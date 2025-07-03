@@ -1,0 +1,4 @@
+ft_libft\			# no libft
+MLX42\				# no MLX42
+*.a					# no dynamic libraries
+*.o					# no object flies
