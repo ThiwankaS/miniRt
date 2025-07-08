@@ -9,6 +9,7 @@
 # include <stdint.h>
 # include <fcntl.h>
 # include <MLX42/MLX42.h>
+# include "matrix.h"
 # include "../ft_libft/libft.h"
 # include "../ft_libft/ft_printf.h"
 # include "../ft_libft/get_next_line.h"

@@ -18,6 +18,7 @@ LDFLAGS = -L$(MLX42_DIR)/build -lmlx42 -ldl -lglfw -pthread -lm $(LIBFT_A)
 
 # === SOURCES ===
 SRCS = \
+	srcs/matrices/operations.c\
 	main.c
 
 OBJS = $(SRCS:.c=.o)
