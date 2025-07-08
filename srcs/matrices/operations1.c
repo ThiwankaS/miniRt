@@ -1,16 +1,31 @@
-# include "../../include/miniRt.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   operations1.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/08 20:43:39 by tsomacha          #+#    #+#             */
+/*   Updated: 2025/07/08 20:46:33 by tsomacha         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-void matrix(t_mat *m)
+#include "../../include/miniRt.h"
+
+/**
+ * Initializes all elements of a matrix to 0.0.
+ */
+void	matrix(t_mat *m)
 {
-	int row;
-	int column;
+	int	row;
+	int	column;
 
 	row = 0;
 	column = 0;
-	while(column < SIZE)
+	while (column < SIZE)
 	{
 		row = 0;
-		while(row < SIZE)
+		while (row < SIZE)
 		{
 			m->m[column][row] = 0.0;
 			row++;
@@ -19,17 +34,20 @@ void matrix(t_mat *m)
 	}
 }
 
-void matrix_print(t_mat *mt)
+/**
+ * Prints the contents of a matrix in a formatted manner.
+ */
+void	matrix_print(t_mat *mt)
 {
-	int row;
-	int column;
+	int	row;
+	int	column;
 
 	row = 0;
 	column = 0;
-	while(column < SIZE)
+	while (column < SIZE)
 	{
 		row = 0;
-		while(row < SIZE)
+		while (row < SIZE)
 		{
 			printf(" | m[%d][%d] : %8.5f", column, row, mt->m[column][row]);
 			row++;
@@ -39,11 +57,15 @@ void matrix_print(t_mat *mt)
 	}
 }
 
-void matrix_multiply(t_mat *m0, t_mat *m1, t_mat *m2)
+/**
+ * Multiplies two matrices (m1 and m2) and stores the result in m0.
+ * Uses standard matrix multiplication logic.
+ */
+void	matrix_multiply(t_mat *m0, t_mat *m1, t_mat *m2)
 {
-	int column;
-	int row;
-	int k;
+	int	column;
+	int	row;
+	int	k;
 
 	column = 0;
 	while (column < SIZE)
@@ -64,7 +86,10 @@ void matrix_multiply(t_mat *m0, t_mat *m1, t_mat *m2)
 	}
 }
 
-void indentity(t_mat *m0)
+/**
+ * Sets a matrix to the identity matrix (diagonal elements = 1, others = 0).
+ */
+void	indentity(t_mat *m0)
 {
 	m0->m[0][0] = 1.0;
 	m0->m[1][1] = 1.0;
@@ -72,17 +97,21 @@ void indentity(t_mat *m0)
 	m0->m[3][3] = 1.0;
 }
 
-void matrix_transpose(t_mat *m0, t_mat *m1)
+/**
+ * Transposes a matrix m1 and stores the result in m0.
+ * Swaps rows with columns.
+ */
+void	matrix_transpose(t_mat *m0, t_mat *m1)
 {
-	int row;
-	int column;
+	int	row;
+	int	column;
 
 	row = 0;
 	column = 0;
-	while(column < SIZE)
+	while (column < SIZE)
 	{
 		row = 0;
-		while(row < SIZE)
+		while (row < SIZE)
 		{
 			m0->m[column][row] = m1->m[row][column];
 			row++;
