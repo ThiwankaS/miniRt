@@ -29,4 +29,10 @@ void tuple_negate(t_tuple *t1, t_tuple *t2);
 void tuple_multiply_scalor(t_tuple *t0, t_tuple *t1, float a);
 void tuple_divide_scalor(t_tuple *t0, t_tuple *t1, float a);
 
+float dot(t_tuple *t1, t_tuple *t2);
+float tuple_magnitute(t_tuple *t0);
+void cross(t_tuple *t0, t_tuple *t1, t_tuple *t2);
+void normalize(t_tuple *t0, t_tuple *t1);
+void schur_product(t_tuple *t0, t_tuple *t1, t_tuple *t2);
+
 # endif
