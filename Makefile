@@ -23,6 +23,8 @@ SRCS = \
 	srcs/tuples/setting.c\
 	srcs/matrices/setting.c\
 	srcs/matrices/operations1.c\
+	srcs/matrices/operations2.c\
+	srcs/matrices/operations3.c\
 	main.c
 
 OBJS = $(SRCS:.c=.o)
