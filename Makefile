@@ -18,6 +18,9 @@ LDFLAGS = -L$(MLX42_DIR)/build -lmlx42 -ldl -lglfw -pthread -lm $(LIBFT_A)
 
 # === SOURCES ===
 SRCS = \
+	srcs/tuples/operations.c\
+	srcs/tuples/setting.c\
+	srcs/matrices/setting.c\
 	srcs/matrices/operations.c\
 	main.c
 

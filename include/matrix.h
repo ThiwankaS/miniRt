@@ -3,6 +3,4 @@
 
 # include "miniRt.h"
 
-void print(void);
-
 # endif
