@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 20:54:00 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/09 08:20:09 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/09 10:39:15 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,11 +101,6 @@ bool	matrix_inverse(t_mat *out, t_mat *in)
 
 void transform(t_ray *rp, t_ray *r, t_mat *m)
 {
-	t_tuple	new_origin;
-	t_tuple	new_direction;
-
-	matrix_multiply_by_tuple(&new_origin, m, r->origin);
-	matrix_multiply_by_tuple(&new_direction, m, r->direction);
-	rp->origin = &new_origin;
-	rp->direction = &new_direction;
+	matrix_multiply_by_tuple(&rp->origin, m, &r->origin);
+	matrix_multiply_by_tuple(&rp->direction, m, &r->direction);
 }

@@ -4,12 +4,12 @@ void position(t_tuple *pp, t_ray *r, float t)
 {
 	t_tuple temp;
 
-	tuple_multiply_scalor(&temp, r->direction, t);
-	tuple_add(pp, r->origin, &temp);
+	tuple_multiply_scalor(&temp, &r->direction, t);
+	tuple_add(pp, &r->origin, &temp);
 }
 t_intersect *intersection(double t, t_object *object)
 {
-	t_intersect *i = calloc(1, sizeof(t_intersect));
+	t_intersect *i = ft_calloc(1, sizeof(t_intersect));
 	if(!i)
 		return NULL;
 	i->value = t;
@@ -19,22 +19,26 @@ t_intersect *intersection(double t, t_object *object)
 
 t_intersect *calculate_intersects(t_object *object, t_ray *rp)
 {
-	t_mat	inverse;
-	t_ray	r;
-	t_tuple	center;
-	t_tuple	distance;
-	t_intersect *intersects;
+	t_tuple		abs;
+	t_tuple		sphere_to_ray;
+	t_intersect	*intersects;
+	t_mat		invs;
+	t_ray		r;
+	float		a;
+	float		b;
+	float		c;
+	float		discriminent;
 
-	matrix_inverse(&inverse, object->transform);
-	transform(&r, rp, inverse);
-	point(&center, object->x, object->y, object->z);
-	substrctTuples(&distance, r.origin, center);
-	float a = dot(r.direction, r.direction);
-	float b = 2.0 * dot(r.direction, &distance);
-	float c = dot(&distance, &distance) - 1;
-	float discriminent = (b * b) - (4 * a * c);
+	point(&abs, 0, 0, 0);
+	matrix_inverse(&invs, &object->transform);
+	transform(&r, rp, &invs);
+	tuple_subtract(&sphere_to_ray, &r.origin, &abs);
+	a = dot(&r.direction, &r.direction);
+	b = 2 * dot(&r.direction, &sphere_to_ray);
+	c = dot(&sphere_to_ray, &sphere_to_ray) - 1;
+	discriminent = (b * b) - (4 * a * c);
 	if (discriminent < 0)
-		return (NULL);
+		return NULL;
 	intersects = ft_calloc(2, sizeof(t_intersect));
 	if (!intersects)
 		return (NULL);
@@ -49,7 +53,7 @@ t_intersections *intersections(t_intersections *xs, t_intersect *intersect)
 {
 	if(!xs)
 	{
-		t_intersections *xs = calloc(1, sizeof(t_intersections));
+		t_intersections *xs = ft_calloc(1, sizeof(t_intersections));
 		if(!xs)
 			return NULL;
 		xs->intersect = intersect;
@@ -63,7 +67,7 @@ t_intersections *intersections(t_intersections *xs, t_intersect *intersect)
 		previous = current;
 		current = current->next;
 	}
-	t_intersections *new = calloc(1, sizeof(t_intersections));
+	t_intersections *new = ft_calloc(1, sizeof(t_intersections));
 	if(!new)
 		return xs;
 	new->intersect = intersect;

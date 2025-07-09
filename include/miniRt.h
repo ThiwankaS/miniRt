@@ -9,8 +9,8 @@
 # include <stdint.h>
 # include <fcntl.h>
 # include <MLX42/MLX42.h>
-# include "matrix.h"
 # include "tuple.h"
+# include "matrix.h"
 # include "graphics.h"
 # include "../ft_libft/libft.h"
 # include "../ft_libft/ft_printf.h"

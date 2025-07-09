@@ -20,6 +20,12 @@ typedef struct s_mat2
 	float m[SIZE -2][SIZE -2];
 } t_mat2;
 
+typedef struct s_ray
+{
+	t_tuple origin;
+	t_tuple direction;
+} t_ray;
+
 void matrix(t_mat *m);
 void matrix_print(t_mat *mt);
 void matrix_multiply(t_mat *m0, t_mat *m1, t_mat *m2);
@@ -36,6 +42,7 @@ float	minor(t_mat3 *m0, int column, int row);
 float det3x3(t_mat3 *m);
 float det4x4(t_mat *m);
 bool matrix_inverse(t_mat *out, t_mat *in);
+void transform(t_ray *rp, t_ray *r, t_mat *m);
 
 void translation(t_mat *m0, float x, float y, float z);
 void scalling(t_mat *m0, float x, float y, float z);
