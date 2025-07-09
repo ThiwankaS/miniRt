@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 20:43:39 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/08 20:46:33 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/08 23:43:49 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ void	matrix_multiply(t_mat *m0, t_mat *m1, t_mat *m2)
  */
 void	indentity(t_mat *m0)
 {
+	matrix(m0);
 	m0->m[0][0] = 1.0;
 	m0->m[1][1] = 1.0;
 	m0->m[2][2] = 1.0;

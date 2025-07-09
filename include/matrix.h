@@ -34,4 +34,10 @@ float minor(t_mat3 *m0, int column, int row);
 float det3x3(t_mat3 *m);
 float det4x4(t_mat *m);
 bool matrix_inverse(t_mat *out, t_mat *in);
+
+void translation(t_mat *m0, float x, float y, float z);
+void scalling(t_mat *m0, float x, float y, float z);
+void rotate_x(t_mat *m0, float r);
+void rotate_y(t_mat *m0, float r);
+void rotate_z(t_mat *m0, float r);
 # endif
