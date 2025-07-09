@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 20:47:32 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/08 20:52:15 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/09 11:47:26 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	matrix_multiply_by_tuple(t_tuple *t0, t_mat *m0, t_tuple *t1)
 	while (i < SIZE)
 	{
 		j = 0;
+		t0->t[i] = 0;
 		while (j < SIZE)
 		{
 			t0->t[i] += (m0->m[i][j] * t1->t[j]);
