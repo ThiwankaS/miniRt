@@ -36,13 +36,14 @@ int main(void)
 	s.y = 0.0;
 	s.z = 0.0;
 	indentity(&s.transform);
+	matrix_inverse(&s.invs, &s.transform);
 
 	//setting up the ray
 	t_ray r;
 	point(&r.origin, light_x, light_y, light_z);
 
 	t_tuple p, temp;
-	t_intersect *xs;
+	t_intersect xs[2];
 
 	for(int y = 0; y < (height -1); y++)
 	{
@@ -53,10 +54,8 @@ int main(void)
 			point(&p, wall_x, wall_y, wall_z);
 			tuple_subtract(&temp, &p, &r.origin);
 			normalize(&r.direction, &temp);
-			xs = calculate_intersects(&s, &r);
-			if(xs && (xs[0].value >= 0 || xs[1].value >= 0))
+			if(cal_intersects(&s, &r, xs) && (xs[0].value >= 0 || xs[1].value >= 0))
 				mlx_put_pixel(img, x, y, color);
-			free(xs);
 		}
 	}
 	// Keep window open

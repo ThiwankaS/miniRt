@@ -1,19 +1,32 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   helper.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/10 01:59:36 by tsomacha          #+#    #+#             */
+/*   Updated: 2025/07/10 01:59:38 by tsomacha         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/miniRt.h"
 
-t_intersections *intersections_sort(t_intersections *xs)
+t_intersections	*intersections_sort(t_intersections *xs)
 {
-	int swapped = 0;
-	t_intersections *current = xs;
-	t_intersect *temp;
+	int				swapped;
+	t_intersections	*current;
+	t_intersect		*temp;
 
-	if(!xs || !xs->next)
-		return xs;
-	while(1)
+	if (!xs || !xs->next)
+		return (xs);
+	while (1)
 	{
 		swapped = 0;
-		while(current && current->next)
+		current = xs;
+		while (current && current->next)
 		{
-			if(current->intersect->value > current->next->intersect->value)
+			if (current->intersect->value > current->next->intersect->value)
 			{
 				temp = current->intersect;
 				current->intersect = current->next->intersect;
@@ -22,16 +35,19 @@ t_intersections *intersections_sort(t_intersections *xs)
 			}
 			current = current->next;
 		}
-		if(!swapped)
-			break;
+		if (!swapped)
+			break ;
 	}
-	return xs;
+	return (xs);
 }
 
-void free_intersections(t_intersections *xs)
+void	free_intersections(t_intersections *xs)
 {
-	t_intersections *current = xs, *temp;
-	while(current)
+	t_intersections *current;
+	t_intersections *temp;
+
+	current = xs;
+	while (current)
 	{
 		temp = current->next;
 		free(current->intersect);
@@ -40,7 +56,7 @@ void free_intersections(t_intersections *xs)
 	}
 }
 
-void set_transform(t_mat *m1, t_mat *m2)
+void	set_transform(t_mat *m1, t_mat *m2)
 {
 	m1->m[0][0] = m2->m[0][0];
 	m1->m[0][1] = m2->m[0][1];

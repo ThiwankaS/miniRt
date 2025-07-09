@@ -21,6 +21,7 @@ typedef struct s_object
 	float type;
 	float radius;
 	t_mat transform;
+	t_mat invs;
 	t_material *material;
 } t_object;
 
@@ -39,7 +40,7 @@ typedef struct s_intersections
 
 void position(t_tuple *pp, t_ray *r, float t);
 t_intersect *intersection(double t, t_object *object);
-t_intersect *calculate_intersects(t_object *object, t_ray *rp);
+t_intersect *cal_intersects(t_object *object, t_ray *rp, t_intersect out[2]);
 t_intersections *intersections(t_intersections *xs, t_intersect *intersect);
 t_intersect *hit(t_intersections *xs);
 
