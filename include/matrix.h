@@ -26,10 +26,12 @@ void matrix_multiply(t_mat *m0, t_mat *m1, t_mat *m2);
 void indentity(t_mat *m0);
 void matrix_transpose(t_mat *m0, t_mat *m1);
 
-float det2x2(t_mat2 *m0);
-void submatrix4x4(t_mat3 *m0, t_mat *m1, int column, int row);
-void submatrix3x3(t_mat2 *m0, t_mat3 *m1, int column, int row);
-float minor(t_mat3 *m0, int column, int row);
+void	submatrix4x4(t_mat3 *m0, t_mat *m1, int column, int row);
+void	submatrix3x3(t_mat2 *m0, t_mat3 *m1, int column, int row);
+void	matrix_multiply_by_tuple(t_tuple *t0, t_mat *m0, t_tuple *t1);
+float	det2x2(t_mat2 *m0);
+float	minor(t_mat3 *m0, int column, int row);
+
 
 float det3x3(t_mat3 *m);
 float det4x4(t_mat *m);

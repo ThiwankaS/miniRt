@@ -11,6 +11,7 @@
 # include <MLX42/MLX42.h>
 # include "matrix.h"
 # include "tuple.h"
+# include "graphics.h"
 # include "../ft_libft/libft.h"
 # include "../ft_libft/ft_printf.h"
 # include "../ft_libft/get_next_line.h"
