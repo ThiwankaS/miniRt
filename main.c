@@ -1,12 +1,26 @@
 # include "include/miniRt.h"
 
-# define WIDTH  1600
-# define HEIGHT 1200
+# define WIDTH  1000
+# define HEIGHT  800
+
+float get_value(t_intersect *xs)
+{
+	float value = 0.0;
+	if(xs)
+	{
+		if(xs[0].value > 0)
+			value = xs[0].value;
+		if(xs[1].value > 0)
+		{
+			if(xs[0].value > xs[1].value)
+				value = xs[1].value;
+		}
+	}
+	return value;
+}
 
 int main(void)
 {
-	uint32_t color = 0xFF0000FF;
-
 	// Create window and image
 	mlx_t *mlx = mlx_init(WIDTH, HEIGHT, "My Window", true);
 	if (!mlx)
@@ -26,10 +40,17 @@ int main(void)
 	int width = 300, height = 300;
 	float pixel_size = wall_size / width;
 
+	t_material mat;
+	mat.ambient = 0.1;
+	mat.diffiuse = 0.9;
+	mat.specular = 0.5;
+	mat.shininess = 200.0;
+	color(&mat.color, 0.9f, 0.2f, 0.8f);
+
 	//seting up the sphere
 	t_object s;
 	s.id = 1;
-	s.material = NULL;
+	s.material = &mat;
 	s.radius = 1.0;
 	s.type = 1;
 	s.x = 0.0;
@@ -42,7 +63,11 @@ int main(void)
 	t_ray r;
 	point(&r.origin, light_x, light_y, light_z);
 
-	t_tuple p, temp;
+	t_light light;
+	color(&light.color, 0.5, 0.5, 0.5);
+	point(&light.position, 10, -10, -10);
+
+	t_tuple p, temp, colour, p1, normal, eye;
 	t_intersect xs[2];
 
 	for(int y = 0; y < (height -1); y++)
@@ -55,7 +80,13 @@ int main(void)
 			tuple_subtract(&temp, &p, &r.origin);
 			normalize(&r.direction, &temp);
 			if(cal_intersects(&s, &r, xs) && (xs[0].value >= 0 || xs[1].value >= 0))
-				mlx_put_pixel(img, x, y, color);
+			{
+				position(&p1, &r, get_value(xs));
+				normal_at(&normal, &s, &p1);
+				tuple_negate(&eye, &r.direction);
+				lighting(&colour, s.material, &light, &p1, &eye, &normal);
+				mlx_put_pixel(img, x, y, tuple_to_color(&colour));
+			}
 		}
 	}
 	// Keep window open
