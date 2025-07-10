@@ -41,11 +41,11 @@ int main(void)
 	float pixel_size = wall_size / width;
 
 	t_material mat;
-	mat.ambient = 0.1;
+	mat.ambient = 0.2;
 	mat.diffiuse = 0.9;
 	mat.specular = 0.5;
 	mat.shininess = 200.0;
-	color(&mat.color, 0.9f, 0.2f, 0.8f);
+	color(&mat.color, 0.9f, 0.2f, 0.2f);
 
 	//seting up the sphere
 	t_object s;
@@ -65,7 +65,7 @@ int main(void)
 
 	t_light light;
 	color(&light.color, 0.5, 0.5, 0.5);
-	point(&light.position, 10, -10, -10);
+	point(&light.position, -10, 10, -10);
 
 	t_tuple p, temp, colour, p1, normal, eye;
 	t_intersect xs[2];
