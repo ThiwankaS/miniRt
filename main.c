@@ -21,76 +21,75 @@ float get_value(t_intersect *xs)
 
 int main(void)
 {
-	// Create window and image
-	mlx_t *mlx = mlx_init(WIDTH, HEIGHT, "My Window", true);
-	if (!mlx)
-		return 1;
+	t_world world;
 
-	mlx_image_t *img = mlx_new_image(mlx, WIDTH, HEIGHT);
-	if (!img)
-		return 1;
+	t_object *s1, *s2;
 
-	// SHOW THE IMAGE FIRST!
-	if (mlx_image_to_window(mlx, img, 0, 0) < 0)
-		return 1;
+	s1 = ft_calloc(1, sizeof(t_object));
+	s2 = ft_calloc(1, sizeof(t_object));
 
-	float light_x = 0, light_y = 0, light_z = -5;
-	float wall_x, wall_y, wall_z = 10.0;
-	float wall_size = 10.0;
-	int width = 300, height = 300;
-	float pixel_size = wall_size / width;
+	t_material mat1, mat2;
 
-	t_material mat;
-	mat.ambient = 0.2;
-	mat.diffiuse = 0.9;
-	mat.specular = 0.5;
-	mat.shininess = 200.0;
-	color(&mat.color, 0.9f, 0.2f, 0.2f);
+	mat1.ambient = 0.1f;
+	mat1.diffuse = 0.7f;
+	mat1.specular = 0.2f;
+	mat1.shininess = 200.0f;
+	color(&mat1.color, 0.8f, 1.0f, 0.6f);
 
-	//seting up the sphere
-	t_object s;
-	s.id = 1;
-	s.material = &mat;
-	s.radius = 1.0;
-	s.type = 1;
-	s.x = 0.0;
-	s.y = 0.0;
-	s.z = 0.0;
-	indentity(&s.transform);
-	matrix_inverse(&s.invs, &s.transform);
+	mat2.ambient = 0.1f;
+	mat2.diffuse = 0.9f;
+	mat2.specular = 0.9f;
+	mat2.shininess = 200.0f;
+	color(&mat2.color, 1.0f, 1.0f, 1.0f);
 
-	//setting up the ray
+	s1->id = 1;
+	s1->type = 1;
+	s1->x = 0.0f;
+	s1->y = 0.0f;
+	s1->z = 0.0f;
+	s1->radius = 1.0f;
+	s1->material = &mat1;
+	identity(&s1->transform);
+	matrix_inverse(&s1->invs, &s1->transform);
+	s1->next = s2;
+
+	t_mat m1;
+	scaling(&m1, 0.5f, 0.5f, 0.5f);
+	s2->id = 2;
+	s2->type = 1;
+	s2->x = 0.0f;
+	s2->y = 0.0f;
+	s2->z = 0.0f;
+	s2->radius = 1.0f;
+	s2->material = &mat2;
+	set_transform(&s2->transform, &m1);
+	matrix_inverse(&s2->invs, &s2->transform);
+	s2->next = NULL;
+
+	point(&world.light.position, -10.0f, 10.0f, -10.0f);
+	color(&world.light.color, 1.0f, 1.0f, 1.0f);
+	world.components = s1;
+
 	t_ray r;
-	point(&r.origin, light_x, light_y, light_z);
+	point(&r.origin, 0.0f, 0.0f, -5.0f);
+	vector(&r.direction, 0.0f, 0.0f, 1.0f);
 
-	t_light light;
-	color(&light.color, 0.5, 0.5, 0.5);
-	point(&light.position, -10, 10, -10);
-
-	t_tuple p, temp, colour, p1, normal, eye;
-	t_intersect xs[2];
-
-	for(int y = 0; y < (height -1); y++)
+	t_intersect *xxs, *node;
+	xxs = intersect_world(&world, &r);
+	xxs = intersections_sort(xxs);
+	int i = 1;
+	if(xxs)
 	{
-		wall_y = (wall_size / 2) - (pixel_size * y);
-		for(int x = 0; x <(width - 1); x++)
+		node = xxs;
+		while(node)
 		{
-			wall_x = (pixel_size * x) - (wall_size / 2);
-			point(&p, wall_x, wall_y, wall_z);
-			tuple_subtract(&temp, &p, &r.origin);
-			normalize(&r.direction, &temp);
-			if(cal_intersects(&s, &r, xs) && (xs[0].value >= 0 || xs[1].value >= 0))
-			{
-				position(&p1, &r, get_value(xs));
-				normal_at(&normal, &s, &p1);
-				tuple_negate(&eye, &r.direction);
-				lighting(&colour, s.material, &light, &p1, &eye, &normal);
-				mlx_put_pixel(img, x, y, tuple_to_color(&colour));
-			}
+			printf("node[%d].value : %.2f\n", i, node->value);
+			node = node->next;
+			i++;
 		}
 	}
-	// Keep window open
-	mlx_loop(mlx);
-	mlx_terminate(mlx);
+	free(s1);
+	free(s2);
+	free_intersections(xxs);
 	return 0;
 }

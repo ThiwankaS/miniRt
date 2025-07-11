@@ -28,6 +28,7 @@ SRCS = \
 	srcs/graphics/ray.c\
 	srcs/graphics/helper.c\
 	srcs/graphics/shading.c\
+	srcs/graphics/world.c\
 	main.c
 
 OBJS = $(SRCS:.c=.o)

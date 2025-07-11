@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 05:42:55 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/10 05:43:33 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/11 04:21:56 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	lighting(t_tuple *out, t_material *m, t_light *light, t_tuple *position, t_
 	}
 	else
 	{
-		tuple_multiply_scalor(&diffuse, &effective_color, light_dot_normal * m->diffiuse);
+		tuple_multiply_scalor(&diffuse, &effective_color, light_dot_normal * m->diffuse);
 		tuple_negate(&neg_lightv, &lightv);
 		reflect(&reflectv, &neg_lightv, normal);
 		reflect_dot_eye = dot(&reflectv, eye);

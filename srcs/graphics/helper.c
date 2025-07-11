@@ -6,59 +6,51 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 01:59:36 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/10 05:41:16 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/11 06:17:14 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/miniRt.h"
 
-/**
- * Sorts the linked list of intersections in ascending order by `t` value.
- * Uses a simple bubble sort algorithm.
- */
-t_intersections	*intersections_sort(t_intersections *xs)
+t_intersect	*intersections_sort(t_intersect *xs)
 {
 	int				swapped;
-	t_intersections	*current;
+	t_intersect		**current;
 	t_intersect		*temp;
 
 	if (!xs || !xs->next)
 		return (xs);
-	while (1)
+	swapped = 1;
+	while (swapped)
 	{
 		swapped = 0;
-		current = xs;
-		while (current && current->next)
+		current = &xs;
+		while ((*current) && (*current)->next)
 		{
-			if (current->intersect->value > current->next->intersect->value)
+			if ((*current)->value > (*current)->next->value)
 			{
-				temp = current->intersect;
-				current->intersect = current->next->intersect;
-				current->next->intersect = temp;
+				temp = (*current)->next;
+				(*current)->next = temp->next;
+				temp->next = (*current);
+				(*current) = temp;
 				swapped = 1;
 			}
-			current = current->next;
+			current = &(*current)->next;
 		}
-		if (!swapped)
-			break ;
 	}
 	return (xs);
 }
 
-/**
- * Frees all memory allocated for a linked list of intersections,
- * including the intersection nodes.
- */
-void	free_intersections(t_intersections *xs)
+
+void	free_intersections(t_intersect *xs)
 {
-	t_intersections	*current;
-	t_intersections	*temp;
+	t_intersect	*current;
+	t_intersect	*temp;
 
 	current = xs;
 	while (current)
 	{
 		temp = current->next;
-		free(current->intersect);
 		free(current);
 		current = temp;
 	}
