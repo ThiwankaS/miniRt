@@ -92,33 +92,30 @@ void view_transformation(t_camera *camera, t_tuple *from, t_tuple *to, t_tuple *
 	matrix_inverse(&camera->invs, &camera->transform);
 }
 
-t_camera *camera_init(int hsize, int vsize, float fov)
+t_camera camera_init(int hsize, int vsize, float fov)
 {
 	float	half_view;
 	float	aspect;
-	t_camera *camera;
+	t_camera camera;
 
-	camera = ft_calloc(1, sizeof(t_camera));
-	if (!camera)
-		return (NULL);
-	camera->hsize = hsize;
-	camera->vsize = vsize;
-	camera->fov = fov;
-	identity(&camera->transform);
-	matrix_inverse(&camera->invs, &camera->transform);
+	camera.hsize = hsize;
+	camera.vsize = vsize;
+	camera.fov = fov;
+	identity(&camera.transform);
+	matrix_inverse(&camera.invs, &camera.transform);
 	half_view = tan(fov/2);
 	aspect = hsize /(float) vsize;
 	if(aspect >= 1)
 	{
-		camera->half_width = half_view;
-		camera->half_height = half_view / aspect;
+		camera.half_width = half_view;
+		camera.half_height = half_view / aspect;
 	}
 	else
 	{
-		camera->half_width = half_view * aspect;
-		camera->half_height = half_view;
+		camera.half_width = half_view * aspect;
+		camera.half_height = half_view;
 	}
-	camera->pixel_size = (camera->half_width * 2) / camera->hsize;
+	camera.pixel_size = (camera.half_width * 2) / camera.hsize;
 	return (camera);
 }
 
