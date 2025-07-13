@@ -194,7 +194,7 @@ void handle_drag(void *param)
 
 	if (!ms->is_dragging || !ms->selected_object)
 		return;
-		
+
 	mlx_get_mouse_pos(ms->mlx, &x, &y);
 	int dx = x - ms->last_x;
 	int dy = y - ms->last_y;
@@ -233,7 +233,7 @@ void mouse_handler(mouse_key_t button, action_t action, modifier_key_t mods, voi
 		{
 			ms->last_x = x;
 			ms->last_y = y;
-			ms->selected_object = pick_object_at(x, y, ms->camera, ms->world);  // we'll implement this
+			ms->selected_object = pick_object_at(x, y, ms->camera, ms->world);
 			ms->is_dragging = (ms->selected_object != NULL);
 		}
 		else if (action == MLX_RELEASE)
@@ -244,4 +244,57 @@ void mouse_handler(mouse_key_t button, action_t action, modifier_key_t mods, voi
 	}
 }
 
+void key_handler(mlx_key_data_t keydata, void *param)
+{
+	t_mouse_state *ms = (t_mouse_state *)param;
+	t_object *obj = ms->selected_object;
+	t_mat m, result;
 
+	if (!obj || !keydata.key || keydata.action != MLX_PRESS)
+		return;
+
+	// Movement
+	if (keydata.key == MLX_KEY_W)
+		translation(&m, 0, 0.1f, 0);
+	else if (keydata.key == MLX_KEY_S)
+		translation(&m, 0, -0.1f, 0);
+	else if (keydata.key == MLX_KEY_A)
+		translation(&m, -0.1f, 0, 0);
+	else if (keydata.key == MLX_KEY_D)
+		translation(&m, 0.1f, 0, 0);
+	else if (keydata.key == MLX_KEY_Q)
+		translation(&m, 0, 0, -0.1f);
+	else if (keydata.key == MLX_KEY_E)
+		translation(&m, 0, 0, 0.1f);
+
+	// Scaling
+	else if (keydata.key == MLX_KEY_Z)
+		scaling(&m, 0.9f, 0.9f, 0.9f);
+	else if (keydata.key == MLX_KEY_X)
+		scaling(&m, 1.1f, 1.1f, 1.1f);
+
+	// Rotation (Y-axis)
+	else if (keydata.key == MLX_KEY_R)
+		rotate_y(&m, 0.1f);
+	else if (keydata.key == MLX_KEY_T)
+		rotate_y(&m, -0.1f);
+
+	// Deselect
+	else if (keydata.key == MLX_KEY_ESCAPE)
+	{
+		ms->selected_object = NULL;
+		ms->is_dragging = false;
+		return;
+	}
+	else
+		return;
+
+	// Apply transformation
+	matrix_multiply(&result, &m, &obj->transform);
+	set_transform(&obj->transform, &result);
+	matrix_inverse(&obj->invs, &obj->transform);
+
+	// Trigger rerender
+	ms->render_state->current_tile = 0;
+	ms->render_state->done = false;
+}

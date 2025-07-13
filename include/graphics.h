@@ -118,5 +118,6 @@ void render(void *param);
 
 void handle_drag(void *param);
 t_object *pick_object_at(int px, int py, t_camera *camera, t_world *world);
+void key_handler(mlx_key_data_t keydata, void *param);
 void mouse_handler(mouse_key_t button, action_t action, modifier_key_t mods, void *param);
 # endif

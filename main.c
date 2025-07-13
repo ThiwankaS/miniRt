@@ -131,7 +131,7 @@ int	main(void)
 
 	// Hook rendering into MLX loop
 	mlx_mouse_hook(mlx, mouse_handler, &mouse_state);
-	mlx_loop_hook(mlx, handle_drag, &mouse_state);
+	mlx_key_hook(mlx, key_handler, &mouse_state);
 	mlx_loop_hook(mlx, render, &state);
 	mlx_loop(mlx);
 	mlx_terminate(mlx);
