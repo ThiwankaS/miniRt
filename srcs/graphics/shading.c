@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 05:42:55 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/13 09:30:12 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/13 09:40:54 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,18 +18,42 @@ void	normal_at(t_tuple *normal, t_object *s, t_tuple *world_point)
 	t_tuple	object_normal;
 	t_tuple	world_normal;
 	t_mat	transpose;
+	float	dist;
 
+	// Convert world point to object space
 	matrix_multiply_by_tuple(&object_point, &s->invs, world_point);
+
 	if (s->type == PLANE)
+	{
 		vector(&object_normal, 0.0f, 1.0f, 0.0f);
+	}
 	else if (s->type == SPHERE)
-		vector(&object_normal,object_point.t[0], object_point.t[1],object_point.t[2]);
+	{
+		vector(&object_normal, object_point.t[0], object_point.t[1], object_point.t[2]);
+	}
+	else if (s->type == CYLINDER)
+	{
+		// Calculate radial distance from y-axis
+		dist = object_point.t[0] * object_point.t[0] + object_point.t[2] * object_point.t[2];
+
+		// Cylinder cap normals (optional, for closed cylinders)
+		// Assuming height from -1 to +1
+		if (dist < 1.0f && object_point.t[1] >= 0.99f) // Top cap
+			vector(&object_normal, 0, 1, 0);
+		else if (dist < 1.0f && object_point.t[1] <= -0.99f) // Bottom cap
+			vector(&object_normal, 0, -1, 0);
+		else // Side surface
+			vector(&object_normal, object_point.t[0], 0, object_point.t[2]);
+	}
+
+	// Transform object normal to world space using transpose of inverse matrix
 	matrix_transpose(&transpose, &s->invs);
 	matrix_multiply_by_tuple(&world_normal, &transpose, &object_normal);
 	world_normal.t[3] = 0.0f;
+
+	// Normalize result
 	normalize(normal, &world_normal);
 }
-
 
 void	reflect(t_tuple *out, t_tuple *in, t_tuple *normal)
 {

@@ -75,6 +75,28 @@ typedef struct s_hit
 	bool		hit;
 } t_hit;
 
+typedef struct s_tile_state {
+	mlx_t		*mlx;
+	mlx_image_t	*img;
+	t_camera	*camera;
+	t_world		*world;
+	int			tiles_x;
+	int			tiles_y;
+	int			current_tile;
+	bool		done;
+}	t_tile_state;
+
+typedef struct s_mouse_state {
+	mlx_t		*mlx;
+	t_camera	*camera;
+	t_world		*world;
+	t_tile_state *render_state;
+	bool		is_dragging;
+	int			last_x;
+	int			last_y;
+	t_object	*selected_object;
+}	t_mouse_state;
+
 void position(t_tuple *pp, t_ray *r, float t);
 t_hit	find_hit(t_world *world, t_ray *ray);
 
@@ -92,5 +114,9 @@ t_tuple	color_at(t_world *world, t_ray *r);
 void view_transformation(t_camera *camera, t_tuple *from, t_tuple *to, t_tuple *up);
 t_camera camera_init(int hsize, int vsize, float fov);
 t_ray ray_for_pixel(t_camera *camera, int px, int py);
-void render(mlx_image_t *img, t_camera *camera, t_world *world);
+void render(void *param);
+
+void handle_drag(void *param);
+t_object *pick_object_at(int px, int py, t_camera *camera, t_world *world);
+void mouse_handler(mouse_key_t button, action_t action, modifier_key_t mods, void *param);
 # endif

@@ -2,8 +2,11 @@
 # define FT_MINIRT_H
 # define _GNU_SOURCE
 
-# define SPHERE 1
-# define PLANE  2
+# define TILE_SIZE 64
+
+# define SPHERE   1
+# define PLANE    2
+# define CYLINDER 3
 
 # include <math.h>
 # include <stdlib.h>

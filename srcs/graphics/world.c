@@ -138,24 +138,110 @@ t_ray ray_for_pixel(t_camera *camera, int px, int py)
 	return (r);
 }
 
-void render(mlx_image_t *img, t_camera *camera, t_world *world)
+void render(void *param)
 {
-	int		x;
-	int		y;
-	t_ray	r;
-	t_tuple	colour;
+	t_tile_state *s = (t_tile_state *)param;
 
-	y = 0;
-	while (y < camera->vsize)
+	if (s->done)
+		return;
+
+	int tile_index = s->current_tile;
+	if (tile_index >= s->tiles_x * s->tiles_y)
 	{
-		x = 0;
-		while (x < camera->hsize)
+		mlx_image_to_window(s->mlx, s->img, 0, 0);
+		s->done = true;
+		return;
+	}
+	int tile_x = (tile_index % s->tiles_x) * TILE_SIZE;
+	int tile_y = (tile_index / s->tiles_x) * TILE_SIZE;
+	int max_x = tile_x + TILE_SIZE;
+	int max_y = tile_y + TILE_SIZE;
+
+	if (max_x > s->camera->hsize)
+		max_x = s->camera->hsize;
+	if (max_y > s->camera->vsize)
+		max_y = s->camera->vsize;
+
+	int y = tile_y;
+	while (y < max_y)
+	{
+		int x = tile_x;
+		while (x < max_x)
 		{
-			r = ray_for_pixel(camera, x, y);
-			colour = color_at(world, &r);
-			mlx_put_pixel(img, x, y, tuple_to_color(&colour));
+			t_ray r = ray_for_pixel(s->camera, x, y);
+			t_tuple c = color_at(s->world, &r);
+			mlx_put_pixel(s->img, x, y, tuple_to_color(&c));
 			x++;
 		}
 		y++;
 	}
+	s->current_tile++;
 }
+
+t_object *pick_object_at(int px, int py, t_camera *camera, t_world *world)
+{
+	t_ray ray = ray_for_pixel(camera, px, py);
+	t_hit hit = find_hit(world, &ray);
+	if (hit.hit)
+		return hit.object;
+	return NULL;
+}
+
+void handle_drag(void *param)
+{
+	t_mouse_state *ms = (t_mouse_state *)param;
+	int x, y;
+
+	if (!ms->is_dragging || !ms->selected_object)
+		return;
+		
+	mlx_get_mouse_pos(ms->mlx, &x, &y);
+	int dx = x - ms->last_x;
+	int dy = y - ms->last_y;
+
+	if (dx != 0 || dy != 0)
+	{
+		// Convert to world space delta — tweak this factor as needed
+		float move_x = dx * 0.01f;
+		float move_y = -dy * 0.01f;
+
+		// Move the object in X and Y direction
+		t_mat translate, result;
+		translation(&translate, move_x, move_y, 0.0f);
+		matrix_multiply(&result, &translate, &ms->selected_object->transform);
+		set_transform(&ms->selected_object->transform, &result);
+		matrix_inverse(&ms->selected_object->invs, &ms->selected_object->transform);
+
+		// Reset renderer
+		ms->render_state->current_tile = 0;
+		ms->render_state->done = false;
+		ms->last_x = x;
+		ms->last_y = y;
+	}
+}
+
+void mouse_handler(mouse_key_t button, action_t action, modifier_key_t mods, void *param)
+{
+	t_mouse_state *ms = (t_mouse_state *)param;
+
+	int x, y;
+	mlx_get_mouse_pos(ms->mlx, &x, &y);
+	(void)mods;
+	if (button == MLX_MOUSE_BUTTON_LEFT)
+	{
+		if (action == MLX_PRESS)
+		{
+			ms->last_x = x;
+			ms->last_y = y;
+			ms->selected_object = pick_object_at(x, y, ms->camera, ms->world);  // we'll implement this
+			ms->is_dragging = (ms->selected_object != NULL);
+		}
+		else if (action == MLX_RELEASE)
+		{
+			ms->is_dragging = false;
+			ms->selected_object = NULL;
+		}
+	}
+}
+
+
