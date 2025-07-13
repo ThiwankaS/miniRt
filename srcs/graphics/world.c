@@ -48,7 +48,7 @@ t_tuple	color_at(t_world *world, t_ray *r)
 	t_intersect	*i;
 	t_compute	comp;
 
-	color(&colour, 0.0f, 0.0f, 0.0f);
+	color(&colour, 0.2f, 0.2f, 0.2f);
 	xs = intersect_world(world, r);
 	xs = intersections_sort(xs);
 	i = hit(xs);

@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 05:42:55 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/11 04:21:56 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/13 06:43:02 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,10 @@ void	normal_at(t_tuple *normal, t_object *s, t_tuple *world_point)
 	}
 	point(&abs, 0, 0, 0);
 	matrix_multiply_by_tuple(&object_point, &inverse, world_point);
-	tuple_subtract(&object_normal, &object_point, &abs);
+	if (s->type == PLANE)
+		vector(&object_normal, 0.0f, 1.0f, 0.0f);
+	if (s->type == SPHERE)
+		tuple_subtract(&object_normal, &object_point, &abs);
 	matrix_transpose(&trans, &inverse);
 	matrix_multiply_by_tuple(&world_normal, &trans, &object_normal);
 	world_normal.t[3] = 0.0f;

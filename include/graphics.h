@@ -61,7 +61,9 @@ typedef struct s_camera
 	int hsize;
 	int vsize;
 	float fov;
-	float half_width, half_height, pixel_size;
+	float half_width;
+	float half_height;
+	float pixel_size;
 	t_mat transform;
 	t_mat invs;
 } t_camera;

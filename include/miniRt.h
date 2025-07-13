@@ -2,6 +2,9 @@
 # define FT_MINIRT_H
 # define _GNU_SOURCE
 
+# define SPHERE 1
+# define PLANE  2
+
 # include <math.h>
 # include <stdlib.h>
 # include <stdio.h>
@@ -16,4 +19,4 @@
 # include "../ft_libft/ft_printf.h"
 # include "../ft_libft/get_next_line.h"
 
-#endif
+# endif

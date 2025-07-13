@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 02:26:59 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/13 02:58:10 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/13 06:43:51 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ t_intersect	*add_node(t_object *object, float t)
 {
 	t_intersect	*i;
 
+	if (t < 0.0f)
+		return (NULL);
 	i = ft_calloc(1, sizeof(t_intersect));
 	if (!i)
 		return (NULL);
@@ -40,24 +42,36 @@ t_intersect	*add_node(t_object *object, float t)
 
 t_intersect	*cal_intersects(t_object *object, t_ray *rp, t_intersect *xs)
 {
-	t_tuple	abs;
-	t_tuple	sphere_to_ray;
 	t_ray	r;
-	float	values[4];
-	float	discriminent;
 
-	point(&abs, 0, 0, 0);
 	transform(&r, rp, &object->invs);
-	tuple_subtract(&sphere_to_ray, &r.origin, &abs);
-	values[0] = dot(&r.direction, &r.direction);
-	values[1] = 2 * dot(&r.direction, &sphere_to_ray);
-	values[2] = dot(&sphere_to_ray, &sphere_to_ray) - 1;
-	discriminent = (values[1] * values[1]) - (4 * values[0] * values[2]);
-	if (discriminent < 0)
-		return (xs);
-	values[3] = sqrt(discriminent);
-	xs = intersections(xs, object, (-values[1] - values[3]) / (2 * values[0]));
-	xs = intersections(xs, object, (-values[1] + values[3]) / (2 * values[0]));
+	if (object->type == SPHERE)
+	{
+		t_tuple	abs;
+		t_tuple	sphere_to_ray;
+		float	values[4];
+		float	discriminent;
+
+		point(&abs, 0, 0, 0);
+		tuple_subtract(&sphere_to_ray, &r.origin, &abs);
+		values[0] = dot(&r.direction, &r.direction);
+		values[1] = 2 * dot(&r.direction, &sphere_to_ray);
+		values[2] = dot(&sphere_to_ray, &sphere_to_ray) - 1;
+		discriminent = (values[1] * values[1]) - (4 * values[0] * values[2]);
+		if (discriminent < 0)
+			return (xs);
+		values[3] = sqrt(discriminent);
+		xs = intersections(xs, object, (-values[1] - values[3]) / (2 * values[0]));
+		xs = intersections(xs, object, (-values[1] + values[3]) / (2 * values[0]));
+	}
+	if (object->type == PLANE)
+	{
+		float	t;
+		if (fabs(r.direction.t[1]) < 1e-6)
+			return (xs);
+		t = -r.origin.t[1] / r.direction.t[1];
+		xs = intersections(xs, object, t);
+	}
 	return (xs);
 }
 
