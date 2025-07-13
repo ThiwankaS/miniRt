@@ -1,26 +1,23 @@
 # include "include/miniRt.h"
 
-# define WIDTH  1000
-# define HEIGHT  800
-
-float get_value(t_intersect *xs)
-{
-	float value = 0.0;
-	if(xs)
-	{
-		if(xs[0].value > 0)
-			value = xs[0].value;
-		if(xs[1].value > 0)
-		{
-			if(xs[0].value > xs[1].value)
-				value = xs[1].value;
-		}
-	}
-	return value;
-}
+# define WIDTH   800
+# define HEIGHT  600
 
 int main(void)
 {
+		// Create window and image
+	mlx_t *mlx = mlx_init(WIDTH, HEIGHT, "My Window", true);
+	if (!mlx)
+		return (1);
+
+	mlx_image_t *img = mlx_new_image(mlx, WIDTH, HEIGHT);
+	if (!img)
+		return (1);
+
+	// SHOW THE IMAGE FIRST!
+	if (mlx_image_to_window(mlx, img, 0, 0) < 0)
+		return (1);
+
 	t_world world;
 
 	t_object *s1, *s2;
@@ -29,67 +26,66 @@ int main(void)
 	s2 = ft_calloc(1, sizeof(t_object));
 
 	t_material mat1, mat2;
+	t_mat m1, m2, m3;
 
 	mat1.ambient = 0.1f;
 	mat1.diffuse = 0.7f;
-	mat1.specular = 0.2f;
+	mat1.specular = 0.0f;
 	mat1.shininess = 200.0f;
-	color(&mat1.color, 0.8f, 1.0f, 0.6f);
-
-	mat2.ambient = 0.1f;
-	mat2.diffuse = 0.9f;
-	mat2.specular = 0.9f;
-	mat2.shininess = 200.0f;
-	color(&mat2.color, 1.0f, 1.0f, 1.0f);
-
+	color(&mat1.color, 0.0f, 0.0f, 1.0f);
+	scaling(&m1, 0.3f, 0.3f, 0.3f);
+	translation(&m2, -0.6f, 0.0f, 0.0f);
+	matrix_multiply(&m3, &m2, &m1);
 	s1->id = 1;
 	s1->type = 1;
-	s1->x = 0.0f;
+	s1->x = -0.6f;
 	s1->y = 0.0f;
 	s1->z = 0.0f;
 	s1->radius = 1.0f;
 	s1->material = &mat1;
-	identity(&s1->transform);
+	set_transform(&s1->transform, &m3);
 	matrix_inverse(&s1->invs, &s1->transform);
-	s1->next = s2;
 
-	t_mat m1;
-	scaling(&m1, 0.5f, 0.5f, 0.5f);
+
+	mat2.ambient = 0.1f;
+	mat2.diffuse = 0.7f;
+	mat2.specular = 0.0f;
+	mat2.shininess = 200.0f;
+	color(&mat2.color, 1.0f, 0.0f, 0.0f);
+	scaling(&m1, 0.3f, 0.3f, 0.3f);
+	translation(&m2, 0.6f, 0.0f, 0.0f);
+	matrix_multiply(&m3, &m2, &m1);
 	s2->id = 2;
 	s2->type = 1;
-	s2->x = 0.0f;
+	s2->x = 0.6f;
 	s2->y = 0.0f;
 	s2->z = 0.0f;
 	s2->radius = 1.0f;
 	s2->material = &mat2;
-	set_transform(&s2->transform, &m1);
+	set_transform(&s2->transform, &m3);
 	matrix_inverse(&s2->invs, &s2->transform);
+
+	s1->next = s2;
 	s2->next = NULL;
 
 	point(&world.light.position, -10.0f, 10.0f, -10.0f);
 	color(&world.light.color, 1.0f, 1.0f, 1.0f);
 	world.components = s1;
 
-	t_ray r;
-	point(&r.origin, 0.0f, 0.0f, -5.0f);
-	vector(&r.direction, 0.0f, 0.0f, 1.0f);
+	t_camera *camera = camera_init(WIDTH, HEIGHT, M_PI / 3);
+	t_tuple from, to, up;
+	point(&from, 1.0f, 1.0f, 1.0f);
+	point(&to, 0.0f, 0.0f, 0.0f);
+	vector(&up, 0.0f, 1.0f, 0.0f);
+	view_transformation(&camera->transform, &from, &to, &up);
 
-	t_intersect *xxs, *node;
-	xxs = intersect_world(&world, &r);
-	xxs = intersections_sort(xxs);
-	int i = 1;
-	if(xxs)
-	{
-		node = xxs;
-		while(node)
-		{
-			printf("node[%d].value : %.2f\n", i, node->value);
-			node = node->next;
-			i++;
-		}
-	}
+	render(img, camera, &world);
+
+	free(camera);
 	free(s1);
 	free(s2);
-	free_intersections(xxs);
+
+	mlx_loop(mlx);
+	mlx_terminate(mlx);
 	return 0;
 }

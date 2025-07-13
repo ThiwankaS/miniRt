@@ -46,6 +46,24 @@ typedef struct s_world
 	t_object *components;
 } t_world;
 
+typedef struct s_compute
+{
+	bool inside;
+	float value;
+	t_object *object;
+	t_tuple p;
+	t_tuple eye_v;
+	t_tuple normal_v;
+} t_compute;
+
+typedef struct s_camera
+{
+	int hsize;
+	int vsize;
+	float fov;
+	float half_width, half_height, pixel_size;
+	t_mat transform;
+} t_camera;
 
 void position(t_tuple *pp, t_ray *r, float t);
 t_intersect	*cal_intersects(t_object *object, t_ray *rp, t_intersect *xs);
@@ -64,5 +82,11 @@ void point_light(t_light *light, t_tuple *position, t_tuple *intensity);
 void lighting(t_tuple *out, t_material *m, t_light *light, t_tuple *position, t_tuple *eye, t_tuple *normal);
 
 t_intersect	*intersect_world(t_world *w, t_ray *r);
-
+t_compute	*prepare_compute(t_intersect *i, t_ray *r);
+void shade_hit(t_tuple *colour, t_object *object, t_world *world, t_compute *comp);
+t_tuple	*color_at(t_world *world, t_ray *r);
+void view_transformation(t_mat *transform, t_tuple *from, t_tuple *to, t_tuple *up);
+t_camera *camera_init(int hsize, int vsize, float fov);
+t_ray *ray_for_pixel(t_camera *camera, int px, int py);
+void render(mlx_image_t *img, t_camera *camera, t_world *world);
 # endif

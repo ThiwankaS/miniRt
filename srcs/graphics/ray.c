@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 02:26:59 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/11 06:17:41 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/13 02:58:10 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ t_intersect	*cal_intersects(t_object *object, t_ray *rp, t_intersect *xs)
 	values[2] = dot(&sphere_to_ray, &sphere_to_ray) - 1;
 	discriminent = (values[1] * values[1]) - (4 * values[0] * values[2]);
 	if (discriminent < 0)
-		return (NULL);
+		return (xs);
 	values[3] = sqrt(discriminent);
 	xs = intersections(xs, object, (-values[1] - values[3]) / (2 * values[0]));
 	xs = intersections(xs, object, (-values[1] + values[3]) / (2 * values[0]));
@@ -70,14 +70,14 @@ t_intersect	*intersections(t_intersect *xs, t_object *s, float value)
 
 	current = xs;
 	previous = NULL;
+	new = add_node(s, value);
+	if (!new)
+		return (xs);
 	while (current)
 	{
 		previous = current;
 		current = current->next;
 	}
-	new = add_node(s, value);
-	if (!new)
-		return (NULL);
 	if (!xs && !previous)
 	{
 		new->count = 1;
