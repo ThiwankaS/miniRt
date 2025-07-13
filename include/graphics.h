@@ -83,7 +83,7 @@ void point_light(t_light *light, t_tuple *position, t_tuple *intensity);
 void lighting(t_tuple *out, t_material *m, t_light *light, t_tuple *position, t_tuple *eye, t_tuple *normal);
 
 t_intersect	*intersect_world(t_world *w, t_ray *r);
-t_compute	*prepare_compute(t_intersect *i, t_ray *r);
+t_compute	prepare_compute(t_intersect *i, t_ray *r);
 void shade_hit(t_tuple *colour, t_object *object, t_world *world, t_compute *comp);
 t_tuple	*color_at(t_world *world, t_ray *r);
 void view_transformation(t_camera *camera, t_tuple *from, t_tuple *to, t_tuple *up);

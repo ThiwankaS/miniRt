@@ -15,27 +15,24 @@ t_intersect	*intersect_world(t_world *w, t_ray *r)
 	return (xs);
 }
 
-t_compute	*prepare_compute(t_intersect *i, t_ray *r)
+t_compute	prepare_compute(t_intersect *i, t_ray *r)
 {
 	float		mul;
-	t_compute	*comp;
+	t_compute	comp;
 
-	comp = ft_calloc(1, sizeof(t_compute));
-	if(!comp)
-		return (NULL);
-	comp->value = i->value;
-	comp->object = i->object;
-	position(&comp->p, r, i->value);
-	tuple_negate(&comp->eye_v, &r->direction);
-	normal_at(&comp->normal_v, i->object, &comp->p);
-	mul = dot(&comp->eye_v, &comp->normal_v);
+	comp.value = i->value;
+	comp.object = i->object;
+	position(&comp.p, r, i->value);
+	tuple_negate(&comp.eye_v, &r->direction);
+	normal_at(&comp.normal_v, i->object, &comp.p);
+	mul = dot(&comp.eye_v, &comp.normal_v);
 	if(mul < 0)
 	{
-		comp->inside = true;
-		tuple_negate(&comp->normal_v, &comp->normal_v);
+		comp.inside = true;
+		tuple_negate(&comp.normal_v, &comp.normal_v);
 	}
 	else
-		comp->inside = false;
+		comp.inside = false;
 	return (comp);
 }
 
@@ -49,7 +46,7 @@ t_tuple	*color_at(t_world *world, t_ray *r)
 	t_tuple		*colour;
 	t_intersect	*xs;
 	t_intersect	*i;
-	t_compute	*comp;
+	t_compute	comp;
 
 	colour = ft_calloc(1, sizeof(t_tuple));
 	if (!colour)
@@ -60,8 +57,7 @@ t_tuple	*color_at(t_world *world, t_ray *r)
 	if (i)
 	{
 		comp = prepare_compute(i, r);
-		shade_hit(colour, i->object, world, comp);
-		free(comp);
+		shade_hit(colour, i->object, world, &comp);
 		free_intersections(xs);
 		return (colour);
 	}
