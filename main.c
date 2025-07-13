@@ -77,7 +77,7 @@ int main(void)
 	point(&from, 1.0f, 1.0f, 1.0f);
 	point(&to, 0.0f, 0.0f, 0.0f);
 	vector(&up, 0.0f, 1.0f, 0.0f);
-	view_transformation(&camera->transform, &from, &to, &up);
+	view_transformation(camera, &from, &to, &up);
 
 	render(img, camera, &world);
 

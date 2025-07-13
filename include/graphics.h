@@ -63,6 +63,7 @@ typedef struct s_camera
 	float fov;
 	float half_width, half_height, pixel_size;
 	t_mat transform;
+	t_mat invs;
 } t_camera;
 
 void position(t_tuple *pp, t_ray *r, float t);
@@ -85,7 +86,7 @@ t_intersect	*intersect_world(t_world *w, t_ray *r);
 t_compute	*prepare_compute(t_intersect *i, t_ray *r);
 void shade_hit(t_tuple *colour, t_object *object, t_world *world, t_compute *comp);
 t_tuple	*color_at(t_world *world, t_ray *r);
-void view_transformation(t_mat *transform, t_tuple *from, t_tuple *to, t_tuple *up);
+void view_transformation(t_camera *camera, t_tuple *from, t_tuple *to, t_tuple *up);
 t_camera *camera_init(int hsize, int vsize, float fov);
 t_ray *ray_for_pixel(t_camera *camera, int px, int py);
 void render(mlx_image_t *img, t_camera *camera, t_world *world);
