@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 02:26:59 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/13 06:43:51 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/13 09:17:19 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,102 +24,68 @@ void	position(t_tuple *pp, t_ray *r, float t)
 	tuple_add(pp, &r->origin, &temp);
 }
 
-
-t_intersect	*add_node(t_object *object, float t)
+t_hit	find_hit(t_world *world, t_ray *ray)
 {
-	t_intersect	*i;
+	t_object	*object;
+	t_hit		closest;
+	t_ray		local_ray;
+	float		t;
 
-	if (t < 0.0f)
-		return (NULL);
-	i = ft_calloc(1, sizeof(t_intersect));
-	if (!i)
-		return (NULL);
-	i->value = t;
-	i->object = object;
-	i->next = NULL;
-	return (i);
-}
+	closest.hit = false;
+	closest.t = INFINITY;
+	closest.object = NULL;
 
-t_intersect	*cal_intersects(t_object *object, t_ray *rp, t_intersect *xs)
-{
-	t_ray	r;
-
-	transform(&r, rp, &object->invs);
-	if (object->type == SPHERE)
+	object = world->components;
+	while (object)
 	{
-		t_tuple	abs;
-		t_tuple	sphere_to_ray;
-		float	values[4];
-		float	discriminent;
-
-		point(&abs, 0, 0, 0);
-		tuple_subtract(&sphere_to_ray, &r.origin, &abs);
-		values[0] = dot(&r.direction, &r.direction);
-		values[1] = 2 * dot(&r.direction, &sphere_to_ray);
-		values[2] = dot(&sphere_to_ray, &sphere_to_ray) - 1;
-		discriminent = (values[1] * values[1]) - (4 * values[0] * values[2]);
-		if (discriminent < 0)
-			return (xs);
-		values[3] = sqrt(discriminent);
-		xs = intersections(xs, object, (-values[1] - values[3]) / (2 * values[0]));
-		xs = intersections(xs, object, (-values[1] + values[3]) / (2 * values[0]));
-	}
-	if (object->type == PLANE)
-	{
-		float	t;
-		if (fabs(r.direction.t[1]) < 1e-6)
-			return (xs);
-		t = -r.origin.t[1] / r.direction.t[1];
-		xs = intersections(xs, object, t);
-	}
-	return (xs);
-}
-
-
-t_intersect	*intersections(t_intersect *xs, t_object *s, float value)
-{
-	t_intersect	*current;
-	t_intersect	*previous;
-	t_intersect	*new;
-
-	current = xs;
-	previous = NULL;
-	new = add_node(s, value);
-	if (!new)
-		return (xs);
-	while (current)
-	{
-		previous = current;
-		current = current->next;
-	}
-	if (!xs && !previous)
-	{
-		new->count = 1;
-		return (new);
-	}
-	previous->next = new;
-	xs->count++;
-	return (xs);
-}
-
-
-t_intersect	*hit(t_intersect *xs)
-{
-	t_intersect	*i;
-	t_intersect	*current;
-	t_intersect	*previous;
-
-	current = xs;
-	i = NULL;
-	while (current)
-	{
-		previous = current;
-		if (previous->value > 0.0)
+		transform(&local_ray, ray, &object->invs);
+		if (object->type == SPHERE)
 		{
-			if (!i || previous->value < i->value)
-				i = previous;
+			t_tuple sphere_to_ray;
+			t_tuple origin;
+			float a, b, c, discriminant;
+
+			point(&origin, 0, 0, 0);
+			tuple_subtract(&sphere_to_ray, &local_ray.origin, &origin);
+			a = dot(&local_ray.direction, &local_ray.direction);
+			b = 2 * dot(&local_ray.direction, &sphere_to_ray);
+			c = dot(&sphere_to_ray, &sphere_to_ray) - 1;
+			discriminant = b * b - 4 * a * c;
+
+			if (discriminant >= 0.0f)
+			{
+				float sqrt_d = sqrtf(discriminant);
+				float t1 = (-b - sqrt_d) / (2 * a);
+				float t2 = (-b + sqrt_d) / (2 * a);
+
+				if (t1 > 0.0f && t1 < closest.t)
+				{
+					closest.t = t1;
+					closest.object = object;
+					closest.hit = true;
+				}
+				if (t2 > 0.0f && t2 < closest.t)
+				{
+					closest.t = t2;
+					closest.object = object;
+					closest.hit = true;
+				}
+			}
 		}
-		current = current->next;
+		else if (object->type == PLANE)
+		{
+			if (fabs(local_ray.direction.t[1]) >= 1e-6)
+			{
+				t = -local_ray.origin.t[1] / local_ray.direction.t[1];
+				if (t > 0.0f && t < closest.t)
+				{
+					closest.t = t;
+					closest.object = object;
+					closest.hit = true;
+				}
+			}
+		}
+		object = object->next;
 	}
-	return (i);
+	return (closest);
 }

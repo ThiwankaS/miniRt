@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 05:42:55 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/13 06:43:02 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/13 09:30:12 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,29 +14,22 @@
 
 void	normal_at(t_tuple *normal, t_object *s, t_tuple *world_point)
 {
-	t_mat	inverse;
-	t_mat	trans;
-	t_tuple	abs;
 	t_tuple	object_point;
 	t_tuple	object_normal;
 	t_tuple	world_normal;
+	t_mat	transpose;
 
-	if (!matrix_inverse(&inverse, &s->transform))
-	{
-		vector(normal, 0, 0, 0);
-		return ;
-	}
-	point(&abs, 0, 0, 0);
-	matrix_multiply_by_tuple(&object_point, &inverse, world_point);
+	matrix_multiply_by_tuple(&object_point, &s->invs, world_point);
 	if (s->type == PLANE)
 		vector(&object_normal, 0.0f, 1.0f, 0.0f);
-	if (s->type == SPHERE)
-		tuple_subtract(&object_normal, &object_point, &abs);
-	matrix_transpose(&trans, &inverse);
-	matrix_multiply_by_tuple(&world_normal, &trans, &object_normal);
+	else if (s->type == SPHERE)
+		vector(&object_normal,object_point.t[0], object_point.t[1],object_point.t[2]);
+	matrix_transpose(&transpose, &s->invs);
+	matrix_multiply_by_tuple(&world_normal, &transpose, &object_normal);
 	world_normal.t[3] = 0.0f;
 	normalize(normal, &world_normal);
 }
+
 
 void	reflect(t_tuple *out, t_tuple *in, t_tuple *normal)
 {

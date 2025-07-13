@@ -1,39 +1,34 @@
 #include "../../include/miniRt.h"
 
-t_intersect	*intersect_world(t_world *w, t_ray *r)
+t_compute	prepare_compute(float t, t_object *object, t_ray *r)
 {
-	t_intersect	*xs;
-	t_object	*current;
+	t_compute comp;
+	float dot_val;
 
-	xs = NULL;
-	current = w->components;
-	while (current)
-	{
-		xs = cal_intersects(current, r, xs);
-		current = current->next;
-	}
-	return (xs);
-}
+	comp.value = t;
+	comp.object = object;
 
-t_compute	prepare_compute(t_intersect *i, t_ray *r)
-{
-	float		mul;
-	t_compute	comp;
+	// Position on the surface
+	position(&comp.p, r, t);
 
-	comp.value = i->value;
-	comp.object = i->object;
-	position(&comp.p, r, i->value);
+	// Eye vector
 	tuple_negate(&comp.eye_v, &r->direction);
-	normal_at(&comp.normal_v, i->object, &comp.p);
-	mul = dot(&comp.eye_v, &comp.normal_v);
-	if(mul < 0)
+
+	// Correct normal (transforms inside)
+	normal_at(&comp.normal_v, object, &comp.p);
+
+	// Determine if we're inside the object
+	dot_val = dot(&comp.eye_v, &comp.normal_v);
+	if (dot_val < 0.0f)
 	{
 		comp.inside = true;
 		tuple_negate(&comp.normal_v, &comp.normal_v);
 	}
 	else
+	{
 		comp.inside = false;
-	return (comp);
+	}
+	return comp;
 }
 
 void shade_hit(t_tuple *colour, t_object *object, t_world *world, t_compute *comp)
@@ -44,22 +39,17 @@ void shade_hit(t_tuple *colour, t_object *object, t_world *world, t_compute *com
 t_tuple	color_at(t_world *world, t_ray *r)
 {
 	t_tuple		colour;
-	t_intersect	*xs;
-	t_intersect	*i;
 	t_compute	comp;
+	t_hit h;
 
+	h = find_hit(world, r);
 	color(&colour, 0.2f, 0.2f, 0.2f);
-	xs = intersect_world(world, r);
-	xs = intersections_sort(xs);
-	i = hit(xs);
-	if (i)
+	if (h.hit)
 	{
-		comp = prepare_compute(i, r);
-		shade_hit(&colour, i->object, world, &comp);
-		free_intersections(xs);
+		comp = prepare_compute(h.t, h.object, r);
+		shade_hit(&colour, h.object, world, &comp);
 		return (colour);
 	}
-	free_intersections(xs);
 	return (colour);
 }
 

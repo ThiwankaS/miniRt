@@ -68,24 +68,25 @@ typedef struct s_camera
 	t_mat invs;
 } t_camera;
 
-void position(t_tuple *pp, t_ray *r, float t);
-t_intersect	*cal_intersects(t_object *object, t_ray *rp, t_intersect *xs);
-t_intersect	*intersections(t_intersect *xs, t_object *s, float value);
-t_intersect	*hit(t_intersect *xs);
+typedef struct s_hit
+{
+	float		t;
+	t_object	*object;
+	bool		hit;
+} t_hit;
 
-t_intersect	*intersections_sort(t_intersect *xs);
-void free_intersections(t_intersect *xs);
+void position(t_tuple *pp, t_ray *r, float t);
+t_hit	find_hit(t_world *world, t_ray *ray);
+
 void set_transform(t_mat *m1, t_mat *m2);
 uint32_t tuple_to_color(t_tuple *tp);
-t_intersect	*add_node(t_object *object, float t);
 
 void normal_at(t_tuple *normal, t_object *s, t_tuple *world_point);
 void reflect(t_tuple *out, t_tuple *in, t_tuple *normal);
 void point_light(t_light *light, t_tuple *position, t_tuple *intensity);
 void lighting(t_tuple *out, t_material *m, t_light *light, t_tuple *position, t_tuple *eye, t_tuple *normal);
 
-t_intersect	*intersect_world(t_world *w, t_ray *r);
-t_compute	prepare_compute(t_intersect *i, t_ray *r);
+t_compute	prepare_compute(float t, t_object *object, t_ray *r);
 void shade_hit(t_tuple *colour, t_object *object, t_world *world, t_compute *comp);
 t_tuple	color_at(t_world *world, t_ray *r);
 void view_transformation(t_camera *camera, t_tuple *from, t_tuple *to, t_tuple *up);
