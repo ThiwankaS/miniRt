@@ -1,27 +1,26 @@
 # include "include/miniRt.h"
 
-typedef struct s_projectile
+# define WIDTH  1000
+# define HEIGHT  800
+
+float get_value(t_intersect *xs)
 {
-	t_tuple point;
-	t_tuple velocity;
-} t_projectile;
-
-typedef struct s_environment
-{
-	t_tuple gravity;
-	t_tuple wind;
-} t_environment;
-
-t_projectile *tick(t_environment *e, t_projectile *p);
-
-// WIDTH and HEIGHT
-#define WIDTH 1600
-#define HEIGHT 1200
+	float value = 0.0;
+	if(xs)
+	{
+		if(xs[0].value > 0)
+			value = xs[0].value;
+		if(xs[1].value > 0)
+		{
+			if(xs[0].value > xs[1].value)
+				value = xs[1].value;
+		}
+	}
+	return value;
+}
 
 int main(void)
 {
-	uint32_t color = 0xFF0000FF;
-
 	// Create window and image
 	mlx_t *mlx = mlx_init(WIDTH, HEIGHT, "My Window", true);
 	if (!mlx)
@@ -35,48 +34,63 @@ int main(void)
 	if (mlx_image_to_window(mlx, img, 0, 0) < 0)
 		return 1;
 
-	// Setup tuples
-	t_tuple p, velocity, gravity, wind, norm_velocity, scaled_velocity;
+	float light_x = 0, light_y = 0, light_z = -5;
+	float wall_x, wall_y, wall_z = 10.0;
+	float wall_size = 10.0;
+	int width = 300, height = 300;
+	float pixel_size = wall_size / width;
 
-	point(&p, 50.0, 50.0, 0.0); // start 1 unit up so it's visible
-	vector(&velocity, 1.0, 1.8, 0.0);
-	normalize(&norm_velocity, &velocity);
-	tuple_multiply_scalor(&scaled_velocity, &norm_velocity, 15.0); // reasonable speed
+	t_material mat;
+	mat.ambient = 0.2;
+	mat.diffuse = 0.9;
+	mat.specular = 0.5;
+	mat.shininess = 200.0;
+	color(&mat.color, 1.0f, 0.2f, 1.0f);
 
-	vector(&gravity, 0.0, -0.1, 0.0);
-	vector(&wind, -0.01, 0.0, 0.0);
+	//seting up the sphere
+	t_object s;
+	s.id = 1;
+	s.material = &mat;
+	s.radius = 1.0;
+	s.type = 1;
+	s.x = 0.0;
+	s.y = 0.0;
+	s.z = 0.0;
+	indentity(&s.transform);
+	matrix_inverse(&s.invs, &s.transform);
 
-	t_projectile proj = {p, scaled_velocity};
-	t_environment env = {gravity, wind};
+	//setting up the ray
+	t_ray r;
+	point(&r.origin, light_x, light_y, light_z);
 
-	// Draw the motion
-	while (proj.point.t[1] > 0 && proj.point.t[0] >= 0 && proj.point.t[0] < WIDTH && proj.point.t[1] < HEIGHT)
+	t_light light;
+	color(&light.color, 0.5, 0.5, 0.5);
+	point(&light.position, -10, 10, -10);
+
+	t_tuple p, temp, colour, p1, normal, eye;
+	t_intersect xs[2];
+
+	for(int y = 0; y < (height -1); y++)
 	{
-		int x = (int)proj.point.t[0];
-		int y = HEIGHT - (int)proj.point.t[1]; // Flip Y axis
-
-		if (x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT)
-			mlx_put_pixel(img, x, y, color);
-
-		t_projectile *next = tick(&env, &proj);
-		proj = *next;
-		free(next);
+		wall_y = (wall_size / 2) - (pixel_size * y);
+		for(int x = 0; x <(width - 1); x++)
+		{
+			wall_x = (pixel_size * x) - (wall_size / 2);
+			point(&p, wall_x, wall_y, wall_z);
+			tuple_subtract(&temp, &p, &r.origin);
+			normalize(&r.direction, &temp);
+			if(cal_intersects(&s, &r, xs) && (xs[0].value >= 0 || xs[1].value >= 0))
+			{
+				position(&p1, &r, get_value(xs));
+				normal_at(&normal, &s, &p1);
+				tuple_negate(&eye, &r.direction);
+				lighting(&colour, s.material, &light, &p1, &eye, &normal);
+				mlx_put_pixel(img, x, y, tuple_to_color(&colour));
+			}
+		}
 	}
-
 	// Keep window open
 	mlx_loop(mlx);
 	mlx_terminate(mlx);
 	return 0;
-}
-
-t_projectile *tick(t_environment *e, t_projectile *p)
-{
-	t_projectile *pro = malloc(sizeof(t_projectile));
-	t_tuple temp;
-
-	tuple_add(&pro->point, &p->point, &p->velocity);
-	tuple_add(&temp, &e->gravity, &e->wind);
-	tuple_add(&pro->velocity, &p->velocity, &temp);
-
-	return pro;
 }

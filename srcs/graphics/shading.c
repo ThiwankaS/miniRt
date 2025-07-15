@@ -1,0 +1,115 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   shading.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/10 05:42:55 by tsomacha          #+#    #+#             */
+/*   Updated: 2025/07/13 09:40:54 by tsomacha         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../include/miniRt.h"
+
+void	normal_at(t_tuple *normal, t_object *s, t_tuple *world_point)
+{
+	t_tuple	object_point;
+	t_tuple	object_normal;
+	t_tuple	world_normal;
+	t_mat	transpose;
+	float	dist;
+
+	// Convert world point to object space
+	matrix_multiply_by_tuple(&object_point, &s->invs, world_point);
+
+	if (s->type == PLANE)
+	{
+		vector(&object_normal, 0.0f, 1.0f, 0.0f);
+	}
+	else if (s->type == SPHERE)
+	{
+		vector(&object_normal, object_point.t[0], object_point.t[1], object_point.t[2]);
+	}
+	else if (s->type == CYLINDER)
+	{
+		// Calculate radial distance from y-axis
+		dist = object_point.t[0] * object_point.t[0] + object_point.t[2] * object_point.t[2];
+
+		// Cylinder cap normals (optional, for closed cylinders)
+		// Assuming height from -1 to +1
+		if (dist < 1.0f && object_point.t[1] >= 0.99f) // Top cap
+			vector(&object_normal, 0, 1, 0);
+		else if (dist < 1.0f && object_point.t[1] <= -0.99f) // Bottom cap
+			vector(&object_normal, 0, -1, 0);
+		else // Side surface
+			vector(&object_normal, object_point.t[0], 0, object_point.t[2]);
+	}
+
+	// Transform object normal to world space using transpose of inverse matrix
+	matrix_transpose(&transpose, &s->invs);
+	matrix_multiply_by_tuple(&world_normal, &transpose, &object_normal);
+	world_normal.t[3] = 0.0f;
+
+	// Normalize result
+	normalize(normal, &world_normal);
+}
+
+void	reflect(t_tuple *out, t_tuple *in, t_tuple *normal)
+{
+	float	product;
+	t_tuple	scaled;
+
+	product = dot(in, normal) * 2.0f;
+	tuple_multiply_scalor(&scaled, normal, product);
+	tuple_subtract(out, in, &scaled);
+}
+
+void	point_light(t_light *light, t_tuple *position, t_tuple *intensity)
+{
+	light->color = *intensity;
+	light->position = *position;
+}
+
+void	lighting(t_tuple *out, t_material *m, t_light *light, t_tuple *position, t_tuple *eye, t_tuple *normal)
+{
+	t_tuple	ambient;
+	t_tuple	diffuse;
+	t_tuple	specular;
+	t_tuple	effective_color;
+	t_tuple	lightv;
+	t_tuple	neg_lightv;
+	t_tuple	reflectv;
+	t_tuple	temp;
+	float	light_dot_normal;
+	float	reflect_dot_eye;
+	float	factor;
+
+	schur_product(&effective_color, &m->color, &light->color);
+	tuple_subtract(&temp, &light->position, position);
+	normalize(&lightv, &temp);
+	tuple_multiply_scalor(&ambient, &effective_color, m->ambient);
+	light_dot_normal = dot(&lightv, normal);
+	if (light_dot_normal < 0.0f)
+	{
+		color(&diffuse, 0.0f, 0.0f, 0.0f);
+		color(&specular, 0.0f, 0.0f, 0.0f);
+	}
+	else
+	{
+		tuple_multiply_scalor(&diffuse, &effective_color, light_dot_normal * m->diffuse);
+		tuple_negate(&neg_lightv, &lightv);
+		reflect(&reflectv, &neg_lightv, normal);
+		reflect_dot_eye = dot(&reflectv, eye);
+		if (reflect_dot_eye <= 0.0f)
+			vector(&specular, 0.0f, 0.0f, 0.0f);
+		else
+		{
+			factor = pow(reflect_dot_eye, m->shininess);
+			tuple_multiply_scalor(&specular, &light->color, m->specular * factor);
+		}
+	}
+	tuple_add(&temp, &ambient, &diffuse);
+	tuple_add(out, &temp, &specular);
+	out->t[3] = 1.0f;
+}

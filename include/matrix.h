@@ -29,7 +29,7 @@ typedef struct s_ray
 void matrix(t_mat *m);
 void matrix_print(t_mat *mt);
 void matrix_multiply(t_mat *m0, t_mat *m1, t_mat *m2);
-void indentity(t_mat *m0);
+void identity(t_mat *m0);
 void matrix_transpose(t_mat *m0, t_mat *m1);
 
 void	submatrix4x4(t_mat3 *m0, t_mat *m1, int column, int row);
@@ -45,7 +45,7 @@ bool matrix_inverse(t_mat *out, t_mat *in);
 void transform(t_ray *rp, t_ray *r, t_mat *m);
 
 void translation(t_mat *m0, float x, float y, float z);
-void scalling(t_mat *m0, float x, float y, float z);
+void scaling(t_mat *m0, float x, float y, float z);
 void rotate_x(t_mat *m0, float r);
 void rotate_y(t_mat *m0, float r);
 void rotate_z(t_mat *m0, float r);
