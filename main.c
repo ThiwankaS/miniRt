@@ -41,6 +41,7 @@ int	main(void)
 	floor.material = &m_wall;
 	identity(&floor.transform);
 	matrix_inverse(&floor.invs, &floor.transform);
+	matrix_transpose(&floor.invs_trans, &floor.invs);
 
 	// Back Wall (XY plane at Z = 3, facing -Z)
 	translation(&trans, 0, 0, 3);
@@ -50,6 +51,7 @@ int	main(void)
 	back_wall.material = &m_wall;
 	set_transform(&back_wall.transform, &tmp);
 	matrix_inverse(&back_wall.invs, &back_wall.transform);
+	matrix_transpose(&back_wall.invs_trans, &back_wall.invs);
 
 	// Left Wall (YZ plane at X = -3, facing +X)
 	translation(&trans, -3, 0, 0);
@@ -59,6 +61,7 @@ int	main(void)
 	left_wall.material = &m_wall;
 	set_transform(&left_wall.transform, &tmp);
 	matrix_inverse(&left_wall.invs, &left_wall.transform);
+	matrix_transpose(&left_wall.invs_trans, &left_wall.invs);
 
 	// Sphere 1
 	scaling(&scale, 0.5f, 0.5f, 0.5f);
@@ -68,6 +71,7 @@ int	main(void)
 	sphere1.material = &m_sphere1;
 	set_transform(&sphere1.transform, &tmp);
 	matrix_inverse(&sphere1.invs, &sphere1.transform);
+	matrix_transpose(&sphere1.invs_trans, &sphere1.invs);
 
 	// Sphere 2
 	scaling(&scale, 0.4f, 0.4f, 0.4f);
@@ -77,6 +81,7 @@ int	main(void)
 	sphere2.material = &m_sphere2;
 	set_transform(&sphere2.transform, &tmp);
 	matrix_inverse(&sphere2.invs, &sphere2.transform);
+	matrix_transpose(&sphere2.invs_trans, &sphere2.invs);
 
 	// Cylinder
 	scaling(&scale, 0.3f, 1.0f, 0.3f);
@@ -86,6 +91,7 @@ int	main(void)
 	cylinder.material = &m_cylinder;
 	set_transform(&cylinder.transform, &tmp);
 	matrix_inverse(&cylinder.invs, &cylinder.transform);
+	matrix_transpose(&cylinder.invs_trans, &cylinder.invs);
 
 	// Chain objects: floor -> back_wall -> left_wall -> sphere1 -> sphere2 -> cylinder
 	floor.next = &back_wall;
