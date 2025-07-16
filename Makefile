@@ -15,7 +15,7 @@ MLX42_BUILD_CMD = cmake -B $(MLX42_DIR)/build -S $(MLX42_DIR) && cmake --build $
 CMD = cc
 
 # Debug and Release Flags
-DEBUG_FLAGS = -Wall -Wextra -Werror -g -fsanitize=address,undefined
+DEBUG_FLAGS = -Wall -Wextra -Werror -g -O0 #-fsanitize=address,undefined
 RELEASE_FLAGS = -Wall -Wextra -Werror -O3
 
 # Default to RELEASE
