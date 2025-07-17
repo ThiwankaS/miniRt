@@ -22,4 +22,14 @@
 # include "../ft_libft/ft_printf.h"
 # include "../ft_libft/get_next_line.h"
 
+
+int ft_error(char *msg);
+int values_validation(char *str);
+void free_split(char **array);
+bool	ft_isspace(char c);
+float ft_atof(const char *str);
+int set_world(char *line, t_world *world, int *index);
+int set_light(char *line, t_world *world, int *index);
+bool init_file_reader(char *filename, t_world *world);
+
 # endif

@@ -15,7 +15,7 @@ MLX42_BUILD_CMD = cmake -B $(MLX42_DIR)/build -S $(MLX42_DIR) && cmake --build $
 CMD = cc
 
 # Debug and Release Flags
-DEBUG_FLAGS = -Wall -Wextra -Werror -g -O0 #-fsanitize=address,undefined
+DEBUG_FLAGS = -Wall -Wextra -Werror -g -O0 -fsanitize=address,undefined
 RELEASE_FLAGS = -Wall -Wextra -Werror -O3
 
 # Default to RELEASE
@@ -35,6 +35,11 @@ SRCS = \
 	srcs/graphics/helper.c\
 	srcs/graphics/shading.c\
 	srcs/graphics/world.c\
+	srcs/error/file.c\
+	srcs/parsing/atof.c\
+	srcs/parsing/reader.c\
+	srcs/parsing/world.c\
+	srcs/parsing/light.c\
 	main.c
 
 OBJS = $(SRCS:.c=.o)

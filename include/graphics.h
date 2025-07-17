@@ -34,8 +34,13 @@ typedef struct s_object
 } t_object;
 typedef struct s_world
 {
-	t_light light;
-	t_object *components;
+	bool		set_ambient;
+	bool		set_light;
+	float		ambient;
+	float		diffuse;
+	t_tuple		colour;
+	t_light		light;
+	t_object	*components;
 } t_world;
 
 typedef struct s_compute
