@@ -7,17 +7,9 @@ t_compute	prepare_compute(float t, t_object *object, t_ray *r)
 
 	comp.value = t;
 	comp.object = object;
-
-	// Position on the surface
 	position(&comp.p, r, t);
-
-	// Eye vector
 	tuple_negate(&comp.eye_v, &r->direction);
-
-	// Correct normal (transforms inside)
 	normal_at(&comp.normal_v, object, &comp.p);
-
-	// Determine if we're inside the object
 	dot_val = dot(&comp.eye_v, &comp.normal_v);
 	if (dot_val < 0.0f)
 	{
@@ -31,11 +23,6 @@ t_compute	prepare_compute(float t, t_object *object, t_ray *r)
 	return comp;
 }
 
-void shade_hit(t_tuple *colour, t_object *object, t_world *world, t_compute *comp)
-{
-	lighting(colour, object->material, &world->light, &comp->p, &comp->eye_v, &comp->normal_v);
-}
-
 t_tuple	color_at(t_world *world, t_ray *r)
 {
 	t_tuple		colour;
@@ -47,7 +34,7 @@ t_tuple	color_at(t_world *world, t_ray *r)
 	if (h.hit)
 	{
 		comp = prepare_compute(h.t, h.object, r);
-		shade_hit(&colour, h.object, world, &comp);
+		lighting(&colour, h.object->material, &world->light, &comp);
 		return (colour);
 	}
 	return (colour);

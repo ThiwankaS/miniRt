@@ -28,22 +28,19 @@ typedef struct s_object
 	float radius;
 	t_mat transform;
 	t_mat invs;
+	t_mat invs_trans;
 	t_material *material;
 	struct s_object *next;
 } t_object;
-
-typedef struct s_intersect
-{
-	int count;
-	float value;
-	t_object *object;
-	struct s_intersect *next;
-} t_intersect;
-
 typedef struct s_world
 {
-	t_light light;
-	t_object *components;
+	bool		set_ambient;
+	bool		set_light;
+	float		ambient;
+	float		diffuse;
+	t_tuple		colour;
+	t_light		light;
+	t_object	*components;
 } t_world;
 
 typedef struct s_compute
@@ -75,7 +72,8 @@ typedef struct s_hit
 	bool		hit;
 } t_hit;
 
-typedef struct s_tile_state {
+typedef struct s_tile_state
+{
 	mlx_t		*mlx;
 	mlx_image_t	*img;
 	t_camera	*camera;
@@ -86,7 +84,8 @@ typedef struct s_tile_state {
 	bool		done;
 }	t_tile_state;
 
-typedef struct s_mouse_state {
+typedef struct s_mouse_state
+{
 	mlx_t		*mlx;
 	t_camera	*camera;
 	t_world		*world;
@@ -105,11 +104,9 @@ uint32_t tuple_to_color(t_tuple *tp);
 
 void normal_at(t_tuple *normal, t_object *s, t_tuple *world_point);
 void reflect(t_tuple *out, t_tuple *in, t_tuple *normal);
-void point_light(t_light *light, t_tuple *position, t_tuple *intensity);
-void lighting(t_tuple *out, t_material *m, t_light *light, t_tuple *position, t_tuple *eye, t_tuple *normal);
+void	lighting(t_tuple *out, t_material *m, t_light *light, t_compute *comp);
 
 t_compute	prepare_compute(float t, t_object *object, t_ray *r);
-void shade_hit(t_tuple *colour, t_object *object, t_world *world, t_compute *comp);
 t_tuple	color_at(t_world *world, t_ray *r);
 void view_transformation(t_camera *camera, t_tuple *from, t_tuple *to, t_tuple *up);
 t_camera camera_init(int hsize, int vsize, float fov);

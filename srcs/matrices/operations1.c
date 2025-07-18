@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 20:43:39 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/11 04:07:59 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/16 15:01:30 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ void	matrix_multiply(t_mat *m0, t_mat *m1, t_mat *m2)
 {
 	int	column;
 	int	row;
-	int	k;
 
 	column = 0;
 	while (column < SIZE)
@@ -73,13 +72,11 @@ void	matrix_multiply(t_mat *m0, t_mat *m1, t_mat *m2)
 		row = 0;
 		while (row < SIZE)
 		{
-			m0->m[column][row] = 0.0;
-			k = 0;
-			while (k < SIZE)
-			{
-				m0->m[column][row] += m1->m[column][k] * m2->m[k][row];
-				k++;
-			}
+			m0->m[column][row] =
+				m1->m[column][0] * m2->m[0][row] +
+				m1->m[column][1] * m2->m[1][row] +
+				m1->m[column][2] * m2->m[2][row] +
+				m1->m[column][3] * m2->m[3][row];
 			row++;
 		}
 		column++;
