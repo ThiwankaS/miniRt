@@ -27,6 +27,15 @@ int init_world(t_world *world, float *v)
 	return (0);
 }
 
+bool valid_char(char c)
+{
+	if (c >= '0' && c <= '9')
+		return (true);
+	if (c == '-')
+		return (true);
+	return (false);
+}
+
 int values_validation(char *str)
 {
 	int i;
@@ -38,7 +47,7 @@ int values_validation(char *str)
 	{
 		if(str[i] == ',')
 			count++;
-		else if (str[i] >= '0' && str[i] <= '9')
+		else if (valid_char(str[i]))
 		{
 			i++;
 			continue;
@@ -48,11 +57,11 @@ int values_validation(char *str)
 		i++;
 	}
 	if (count == 2 && (str[i] == '\0' || ft_isspace(str[i])))
-		return (0);
-	return (1);
+		return (1);
+	return (0);
 }
 
-int set_world(char *line, t_world *world, int *index)
+int set_world(char *line, t_state *state, int *index)
 {
 	char	**items;
 	char	**values;
@@ -61,7 +70,7 @@ int set_world(char *line, t_world *world, int *index)
 	items = ft_split(&line[*index],' ');
 	if (!items || !items[0] || !items[1])
 		return (free_split(items), 1);
-	if (!items[1] || values_validation(items[1]))
+	if (!items[1] || !values_validation(items[1]))
 		return (free_split(items), 1);
 	values = ft_split(items[1], ',');
 	if (!values || !values[0] || !values[1] || !values[2])
@@ -76,7 +85,7 @@ int set_world(char *line, t_world *world, int *index)
 	v[3] = ft_atof(values[2]);
 	free_split(items);
 	free_split(values);
-	if (init_world(world, v))
+	if (init_world(&state->world, v))
 		return (1);
 	return (0);
 }

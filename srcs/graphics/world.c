@@ -69,33 +69,6 @@ void view_transformation(t_camera *camera, t_tuple *from, t_tuple *to, t_tuple *
 	matrix_inverse(&camera->invs, &camera->transform);
 }
 
-t_camera camera_init(int hsize, int vsize, float fov)
-{
-	float	half_view;
-	float	aspect;
-	t_camera camera;
-
-	camera.hsize = hsize;
-	camera.vsize = vsize;
-	camera.fov = fov;
-	identity(&camera.transform);
-	matrix_inverse(&camera.invs, &camera.transform);
-	half_view = tan(fov/2);
-	aspect = hsize /(float) vsize;
-	if(aspect >= 1)
-	{
-		camera.half_width = half_view;
-		camera.half_height = half_view / aspect;
-	}
-	else
-	{
-		camera.half_width = half_view * aspect;
-		camera.half_height = half_view;
-	}
-	camera.pixel_size = (camera.half_width * 2) / camera.hsize;
-	return (camera);
-}
-
 t_ray ray_for_pixel(t_camera *camera, int px, int py)
 {
 	float	xoffset;
@@ -127,7 +100,7 @@ t_ray ray_for_pixel(t_camera *camera, int px, int py)
 
 void render(void *param)
 {
-	t_tile_state *s = (t_tile_state *)param;
+	t_state *s = (t_state *)param;
 
 	if (s->done)
 		return;
@@ -144,10 +117,10 @@ void render(void *param)
 	int max_x = tile_x + TILE_SIZE;
 	int max_y = tile_y + TILE_SIZE;
 
-	if (max_x > s->camera->hsize)
-		max_x = s->camera->hsize;
-	if (max_y > s->camera->vsize)
-		max_y = s->camera->vsize;
+	if (max_x > s->camera.hsize)
+		max_x = s->camera.hsize;
+	if (max_y > s->camera.vsize)
+		max_y = s->camera.vsize;
 
 	int y = tile_y;
 	while (y < max_y)
@@ -155,8 +128,8 @@ void render(void *param)
 		int x = tile_x;
 		while (x < max_x)
 		{
-			t_ray r = ray_for_pixel(s->camera, x, y);
-			t_tuple c = color_at(s->world, &r);
+			t_ray r = ray_for_pixel(&s->camera, x, y);
+			t_tuple c = color_at(&s->world, &r);
 			mlx_put_pixel(s->img, x, y, tuple_to_color(&c));
 			x++;
 		}

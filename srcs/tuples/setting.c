@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 20:37:05 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/08 20:41:24 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/18 05:59:55 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,8 @@ void	vector(t_tuple *p, float x, float y, float z)
  */
 void	tuple_print(t_tuple *tp)
 {
-	printf(" | x : %8.5f", tp->t[0]);
-	printf(" | y : %8.5f", tp->t[1]);
-	printf(" | z : %8.5f", tp->t[2]);
-	printf(" | w : %8.5f\n", tp->t[3]);
+	printf(" | x : %6.3f", tp->t[0]);
+	printf(" | y : %6.3f", tp->t[1]);
+	printf(" | z : %6.3f", tp->t[2]);
+	printf(" | w : %6.3f\n", tp->t[3]);
 }
