@@ -40,6 +40,7 @@ SRCS = \
 	srcs/parsing/reader.c\
 	srcs/parsing/world.c\
 	srcs/parsing/light.c\
+	srcs/parsing/camera.c\
 	main.c
 
 OBJS = $(SRCS:.c=.o)

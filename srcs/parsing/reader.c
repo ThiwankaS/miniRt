@@ -10,7 +10,7 @@ bool line_break(char *line, int *index)
 	return (false);
 }
 
-bool process_line(char *line, t_world *world)
+bool process_line(char *line, t_state *state)
 {
 	int	i;
 	int	res;
@@ -20,11 +20,11 @@ bool process_line(char *line, t_world *world)
 	while (line && line[i] && line[i] != ' ')
 		i++;
 	if (i != 0 && ft_strncmp(line, "A", i) == 0)
-		res = set_world(line, world, &i);
+		res = set_world(line, state, &i);
 	else if (i != 0 && ft_strncmp(line, "L", i) == 0)
-		res = set_light(line, world, &i);
+		res = set_light(line, state, &i);
 	else if (i != 0 && ft_strncmp(line, "C", i) == 0)
-		printf("calling camera processing function [%d]\n", i);
+		res = set_camera(line, state, &i);
 	else if (i != 0 && ft_strncmp(line, "sp", i) == 0)
 		printf("calling sphere processing function [%d]\n", i);
 	else if (i != 0 && ft_strncmp(line, "pl", i) == 0)
@@ -50,7 +50,7 @@ bool valid_filename(char *filename)
 	return (true);
 }
 
-bool read_content(int fd, t_world *world)
+bool read_content(int fd, t_state *state)
 {
 	char *line;
 
@@ -60,7 +60,7 @@ bool read_content(int fd, t_world *world)
 		line = get_next_line(fd);
 		if (!line)
 			break ;
-		if (!process_line(line, world))
+		if (!process_line(line, state))
 		{
 			free(line);
 			return (false);
@@ -71,7 +71,7 @@ bool read_content(int fd, t_world *world)
 	return (true);
 }
 
-bool init_file_reader(char *filename, t_world *world)
+bool init_file_reader(char *filename, t_state *state)
 {
 	int fd;
 
@@ -86,7 +86,7 @@ bool init_file_reader(char *filename, t_world *world)
 		ft_error("[ failed to open the file ! ] \n");
 		return (false);
 	}
-	if(!read_content(fd, world))
+	if(!read_content(fd, state))
 	{
 		ft_error("[ incorrect data in the file ! ] \n");
 		close(fd);

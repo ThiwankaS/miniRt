@@ -1,9 +1,10 @@
 # ifndef FT_MINIRT_H
 # define FT_MINIRT_H
+
 # define _GNU_SOURCE
-
+# define WIDTH 1600
+# define HEIGHT 1200
 # define TILE_SIZE 64
-
 # define SPHERE   1
 # define PLANE    2
 # define CYLINDER 3
@@ -28,8 +29,9 @@ int values_validation(char *str);
 void free_split(char **array);
 bool	ft_isspace(char c);
 float ft_atof(const char *str);
-int set_world(char *line, t_world *world, int *index);
-int set_light(char *line, t_world *world, int *index);
-bool init_file_reader(char *filename, t_world *world);
+int set_world(char *line, t_state *state, int *index);
+int set_light(char *line, t_state *state, int *index);
+int set_camera(char *line, t_state *state, int *index);
+bool init_file_reader(char *filename, t_state *state);
 
 # endif

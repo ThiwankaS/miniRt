@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 20:43:39 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/16 15:01:30 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/18 06:00:26 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	matrix_print(t_mat *mt)
 		row = 0;
 		while (row < SIZE)
 		{
-			printf(" | m[%d][%d] : %8.5f", column, row, mt->m[column][row]);
+			printf(" | m[%d][%d] : %6.3f", column, row, mt->m[column][row]);
 			row++;
 		}
 		printf("\n");

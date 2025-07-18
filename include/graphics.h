@@ -61,6 +61,7 @@ typedef struct s_camera
 	float half_width;
 	float half_height;
 	float pixel_size;
+	bool set_camera;
 	t_mat transform;
 	t_mat invs;
 } t_camera;
@@ -72,24 +73,24 @@ typedef struct s_hit
 	bool		hit;
 } t_hit;
 
-typedef struct s_tile_state
+typedef struct s_state
 {
 	mlx_t		*mlx;
 	mlx_image_t	*img;
-	t_camera	*camera;
-	t_world		*world;
+	t_camera	camera;
+	t_world		world;
 	int			tiles_x;
 	int			tiles_y;
 	int			current_tile;
 	bool		done;
-}	t_tile_state;
+}	t_state;
 
 typedef struct s_mouse_state
 {
 	mlx_t		*mlx;
 	t_camera	*camera;
 	t_world		*world;
-	t_tile_state *render_state;
+	t_state *render_state;
 	bool		is_dragging;
 	int			last_x;
 	int			last_y;
@@ -109,7 +110,6 @@ void	lighting(t_tuple *out, t_material *m, t_light *light, t_compute *comp);
 t_compute	prepare_compute(float t, t_object *object, t_ray *r);
 t_tuple	color_at(t_world *world, t_ray *r);
 void view_transformation(t_camera *camera, t_tuple *from, t_tuple *to, t_tuple *up);
-t_camera camera_init(int hsize, int vsize, float fov);
 t_ray ray_for_pixel(t_camera *camera, int px, int py);
 void render(void *param);
 

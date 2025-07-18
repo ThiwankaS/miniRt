@@ -115,7 +115,7 @@ int	main(void)
 	view_transformation(&camera, &from, &to, &up);
 
 	// Render
-	static t_tile_state state;
+	static t_state state;
 	state.mlx = mlx;
 	state.img = img;
 	state.camera = &camera;
