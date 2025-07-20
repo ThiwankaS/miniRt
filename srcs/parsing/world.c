@@ -1,15 +1,33 @@
-# include "../../include/miniRt.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   world.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/20 04:37:53 by tsomacha          #+#    #+#             */
+/*   Updated: 2025/07/21 01:39:39 by tsomacha         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-void free_split(char **array)
+#include "../../include/miniRt.h"
+
+void	free_split(char **array)
 {
-	int i = 0;
-	if (!array) return;
+	int	i;
+
+	i = 0;
+	if (!array)
+		return ;
 	while (array[i])
-		free(array[i++]);
+	{
+		free(array[i]);
+		i++;
+	}
 	free(array);
 }
 
-int init_world(t_world *world, float *v)
+int	init_world(t_world *world, float *v)
 {
 	if (world->set_ambient)
 		return (1);
@@ -27,30 +45,32 @@ int init_world(t_world *world, float *v)
 	return (0);
 }
 
-bool valid_char(char c)
+bool	valid_char(char c)
 {
 	if (c >= '0' && c <= '9')
 		return (true);
 	if (c == '-')
 		return (true);
+	if (c == '.')
+		return (true);
 	return (false);
 }
 
-int values_validation(char *str)
+int	values_validation(char *str)
 {
-	int i;
-	int count;
+	int	i;
+	int	count;
 
 	i = 0;
 	count = 0;
 	while (str[i])
 	{
-		if(str[i] == ',')
+		if (str[i] == ',')
 			count++;
 		else if (valid_char(str[i]))
 		{
 			i++;
-			continue;
+			continue ;
 		}
 		else
 			break ;
@@ -61,13 +81,13 @@ int values_validation(char *str)
 	return (0);
 }
 
-int set_world(char *line, t_state *state, int *index)
+int	set_world(char *line, t_state *state, int *index)
 {
 	char	**items;
 	char	**values;
 	float	v[4];
 
-	items = ft_split(&line[*index],' ');
+	items = ft_split(&line[*index], ' ');
 	if (!items || !items[0] || !items[1])
 		return (free_split(items), 1);
 	if (!items[1] || !values_validation(items[1]))

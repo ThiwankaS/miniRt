@@ -1,21 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   light.c                                            :+:      :+:    :+:   */
+/*   sphere.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/20 04:38:17 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/20 04:38:19 by tsomacha         ###   ########.fr       */
+/*   Created: 2025/07/20 06:35:49 by tsomacha          #+#    #+#             */
+/*   Updated: 2025/07/21 01:59:01 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/miniRt.h"
 
-bool	set_light_color(t_world *world, char *line)
+bool	get_position_s(float *v, char *line)
 {
 	char	**values;
-	float	v[3];
 
 	if (!line || !values_validation(line))
 		return (false);
@@ -28,34 +27,26 @@ bool	set_light_color(t_world *world, char *line)
 	v[0] = ft_atof(values[0]);
 	v[1] = ft_atof(values[1]);
 	v[2] = ft_atof(values[2]);
-	if (v[0] < 0.0f || v[0] > 255.0f)
-		return (false);
-	if (v[1] < 0.0f || v[1] > 255.0f)
-		return (false);
-	if (v[2] < 0.0f || v[2] > 255.0f)
-		return (false);
-	color(&world->light.color, v[0], v[1], v[2]);
 	free_split(values);
 	return (true);
 }
 
-bool	set_light_diffuse(t_world *world, char *line)
+bool	get_radius_s(float *v, char *line)
 {
-	float	v;
+	float	d;
 
 	if (!line)
 		return (false);
-	v = ft_atof(line);
-	if (v < 0.0f || v > 1.0f)
+	d = ft_atof(line);
+	if (d < 0.0f)
 		return (false);
-	world->diffuse = v;
+	v[3] = d / 2.0f;
 	return (true);
 }
 
-bool	set_light_position(t_world *world, char *line)
+bool	get_color_s(float *v, char *line)
 {
 	char	**values;
-	float	v[3];
 
 	if (!line || !values_validation(line))
 		return (false);
@@ -65,30 +56,61 @@ bool	set_light_position(t_world *world, char *line)
 		free_split(values);
 		return (false);
 	}
-	v[0] = ft_atof(values[0]);
-	v[1] = ft_atof(values[1]);
-	v[2] = ft_atof(values[2]);
-	point(&world->light.position, v[0], v[1], v[2]);
+	v[4] = ft_atof(values[0]);
+	v[5] = ft_atof(values[1]);
+	v[6] = ft_atof(values[2]);
 	free_split(values);
+	if (v[4] < 0.0f || v[4] > 255.0f)
+		return (false);
+	if (v[5] < 0.0f || v[5] > 255.0f)
+		return (false);
+	if (v[6] < 0.0f || v[6] > 255.0f)
+		return (false);
 	return (true);
 }
 
-int	set_light(char *line, t_state *state, int *index)
+void	set_sphere_values(t_state *state, t_object *s, float *v)
 {
-	char	**items;
+	if (!state || !s)
+		return ;
+	s->id = 1;
+	s->type = SPHERE;
+	s->x = v[0];
+	s->y = v[1];
+	s->z = v[2];
+	s->radius = v[3];
+	s->height = 0.0f;
+	color(&s->color, v[4], v[5], v[6]);
+	vector(&s->norm_v, 0.0f, 0.0f, 0.0f);
+	s->ambient = state->world.ambient;
+	s->diffuse = state->world.diffuse;
+	s->specular = 0.0f;
+	s->shininess = 200.0f;
+	identity(&s->transform);
+	identity(&s->invs);
+	identity(&s->invs_trans);
+	s->next = NULL;
+	s->material = NULL;
+	add_object(state, &s);
+}
 
-	if (state->world.set_light)
-		return (1);
+int	set_sphere(char *line, t_state *state, int *index)
+{
+	char		**items;
+	float		v[7];
+	t_object	*s;
+
 	items = ft_split(&line[*index], ' ');
 	if (!items)
 		return (free_split(items), 1);
-	if (!set_light_position(&state->world, items[0]))
+	if (!get_position_s(v, items[0]))
 		return (free_split(items), 1);
-	if (!set_light_diffuse(&state->world, items[1]))
+	if (!get_radius_s(v, items[1]))
 		return (free_split(items), 1);
-	if (!set_light_color(&state->world, items[2]))
+	if (!get_color_s(v, items[2]))
 		return (free_split(items), 1);
-	state->world.set_light = true;
+	s = init_object();
+	set_sphere_values(state, s, v);
 	free_split(items);
 	return (0);
 }

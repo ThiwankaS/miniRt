@@ -41,6 +41,11 @@ SRCS = \
 	srcs/parsing/world.c\
 	srcs/parsing/light.c\
 	srcs/parsing/camera.c\
+	srcs/parsing/common.c\
+	srcs/parsing/sphere.c\
+	srcs/parsing/plane.c\
+	srcs/parsing/cylinder1.c\
+	srcs/parsing/cylinder2.c\
 	main.c
 
 OBJS = $(SRCS:.c=.o)
