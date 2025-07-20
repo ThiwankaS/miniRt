@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 04:38:04 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/20 07:49:19 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/21 02:21:38 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ bool	process_line(char *line, t_state *state)
 	else if (i != 0 && ft_strncmp(line, "pl", i) == 0)
 		res = set_plane(line, state, &i);
 	else if (i != 0 && ft_strncmp(line, "cy", i) == 0)
-		printf("calling cylinder processing function [%d]\n", i);
+		res = set_cylinder(line, state, &i);
 	else if (i != 0 && !line_break(line, &i))
 		return (false);
 	if (res)

@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 05:22:24 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/20 07:48:39 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/21 02:04:02 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ int			set_light(char *line, t_state *state, int *index);
 int			set_camera(char *line, t_state *state, int *index);
 int			set_sphere(char *line, t_state *state, int *index);
 int			set_plane(char *line, t_state *state, int *index);
+int			set_cylinder(char *line, t_state *state, int *index);
 bool		init_file_reader(char *filename, t_state *state);
 
 #endif
