@@ -21,16 +21,18 @@ typedef struct s_light
 typedef struct s_object
 {
 	int   id;
+	int   type;
 	float x;
 	float y;
 	float z;
-	int   type;
 	float radius;
+	float height;
 	float ambient;
 	float diffuse;
 	float specular;
 	float shininess;
 	t_tuple color;
+	t_tuple norm_v;
 	t_mat transform;
 	t_mat invs;
 	t_mat invs_trans;

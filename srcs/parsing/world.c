@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 04:37:53 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/20 04:37:55 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/21 01:39:39 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,10 @@ void	free_split(char **array)
 	if (!array)
 		return ;
 	while (array[i])
-		free(array[i++]);
+	{
+		free(array[i]);
+		i++;
+	}
 	free(array);
 }
 
@@ -47,6 +50,8 @@ bool	valid_char(char c)
 	if (c >= '0' && c <= '9')
 		return (true);
 	if (c == '-')
+		return (true);
+	if (c == '.')
 		return (true);
 	return (false);
 }

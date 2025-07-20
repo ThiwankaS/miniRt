@@ -98,10 +98,14 @@ int	main(int argc, char *argv[])
 	default_state(state);
 	if(argc != 1)
 	{
-		init_file_reader(argv[1], state);
-		print_things(state);
+		if(init_file_reader(argv[1], state))
+		{
+			print_things(state);
+		}
 	}
 	else
 		ft_error("[ incorrect arguments ! ] \n");
+	clean_up(state);
+	free(state);
 	return (0);
 }
