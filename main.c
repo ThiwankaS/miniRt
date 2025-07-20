@@ -39,6 +39,27 @@ void default_state(t_state *state)
 	state->camera.set_camera = false;
 }
 
+void print_object(t_object *s)
+{
+	if(s)
+	{
+		printf("id : %d\n", s->id);
+		printf("type : %d\n", s->type);
+		printf("s.ambient : %.3f\n", s->ambient);
+		printf("s.diffuse : %.3f\n", s->diffuse);
+		printf("s.specular : %.3f\n", s->specular);
+		printf("s.shininess : %.3f\n", s->shininess);
+		printf("s.x : %.3f\n", s->x);
+		printf("s.y : %.3f\n", s->y);
+		printf("s.z : %.3f\n", s->z);
+		printf("s.radius : %.3f\n", s->radius);
+		printf("s.color : \n");
+		tuple_print(&s->color);
+		printf("s.transform : \n");
+		matrix_print(&s->transform);
+	}
+}
+
 void print_things(t_state *state)
 {
 	printf("state.world.ambient : %.3f\n", state->world.ambient);
@@ -59,19 +80,28 @@ void print_things(t_state *state)
 	matrix_print(&state->camera.transform);
 	printf("state->camera.invs : \n");
 	matrix_print(&state->camera.invs);
+	printf("object list :\n");
+	t_object *s = state->world.components;
+	while(s)
+	{
+		print_object(s);
+		s = s->next;
+	}
+
 }
 
 int	main(int argc, char *argv[])
 {
-	t_state	state;
-
-	default_state(&state);
+	t_state	*state = ft_calloc(1, sizeof(t_state));
+	if (!state)
+		return (1);
+	default_state(state);
 	if(argc != 1)
 	{
-		init_file_reader(argv[1], &state);
+		init_file_reader(argv[1], state);
+		print_things(state);
 	}
 	else
 		ft_error("[ incorrect arguments ! ] \n");
-	print_things(&state);
 	return (0);
 }

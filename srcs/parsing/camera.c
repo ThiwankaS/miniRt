@@ -1,6 +1,18 @@
-# include "../../include/miniRt.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   camera.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/20 04:38:29 by tsomacha          #+#    #+#             */
+/*   Updated: 2025/07/20 04:38:31 by tsomacha         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-void update_fov(t_camera *camera, float fov)
+#include "../../include/miniRt.h"
+
+void	update_fov(t_camera *camera, float fov)
 {
 	float	half_view;
 	float	aspect;
@@ -10,9 +22,9 @@ void update_fov(t_camera *camera, float fov)
 	hsize = camera->hsize;
 	vsize = camera->vsize;
 	camera->fov = fov;
-	half_view = tan(fov/2);
-	aspect = hsize /(float) vsize;
-	if(aspect >= 1)
+	half_view = tan(fov / 2);
+	aspect = hsize / (float) vsize;
+	if (aspect >= 1)
 	{
 		camera->half_width = half_view;
 		camera->half_height = half_view / aspect;
@@ -25,21 +37,7 @@ void update_fov(t_camera *camera, float fov)
 	camera->pixel_size = (camera->half_width * 2) / camera->hsize;
 }
 
-void update_view(t_camera *camera, t_tuple *p, t_tuple *d)
-{
-	t_tuple from;
-	t_tuple forward;
-	t_tuple to;
-	t_tuple up;
-
-	point(&from, p->t[0], p->t[1], p->t[2]);
-	vector(&forward, d->t[0], d->t[1], d->t[2]);
-	vector(&up, 0.0f, 1.0f, 0.0f);
-	tuple_add(&to, &from, &forward);
-	view_transformation(camera, &from, &to, &up);
-}
-
-bool get_fov(float *fov, char *line)
+bool	get_fov(float *fov, char *line)
 {
 	float	t;
 
@@ -52,7 +50,7 @@ bool get_fov(float *fov, char *line)
 	return (true);
 }
 
-bool get_orientation(t_tuple *d, char *line)
+bool	get_orientation(t_tuple *d, char *line)
 {
 	char	**values;
 	float	v[3];
@@ -81,7 +79,7 @@ bool get_orientation(t_tuple *d, char *line)
 	return (true);
 }
 
-bool get_cordinates(t_tuple *p, char *line)
+bool	get_cordinates(t_tuple *p, char *line)
 {
 	char	**values;
 	float	v[3];
@@ -102,7 +100,7 @@ bool get_cordinates(t_tuple *p, char *line)
 	return (true);
 }
 
-int set_camera(char *line, t_state *state, int *index)
+int	set_camera(char *line, t_state *state, int *index)
 {
 	char	**items;
 	t_tuple	p;
@@ -111,14 +109,14 @@ int set_camera(char *line, t_state *state, int *index)
 
 	if (state->camera.set_camera)
 		return (1);
-	items = ft_split(&line[*index],' ');
+	items = ft_split(&line[*index], ' ');
 	if (!items)
 		return (free_split(items), 1);
-	if(!get_cordinates(&p, items[0]))
+	if (!get_cordinates(&p, items[0]))
 		return (free_split(items), 1);
-	if(!get_orientation(&d, items[1]))
+	if (!get_orientation(&d, items[1]))
 		return (free_split(items), 1);
-	if(!get_fov(&fov, items[2]))
+	if (!get_fov(&fov, items[2]))
 		return (free_split(items), 1);
 	update_fov(&state->camera, fov);
 	update_view(&state->camera, &p, &d);

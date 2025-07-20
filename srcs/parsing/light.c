@@ -1,6 +1,18 @@
-# include "../../include/miniRt.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   light.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/20 04:38:17 by tsomacha          #+#    #+#             */
+/*   Updated: 2025/07/20 04:38:19 by tsomacha         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-bool set_light_color(t_world *world, char *line)
+#include "../../include/miniRt.h"
+
+bool	set_light_color(t_world *world, char *line)
 {
 	char	**values;
 	float	v[3];
@@ -27,7 +39,7 @@ bool set_light_color(t_world *world, char *line)
 	return (true);
 }
 
-bool set_light_diffuse(t_world *world, char *line)
+bool	set_light_diffuse(t_world *world, char *line)
 {
 	float	v;
 
@@ -40,7 +52,7 @@ bool set_light_diffuse(t_world *world, char *line)
 	return (true);
 }
 
-bool set_light_position(t_world *world, char *line)
+bool	set_light_position(t_world *world, char *line)
 {
 	char	**values;
 	float	v[3];
@@ -61,20 +73,20 @@ bool set_light_position(t_world *world, char *line)
 	return (true);
 }
 
-int set_light(char *line, t_state *state, int *index)
+int	set_light(char *line, t_state *state, int *index)
 {
 	char	**items;
 
 	if (state->world.set_light)
 		return (1);
-	items = ft_split(&line[*index],' ');
+	items = ft_split(&line[*index], ' ');
 	if (!items)
 		return (free_split(items), 1);
-	if(!set_light_position(&state->world, items[0]))
+	if (!set_light_position(&state->world, items[0]))
 		return (free_split(items), 1);
-	if(!set_light_diffuse(&state->world, items[1]))
+	if (!set_light_diffuse(&state->world, items[1]))
 		return (free_split(items), 1);
-	if(!set_light_color(&state->world, items[2]))
+	if (!set_light_color(&state->world, items[2]))
 		return (free_split(items), 1);
 	state->world.set_light = true;
 	free_split(items);

@@ -24,8 +24,13 @@ typedef struct s_object
 	float x;
 	float y;
 	float z;
-	float type;
+	int   type;
 	float radius;
+	float ambient;
+	float diffuse;
+	float specular;
+	float shininess;
+	t_tuple color;
 	t_mat transform;
 	t_mat invs;
 	t_mat invs_trans;

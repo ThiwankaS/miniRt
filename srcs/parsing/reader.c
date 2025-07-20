@@ -1,6 +1,18 @@
-# include "../../include/miniRt.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   reader.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/20 04:38:04 by tsomacha          #+#    #+#             */
+/*   Updated: 2025/07/20 04:43:25 by tsomacha         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-bool line_break(char *line, int *index)
+#include "../../include/miniRt.h"
+
+bool	line_break(char *line, int *index)
 {
 	int	i;
 
@@ -10,7 +22,7 @@ bool line_break(char *line, int *index)
 	return (false);
 }
 
-bool process_line(char *line, t_state *state)
+bool	process_line(char *line, t_state *state)
 {
 	int	i;
 	int	res;
@@ -26,7 +38,7 @@ bool process_line(char *line, t_state *state)
 	else if (i != 0 && ft_strncmp(line, "C", i) == 0)
 		res = set_camera(line, state, &i);
 	else if (i != 0 && ft_strncmp(line, "sp", i) == 0)
-		printf("calling sphere processing function [%d]\n", i);
+		res = set_sphere(line, state, &i);
 	else if (i != 0 && ft_strncmp(line, "pl", i) == 0)
 		printf("calling plane processing function [%d]\n", i);
 	else if (i != 0 && ft_strncmp(line, "cy", i) == 0)
@@ -38,9 +50,9 @@ bool process_line(char *line, t_state *state)
 	return (true);
 }
 
-bool valid_filename(char *filename)
+bool	valid_filename(char *filename)
 {
-	int len;
+	int	len;
 
 	len = ft_strlen(filename);
 	if (ft_strncmp(&filename[len -3], ".rt", 3) != 0)
@@ -50,12 +62,12 @@ bool valid_filename(char *filename)
 	return (true);
 }
 
-bool read_content(int fd, t_state *state)
+bool	read_content(int fd, t_state *state)
 {
-	char *line;
+	char	*line;
 
 	line = NULL;
-	while(true)
+	while (true)
 	{
 		line = get_next_line(fd);
 		if (!line)
@@ -71,22 +83,22 @@ bool read_content(int fd, t_state *state)
 	return (true);
 }
 
-bool init_file_reader(char *filename, t_state *state)
+bool	init_file_reader(char *filename, t_state *state)
 {
-	int fd;
+	int	fd;
 
-	if(!valid_filename(filename))
+	if (!valid_filename(filename))
 	{
 		ft_error("[ incorrect file extension ! ] \n");
 		return (false);
 	}
 	fd = open(filename, O_RDONLY);
-	if(fd < 0)
+	if (fd < 0)
 	{
 		ft_error("[ failed to open the file ! ] \n");
 		return (false);
 	}
-	if(!read_content(fd, state))
+	if (!read_content(fd, state))
 	{
 		ft_error("[ incorrect data in the file ! ] \n");
 		close(fd);

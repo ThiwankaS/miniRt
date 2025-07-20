@@ -1,8 +1,20 @@
-# include "../../include/miniRt.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   atof.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/20 04:39:14 by tsomacha          #+#    #+#             */
+/*   Updated: 2025/07/20 04:39:54 by tsomacha         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../include/miniRt.h"
 
 bool	ft_isspace(char c)
 {
-	if ( c == ' ' || (c >= 9 && c <= 13))
+	if (c == ' ' || (c >= 9 && c <= 13))
 		return (true);
 	return (false);
 }
@@ -20,7 +32,7 @@ float	get_interger_part(const char **str)
 	return (result);
 }
 
-float get_fractional_part(const char **str)
+float	get_fractional_part(const char **str)
 {
 	float	fraction;
 	float	divisor;
@@ -36,7 +48,7 @@ float get_fractional_part(const char **str)
 	return (fraction);
 }
 
-float ft_atof(const char *str)
+float	ft_atof(const char *str)
 {
 	float	result;
 	float	fraction;
