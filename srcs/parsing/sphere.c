@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sphere.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/20 06:35:49 by tsomacha          #+#    #+#             */
+/*   Updated: 2025/07/20 06:35:52 by tsomacha         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/miniRt.h"
 
 bool	get_position(float *v, char *line)
@@ -80,7 +92,7 @@ void	set_sphere_values(t_state *state, t_object *s, float *v)
 	add_object(state, &s);
 }
 
-int set_sphere(char *line, t_state *state, int *index)
+int	set_sphere(char *line, t_state *state, int *index)
 {
 	char		**items;
 	float		v[7];

@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 04:37:43 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/20 06:06:36 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/20 06:35:23 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	clean_up(t_state *state)
 	}
 }
 
-t_object *init_object(void)
+t_object	*init_object(void)
 {
 	t_object	*s;
 
