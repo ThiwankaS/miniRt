@@ -1,31 +1,111 @@
-# include "include/miniRt.h"
+#include "include/miniRt.h"
 
-int main(void)
+void camera_init(t_camera *camera, int hsize, int vsize, float fov)
 {
-	ft_printf("hey, bro !\n");
+	float	half_view;
+	float	aspect;
 
-	double result = M_PI / 2;
-	printf("result : %.5f\n", result);
-
-	char *line = NULL;
-	int fd = open("test.txt", R_OK, 0644);
-	if(fd < 0)
-		return 0;
-	line = get_next_line(fd);
-	while(line != NULL)
+	camera->hsize = hsize;
+	camera->vsize = vsize;
+	camera->fov = fov;
+	identity(&camera->transform);
+	identity(&camera->invs);
+	half_view = tan(fov/2);
+	aspect = hsize /(float) vsize;
+	if(aspect >= 1)
 	{
-		ft_printf("%s", line);
-		free(line);
-		line = get_next_line(fd);
+		camera->half_width = half_view;
+		camera->half_height = half_view / aspect;
 	}
-	const char *msg = "Hello, world!";
-	printf("%s length is %zu\n", msg, ft_strlen(msg));
+	else
+	{
+		camera->half_width = half_view * aspect;
+		camera->half_height = half_view;
+	}
+	camera->pixel_size = (camera->half_width * 2) / camera->hsize;
+}
 
-	mlx_t *mlx = mlx_init(200, 200, "miniRt demo", false);
-	if (!mlx)
-		return (EXIT_FAILURE);
-	mlx_loop(mlx);
-	mlx_terminate(mlx);
-	return (EXIT_SUCCESS);
+
+void default_state(t_state *state)
+{
+	state->world.ambient = 0.0f;
+	state->world.diffuse = 0.0f;
+	state->world.set_ambient = false;
+	state->world.set_light = false;
+	color(&state->world.colour, 1.0f, 1.0f, 1.0f);
+	point(&state->world.light.position, 0.0f, 0.0f, 0.0f);
+	color(&state->world.light.color, 1.0f, 1.0f, 1.0f);
+	camera_init(&state->camera, WIDTH, HEIGHT, M_PI / 3);
+	state->camera.set_camera = false;
+}
+
+void print_object(t_object *s)
+{
+	if(s)
+	{
+		printf("id : %d\n", s->id);
+		printf("type : %d\n", s->type);
+		printf("s.ambient : %.3f\n", s->ambient);
+		printf("s.diffuse : %.3f\n", s->diffuse);
+		printf("s.specular : %.3f\n", s->specular);
+		printf("s.shininess : %.3f\n", s->shininess);
+		printf("s.x : %.3f\n", s->x);
+		printf("s.y : %.3f\n", s->y);
+		printf("s.z : %.3f\n", s->z);
+		printf("s.radius : %.3f\n", s->radius);
+		printf("s.color : \n");
+		tuple_print(&s->color);
+		printf("s.transform : \n");
+		matrix_print(&s->transform);
+	}
+}
+
+void print_things(t_state *state)
+{
+	printf("state.world.ambient : %.3f\n", state->world.ambient);
+	printf("state->world.colour : \n");
+	tuple_print(&state->world.colour);
+	printf("state.world.diffuse : %.3f\n", state->world.diffuse);
+	printf("state->world.light.color : \n");
+	tuple_print(&state->world.light.color);
+	printf("state->world.light.position : \n");
+	tuple_print(&state->world.light.position);
+	printf("state.camera.hszie : %d\n", state->camera.hsize);
+	printf("state.camera.vszie : %d\n", state->camera.vsize);
+	printf("state.camera.half_height : %.3f\n", state->camera.half_height);
+	printf("state.camera.half_width : %.3f\n", state->camera.half_width);
+	printf("state.camera.pixel_size : %.3f\n", state->camera.pixel_size);
+	printf("state.camera.fov : %.3f\n", state->camera.fov);
+	printf("state->camera.transform : \n");
+	matrix_print(&state->camera.transform);
+	printf("state->camera.invs : \n");
+	matrix_print(&state->camera.invs);
+	printf("object list :\n");
+	t_object *s = state->world.components;
+	while(s)
+	{
+		print_object(s);
+		s = s->next;
+	}
+
+}
+
+int	main(int argc, char *argv[])
+{
+	t_state	*state = ft_calloc(1, sizeof(t_state));
+	if (!state)
+		return (1);
+	default_state(state);
+	if(argc != 1)
+	{
+		if(init_file_reader(argv[1], state))
+		{
+			print_things(state);
+		}
+	}
+	else
+		ft_error("[ incorrect arguments ! ] \n");
+	clean_up(state);
+	free(state);
 	return (0);
 }
