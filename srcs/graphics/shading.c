@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 05:42:55 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/16 12:47:54 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/21 04:15:57 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,15 +71,15 @@ void	cal_specular(t_tuple *out, float *s, float *v)
 	out->t[2] += s[9] * s[5] * v[18];
 }
 
-void	cache_values(t_material *m, t_light *light, t_compute *comp, float *s)
+void	cache_values(t_object *obj, t_light *light, t_compute *comp, float *s)
 {
-	s[0] = m->color.t[0];
-	s[1] = m->color.t[1];
-	s[2] = m->color.t[2];
-	s[3] = m->ambient;
-	s[4] = m->diffuse;
-	s[5] = m->specular;
-	s[6] = m->shininess;
+	s[0] = obj->color.t[0];
+	s[1] = obj->color.t[1];
+	s[2] = obj->color.t[2];
+	s[3] = obj->ambient;
+	s[4] = obj->diffuse;
+	s[5] = obj->specular;
+	s[6] = obj->shininess;
 	s[7] = light->color.t[0];
 	s[8] = light->color.t[1];
 	s[9] = light->color.t[2];
@@ -97,12 +97,12 @@ void	cache_values(t_material *m, t_light *light, t_compute *comp, float *s)
 	s[21] = comp->eye_v.t[2];
 }
 
-void	lighting(t_tuple *out, t_material *m, t_light *light, t_compute *comp)
+void	lighting(t_tuple *out, t_object *obj, t_light *light, t_compute *comp)
 {
 	float	v[19];
 	float	s[22];
 
-	cache_values(m, light, comp, s);
+	cache_values(obj, light, comp, s);
 	v[0] = s[0] * s[7];
 	v[1] = s[1] * s[8];
 	v[2] = s[2] * s[9];
