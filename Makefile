@@ -46,6 +46,7 @@ SRCS = \
 	srcs/parsing/plane.c\
 	srcs/parsing/cylinder1.c\
 	srcs/parsing/cylinder2.c\
+	srcs/render/draw.c\
 	main.c
 
 OBJS = $(SRCS:.c=.o)

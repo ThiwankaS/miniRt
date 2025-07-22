@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 05:22:24 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/21 02:04:02 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/21 03:44:41 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 # define MINIRT_H
 
 # define _GNU_SOURCE
-# define WIDTH 1600
-# define HEIGHT 1200
+# define WIDTH 1024
+# define HEIGHT 768
 # define TILE_SIZE 64
 # define SPHERE   1
 # define PLANE    2
@@ -34,6 +34,9 @@
 # include "../ft_libft/libft.h"
 # include "../ft_libft/ft_printf.h"
 # include "../ft_libft/get_next_line.h"
+
+int			render_image(t_state *state);
+void print_object(t_object *s);
 
 int			ft_error(char *msg);
 int			values_validation(char *str);

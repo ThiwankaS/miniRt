@@ -112,13 +112,12 @@ uint32_t tuple_to_color(t_tuple *tp);
 
 void normal_at(t_tuple *normal, t_object *s, t_tuple *world_point);
 void reflect(t_tuple *out, t_tuple *in, t_tuple *normal);
-void	lighting(t_tuple *out, t_material *m, t_light *light, t_compute *comp);
+void	lighting(t_tuple *out, t_object *obj, t_light *light, t_compute *comp);
 
 t_compute	prepare_compute(float t, t_object *object, t_ray *r);
 t_tuple	color_at(t_world *world, t_ray *r);
 void view_transformation(t_camera *camera, t_tuple *from, t_tuple *to, t_tuple *up);
 t_ray ray_for_pixel(t_camera *camera, int px, int py);
-void render(void *param);
 
 void handle_drag(void *param);
 t_object *pick_object_at(int px, int py, t_camera *camera, t_world *world);

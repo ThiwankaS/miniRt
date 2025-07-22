@@ -33,8 +33,9 @@ t_tuple	color_at(t_world *world, t_ray *r)
 	color(&colour, 0.2f, 0.2f, 0.2f);
 	if (h.hit)
 	{
+
 		comp = prepare_compute(h.t, h.object, r);
-		lighting(&colour, h.object->material, &world->light, &comp);
+		lighting(&colour, h.object, &world->light, &comp);
 		return (colour);
 	}
 	return (colour);
@@ -87,7 +88,7 @@ t_ray ray_for_pixel(t_camera *camera, int px, int py)
 	yoffset = (py + 0.5) * camera->pixel_size;
 	world_x = camera->half_width - xoffset;
 	world_y = camera->half_height - yoffset;
-	point(&p, world_x, world_y, -1);
+	point(&p, world_x, world_y, 1.0f);
 	point(&abs_p, 0.0f, 0.0f, 0.0f);
 	matrix_multiply_by_tuple(&pixel, &camera->invs, &p);
 	matrix_multiply_by_tuple(&origin, &camera->invs, &abs_p);
@@ -98,45 +99,45 @@ t_ray ray_for_pixel(t_camera *camera, int px, int py)
 	return (r);
 }
 
-void render(void *param)
-{
-	t_state *s = (t_state *)param;
+// void render(void *param)
+// {
+// 	t_state *s = (t_state *)param;
 
-	if (s->done)
-		return;
+// 	if (s->done)
+// 		return;
 
-	int tile_index = s->current_tile;
-	if (tile_index >= s->tiles_x * s->tiles_y)
-	{
-		mlx_image_to_window(s->mlx, s->img, 0, 0);
-		s->done = true;
-		return;
-	}
-	int tile_x = (tile_index % s->tiles_x) * TILE_SIZE;
-	int tile_y = (tile_index / s->tiles_x) * TILE_SIZE;
-	int max_x = tile_x + TILE_SIZE;
-	int max_y = tile_y + TILE_SIZE;
+// 	int tile_index = s->current_tile;
+// 	if (tile_index >= s->tiles_x * s->tiles_y)
+// 	{
+// 		mlx_image_to_window(s->mlx, s->img, 0, 0);
+// 		s->done = true;
+// 		return;
+// 	}
+// 	int tile_x = (tile_index % s->tiles_x) * TILE_SIZE;
+// 	int tile_y = (tile_index / s->tiles_x) * TILE_SIZE;
+// 	int max_x = tile_x + TILE_SIZE;
+// 	int max_y = tile_y + TILE_SIZE;
 
-	if (max_x > s->camera.hsize)
-		max_x = s->camera.hsize;
-	if (max_y > s->camera.vsize)
-		max_y = s->camera.vsize;
+// 	if (max_x > s->camera.hsize)
+// 		max_x = s->camera.hsize;
+// 	if (max_y > s->camera.vsize)
+// 		max_y = s->camera.vsize;
 
-	int y = tile_y;
-	while (y < max_y)
-	{
-		int x = tile_x;
-		while (x < max_x)
-		{
-			t_ray r = ray_for_pixel(&s->camera, x, y);
-			t_tuple c = color_at(&s->world, &r);
-			mlx_put_pixel(s->img, x, y, tuple_to_color(&c));
-			x++;
-		}
-		y++;
-	}
-	s->current_tile++;
-}
+// 	int y = tile_y;
+// 	while (y < max_y)
+// 	{
+// 		int x = tile_x;
+// 		while (x < max_x)
+// 		{
+// 			t_ray r = ray_for_pixel(&s->camera, x, y);
+// 			t_tuple c = color_at(&s->world, &r);
+// 			mlx_put_pixel(s->img, x, y, tuple_to_color(&c));
+// 			x++;
+// 		}
+// 		y++;
+// 	}
+// 	s->current_tile++;
+// }
 
 t_object *pick_object_at(int px, int py, t_camera *camera, t_world *world)
 {

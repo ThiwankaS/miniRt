@@ -100,7 +100,7 @@ int	main(int argc, char *argv[])
 	{
 		if(init_file_reader(argv[1], state))
 		{
-			print_things(state);
+			render_image(state);
 		}
 	}
 	else
