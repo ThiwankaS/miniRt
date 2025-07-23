@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 04:37:53 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/21 01:39:39 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/22 21:48:55 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	init_world(t_world *world, float *v)
 	if (v[3] < 0.0f || v[3] > 255.0f)
 		return (1);
 	world->ambient = v[0];
-	color(&world->colour, v[1], v[2], v[3]);
+	color(&world->colour, v[1] / 255.0f, v[2] / 255.0f, v[3] / 255.0f);
 	world->set_ambient = true;
 	return (0);
 }

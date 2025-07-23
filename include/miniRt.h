@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 05:22:24 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/21 03:44:41 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/22 20:44:46 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,5 +54,7 @@ int			set_sphere(char *line, t_state *state, int *index);
 int			set_plane(char *line, t_state *state, int *index);
 int			set_cylinder(char *line, t_state *state, int *index);
 bool		init_file_reader(char *filename, t_state *state);
+
+void print_things(t_state *state);
 
 #endif
