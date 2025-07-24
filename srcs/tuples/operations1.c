@@ -14,67 +14,69 @@
 
 /**
  * Adds corresponding components of two tuples (t1 and t2)
- * and stores the result in t0.
+ * and returns the result.
  */
-void	tuple_add(t_tuple *t0, t_tuple *t1, t_tuple *t2)
+t_tuple	tuple_add(t_tuple *t1, t_tuple *t2)
 {
-	t0->t[0] = t1->t[0] + t2->t[0];
-	t0->t[1] = t1->t[1] + t2->t[1];
-	t0->t[2] = t1->t[2] + t2->t[2];
-	t0->t[3] = t1->t[3] + t2->t[3];
+	t_tuple	result;
+
+	result.t[0] = t1->t[0] + t2->t[0];
+	result.t[1] = t1->t[1] + t2->t[1];
+	result.t[2] = t1->t[2] + t2->t[2];
+	result.t[3] = t1->t[3] + t2->t[3];
+	return (result);
 }
 
 /**
  * Subtracts components of tuple t2 from tuple t1
- * and stores the result in t0.
+ * and returns the result.
  */
-void	tuple_subtract(t_tuple *t0, t_tuple *t1, t_tuple *t2)
+t_tuple	tuple_subtract(t_tuple *t1, t_tuple *t2)
 {
-	t0->t[0] = t1->t[0] - t2->t[0];
-	t0->t[1] = t1->t[1] - t2->t[1];
-	t0->t[2] = t1->t[2] - t2->t[2];
-	t0->t[3] = t1->t[3] - t2->t[3];
+	t_tuple	result;
+
+	result.t[0] = t1->t[0] - t2->t[0];
+	result.t[1] = t1->t[1] - t2->t[1];
+	result.t[2] = t1->t[2] - t2->t[2];
+	result.t[3] = t1->t[3] - t2->t[3];
+	return (result);
 }
 
 /**
- * Negates a tuple by subtracting it from a zero vector.
- * Stores the result in t1.
+ * Negates a tuple by subtracting it from a zero vector
+ * and returns the result.
  */
-void	tuple_negate(t_tuple *t1, t_tuple *t2)
+t_tuple	tuple_negate(t_tuple *t2)
 {
 	t_tuple	zero;
 
 	vector(&zero, 0.0, 0.0, 0.0);
-	tuple_subtract(t1, &zero, t2);
+	return (tuple_subtract(&zero, t2));
 }
 
 /**
  * Multiplies each component of tuple t1 by scalar 'a'
- * and stores the result in t0.
+ * and returns the result.
  */
-void	tuple_multiply_scalor(t_tuple *t0, t_tuple *t1, float a)
+t_tuple	tuple_multiply_scalar(t_tuple *t1, float a)
 {
-	t0->t[0] = t1->t[0] * a;
-	t0->t[1] = t1->t[1] * a;
-	t0->t[2] = t1->t[2] * a;
-	t0->t[3] = t1->t[3] * a;
+	t_tuple	result;
+
+	result.t[0] = t1->t[0] * a;
+	result.t[1] = t1->t[1] * a;
+	result.t[2] = t1->t[2] * a;
+	result.t[3] = t1->t[3] * a;
+	return (result);
 }
 
 /**
  * Divides each component of tuple t1 by scalar 'a'
- * and stores the result in t0. If 'a' is zero, t0 is set to zero tuple.
+ * and returns the result. If 'a' is zero, returns a zero tuple.
  */
-void	tuple_divide_scalor(t_tuple *t0, t_tuple *t1, float a)
+t_tuple	tuple_divide_scalar(t_tuple *t1, float a)
 {
-	float	b;
-
-	if (a == 0.0)
-	{
-		t0->t[0] = 0.0;
-		t0->t[1] = 0.0;
-		t0->t[2] = 0.0;
-		t0->t[3] = 0.0;
-	}
-	b = 1 / a;
-	tuple_multiply_scalor(t0, t1, b);
+	if (a == 0.0f)
+		return ((t_tuple){{0.0, 0.0, 0.0, 0.0}});
+	return (tuple_multiply_scalar(t1, 1.0f / a));
 }
+
