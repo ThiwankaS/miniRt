@@ -98,9 +98,22 @@ bool	matrix_inverse(t_mat *out, t_mat *in)
 	}
 	return (true);
 }
-
+/*
 void transform(t_ray *rp, t_ray *r, t_mat *m)
 {
 	matrix_multiply_by_tuple(&rp->origin, m, &r->origin);
 	matrix_multiply_by_tuple(&rp->direction, m, &r->direction);
+}*/
+
+/**
+ * Applies a transformation matrix to a ray.
+ * Returns the transformed ray.
+ */
+t_ray	transform(t_ray *r, t_mat *m)
+{
+	t_ray rp;
+
+	rp.origin = matrix_multiply_by_tuple(m, &r->origin);
+	rp.direction = matrix_multiply_by_tuple(m, &r->direction);
+	return (rp);
 }
