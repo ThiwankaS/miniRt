@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 06:35:49 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/23 05:16:17 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/24 06:00:14 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void	set_sphere_values(t_state *state, t_object *s, float *v)
 	vector(&s->norm_v, 0.0f, 0.0f, 0.0f);
 	s->ambient = state->world.ambient;
 	s->diffuse = state->world.diffuse;
-	s->specular = 10.0f;
+	s->specular = 0.9f;
 	s->shininess = 200.0f;
 	scaling(&m1, s->radius, s->radius, s->radius);
 	translation(&m2, s->x, s->y, s->z);

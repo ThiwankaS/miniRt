@@ -110,9 +110,9 @@ t_hit	find_hit(t_world *world, t_ray *ray);
 void set_transform(t_mat *m1, t_mat *m2);
 uint32_t tuple_to_color(t_tuple *tp);
 
-void normal_at(t_tuple *normal, t_object *s, t_tuple *world_point);
-void reflect(t_tuple *out, t_tuple *in, t_tuple *normal);
-void	lighting(t_tuple *out, t_object *obj, t_light *light, t_compute *comp);
+t_tuple	normal_at(t_object *s, t_tuple *world_point);
+t_tuple reflect(t_tuple *in, t_tuple *normal);
+t_tuple	lighting(t_object *obj, t_light *light, t_compute *comp);
 
 t_compute	prepare_compute(float t, t_object *object, t_ray *r);
 t_tuple	color_at(t_world *world, t_ray *r);

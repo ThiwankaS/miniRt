@@ -9,7 +9,7 @@ t_compute	prepare_compute(float t, t_object *object, t_ray *r)
 	comp.object = object;
 	position(&comp.p, r, t);
 	tuple_negate(&comp.eye_v, &r->direction);
-	normal_at(&comp.normal_v, object, &comp.p);
+	comp.normal_v = normal_at(object, &comp.p);
 	dot_val = dot(&comp.eye_v, &comp.normal_v);
 	if (dot_val < 0.0f)
 	{
@@ -33,9 +33,8 @@ t_tuple	color_at(t_world *world, t_ray *r)
 	color(&colour, 0.2f, 0.2f, 0.2f);
 	if (h.hit)
 	{
-		 printf("Hit t = %.3f\n", h.t);  // Add this
 		comp = prepare_compute(h.t, h.object, r);
-		lighting(&colour, h.object, &world->light, &comp);
+		colour = lighting(h.object, &world->light, &comp);
 		return (colour);
 	}
 	return (colour);
