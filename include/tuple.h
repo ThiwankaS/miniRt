@@ -23,11 +23,11 @@ void vector(t_tuple *p, float x, float y, float z);
 /**
  * arithmatic operations on tuples
  */
-void tuple_add(t_tuple *t0, t_tuple *t1, t_tuple *t2);
-void tuple_subtract(t_tuple *t0, t_tuple *t1, t_tuple *t2);
-void tuple_negate(t_tuple *t1, t_tuple *t2);
-void tuple_multiply_scalor(t_tuple *t0, t_tuple *t1, float a);
-void tuple_divide_scalor(t_tuple *t0, t_tuple *t1, float a);
+t_tuple tuple_add(t_tuple *t1, t_tuple *t2);
+t_tuple tuple_subtract(t_tuple *t1, t_tuple *t2);
+t_tuple tuple_negate(t_tuple *t2);
+t_tuple tuple_multiply_scalar(t_tuple *t1, float a);
+t_tuple tuple_divide_scalar(t_tuple *t1, float a);
 
 float dot(t_tuple *t1, t_tuple *t2);
 float tuple_magnitute(t_tuple *t0);
