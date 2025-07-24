@@ -13,79 +13,74 @@
 #include "../../include/miniRt.h"
 
 /**
- * Creates a translation matrix that moves points by (x, y, z).
- * Stores the result in m0.
+ * Creates and returns a translation matrix that moves points by (x, y, z).
  */
-void	translation(t_mat *m0, float x, float y, float z)
+t_mat	translation(float x, float y, float z)
 {
-	identity(m0);
-	m0->m[0][3] = x;
-	m0->m[1][3] = y;
-	m0->m[2][3] = z;
+	t_mat m = identity();
+	m.m[0][3] = x;
+	m.m[1][3] = y;
+	m.m[2][3] = z;
+	return (m);
 }
 
 /**
- * Creates a scaling matrix that scales along x, y, and z axes.
- * Stores the result in m0.
+ * Creates and returns a scaling matrix that scales along x, y, and z axes.
  */
-void	scaling(t_mat *m0, float x, float y, float z)
+t_mat	scaling(float x, float y, float z)
 {
-	identity(m0);
-	m0->m[0][0] = x;
-	m0->m[1][1] = y;
-	m0->m[2][2] = z;
+	t_mat m = identity();
+	m.m[0][0] = x;
+	m.m[1][1] = y;
+	m.m[2][2] = z;
+	return (m);
 }
 
 /**
- * Creates a rotation matrix around the X-axis by angle r (in radians).
- * Stores the result in m0.
+ * Creates and returns a rotation matrix around the X-axis by angle r (in radians).
  */
-void	rotate_x(t_mat *m0, float r)
+t_mat	rotate_x(float r)
 {
-	float	v1;
-	float	v2;
+	t_mat m = identity();
+	float v1 = cos(r);
+	float v2 = sin(r);
 
-	v1 = cos(r);
-	v2 = sin(r);
-	identity(m0);
-	m0->m[1][1] = v1;
-	m0->m[1][2] = -v2;
-	m0->m[2][1] = v2;
-	m0->m[2][2] = v1;
+	m.m[1][1] = v1;
+	m.m[1][2] = -v2;
+	m.m[2][1] = v2;
+	m.m[2][2] = v1;
+	return (m);
 }
 
 /**
- * Creates a rotation matrix around the Y-axis by angle r (in radians).
- * Stores the result in m0.
+ * Creates and returns a rotation matrix around the Y-axis by angle r (in radians).
  */
-void	rotate_y(t_mat *m0, float r)
+t_mat	rotate_y(float r)
 {
-	float	v1;
-	float	v2;
+	t_mat m = identity();
+	float v1 = cos(r);
+	float v2 = sin(r);
 
-	v1 = cos(r);
-	v2 = sin(r);
-	identity(m0);
-	m0->m[0][0] = v1;
-	m0->m[0][2] = v2;
-	m0->m[2][0] = -v2;
-	m0->m[2][2] = v1;
+	m.m[0][0] = v1;
+	m.m[0][2] = v2;
+	m.m[2][0] = -v2;
+	m.m[2][2] = v1;
+	return (m);
 }
 
 /**
- * Creates a rotation matrix around the Z-axis by angle r (in radians).
- * Stores the result in m0.
+ * Creates and returns a rotation matrix around the Z-axis by angle r (in radians).
  */
-void	rotate_z(t_mat *m0, float r)
+t_mat	rotate_z(float r)
 {
-	float	v1;
-	float	v2;
+	t_mat m = identity();
+	float v1 = cos(r);
+	float v2 = sin(r);
 
-	v1 = cos(r);
-	v2 = sin(r);
-	identity(m0);
-	m0->m[0][0] = v1;
-	m0->m[0][1] = -v2;
-	m0->m[1][0] = v2;
-	m0->m[1][1] = v1;
+	m.m[0][0] = v1;
+	m.m[0][1] = -v2;
+	m.m[1][0] = v2;
+	m.m[1][1] = v1;
+	return (m);
 }
+
