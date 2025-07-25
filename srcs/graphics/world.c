@@ -30,7 +30,7 @@ t_tuple	color_at(t_world *world, t_ray *r)
 	t_hit h;
 
 	h = find_hit(world, r);
-	color(&colour, 0.2f, 0.2f, 0.2f);
+	color(&colour, 0.3f, 0.3f, 0.3f);
 	if (h.hit)
 	{
 		comp = prepare_compute(h.t, h.object, r);

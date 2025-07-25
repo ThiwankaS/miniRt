@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 02:26:59 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/23 05:44:50 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/25 06:31:59 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,15 +39,18 @@ void find_hit_sphere(t_object *object, t_ray *r, t_hit *h)
 	v[5] = r->direction.t[2];
 
 	// subtract sphere center from ray origin
-	v[6] = v[0] - object->x;  // dx = origin.x - center.x
-	v[7] = v[1] - object->y;  // dy = origin.y - center.y
-	v[8] = v[2] - object->z;  // dz = origin.z - center.z
+	// v[6] = v[0] - object->x;  // dx = origin.x - center.x
+	// v[7] = v[1] - object->y;  // dy = origin.y - center.y
+	// v[8] = v[2] - object->z;  // dz = origin.z - center.z
+	v[6] = v[0] - 0;  // dx = origin.x - center.x
+	v[7] = v[1] - 0;  // dy = origin.y - center.y
+	v[8] = v[2] - 0;  // dz = origin.z - center.z
 
 	// quadratic coefficients (a, b, c)
 	v[9]  = v[3]*v[3] + v[4]*v[4] + v[5]*v[5];  // a = dot(direction, direction)
 	v[10] = 2.0f * (v[3]*v[6] + v[4]*v[7] + v[5]*v[8]);  // b = 2 * dot(direction, sphere_to_ray)
 	v[11] = v[6]*v[6] + v[7]*v[7] + v[8]*v[8] - (object->radius * object->radius);  // c = |sphere_to_ray|^2 - r^2
-
+	v[11] = v[6]*v[6] + v[7]*v[7] + v[8]*v[8] - 1;
 	// discriminant
 	v[12] = v[10]*v[10] - 4.0f * v[9] * v[11];
 	if (v[12] >= 0.0f)
@@ -57,15 +60,16 @@ void find_hit_sphere(t_object *object, t_ray *r, t_hit *h)
 		float t1 = (-v[10] - v[13]) * inv_2a;
 		float t2 = (-v[10] + v[13]) * inv_2a;
 
-		if (t1 > 0.0f && t1 < h->t)
+		float min_t = INFINITY;
+
+		if (t1 > 0.0f && t1 < min_t)
+			min_t = t1;
+		if (t2 > 0.0f && t2 < min_t)
+			min_t = t2;
+
+		if (min_t < h->t)
 		{
-			h->t = t1;
-			h->object = object;
-			h->hit = true;
-		}
-		if (t2 > 0.0f && t2 < h->t)
-		{
-			h->t = t2;
+			h->t = min_t;
 			h->object = object;
 			h->hit = true;
 		}
