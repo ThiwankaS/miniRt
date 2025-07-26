@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 02:25:04 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/21 02:25:07 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/23 04:27:48 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	set_cylinder_values(t_state *state, t_object *s, float *v)
 	vector(&s->norm_v, v[3], v[4], v[5]);
 	s->radius = v[6];
 	s->height = v[7];
-	color(&s->color, v[8], v[9], v[10]);
+	color(&s->color, v[8] / 255.0f, v[9] / 255.0f, v[10] / 255.0f);
 	s->ambient = state->world.ambient;
 	s->diffuse = state->world.diffuse;
 	s->specular = 0.0f;

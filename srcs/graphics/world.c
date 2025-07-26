@@ -9,7 +9,7 @@ t_compute	prepare_compute(float t, t_object *object, t_ray *r)
 	comp.object = object;
 	position(&comp.p, r, t);
 	tuple_negate(&comp.eye_v, &r->direction);
-	normal_at(&comp.normal_v, object, &comp.p);
+	comp.normal_v = normal_at(object, &comp.p);
 	dot_val = dot(&comp.eye_v, &comp.normal_v);
 	if (dot_val < 0.0f)
 	{
@@ -30,12 +30,11 @@ t_tuple	color_at(t_world *world, t_ray *r)
 	t_hit h;
 
 	h = find_hit(world, r);
-	color(&colour, 0.2f, 0.2f, 0.2f);
+	color(&colour, 0.3f, 0.3f, 0.3f);
 	if (h.hit)
 	{
-
 		comp = prepare_compute(h.t, h.object, r);
-		lighting(&colour, h.object, &world->light, &comp);
+		colour = lighting(h.object, &world->light, &comp);
 		return (colour);
 	}
 	return (colour);
@@ -53,7 +52,9 @@ void view_transformation(t_camera *camera, t_tuple *from, t_tuple *to, t_tuple *
 	tuple_subtract(&sub, to, from);
 	normalize(&forward, &sub);
 	cross(&left, &forward, up);
+	normalize(&left, &left);
 	cross(&true_up, &left, &forward);
+	normalize(&true_up, &true_up);
 	identity(&orientation);
 	orientation.m[0][0] = left.t[0];
 	orientation.m[0][1] = left.t[1];
@@ -72,30 +73,33 @@ void view_transformation(t_camera *camera, t_tuple *from, t_tuple *to, t_tuple *
 
 t_ray ray_for_pixel(t_camera *camera, int px, int py)
 {
-	float	xoffset;
-	float	yoffset;
-	float	world_x;
-	float	world_y;
-	t_tuple	p;
-	t_tuple	abs_p;
-	t_tuple	pixel;
-	t_tuple	origin;
-	t_tuple	temp;
-	t_tuple	direction;
-	t_ray	r;
+	float		xoffset;
+	float		yoffset;
+	float		world_x;
+	float		world_y;
+	t_tuple		p;
+	t_tuple		abs_p;
+	t_tuple		pixel;
+	t_tuple		origin;
+	t_tuple		temp;
+	t_tuple		direction;
+	t_ray		r;
 
-	xoffset = (px + 0.5) * camera->pixel_size;
-	yoffset = (py + 0.5) * camera->pixel_size;
+	xoffset = (px + 0.5f) * camera->pixel_size;
+	yoffset = (py + 0.5f) * camera->pixel_size;
 	world_x = camera->half_width - xoffset;
 	world_y = camera->half_height - yoffset;
-	point(&p, world_x, world_y, 1.0f);
-	point(&abs_p, 0.0f, 0.0f, 0.0f);
+
+	point(&p, world_x, world_y, -1.0f);      // Camera space
+	point(&abs_p, 0.0f, 0.0f, 0.0f);         // Camera origin
+
+	// Transform both to world space
 	matrix_multiply_by_tuple(&pixel, &camera->invs, &p);
 	matrix_multiply_by_tuple(&origin, &camera->invs, &abs_p);
-	tuple_subtract(&temp, &pixel, &origin);
+	tuple_subtract(&temp, &pixel, &origin); // Direction = pixel - origin
 	normalize(&direction, &temp);
-	vector(&r.direction, direction.t[0], direction.t[1], direction.t[2]);
 	point(&r.origin, origin.t[0], origin.t[1], origin.t[2]);
+	vector(&r.direction, direction.t[0], direction.t[1], direction.t[2]);
 	return (r);
 }
 

@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 06:35:49 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/21 01:59:01 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/24 06:00:14 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ bool	get_color_s(float *v, char *line)
 
 void	set_sphere_values(t_state *state, t_object *s, float *v)
 {
+	t_mat m1, m2;
+
 	if (!state || !s)
 		return ;
 	s->id = 1;
@@ -80,15 +82,17 @@ void	set_sphere_values(t_state *state, t_object *s, float *v)
 	s->z = v[2];
 	s->radius = v[3];
 	s->height = 0.0f;
-	color(&s->color, v[4], v[5], v[6]);
+	color(&s->color, v[4] / 255.0f, v[5] / 255.0f, v[6] / 255.0f);
 	vector(&s->norm_v, 0.0f, 0.0f, 0.0f);
 	s->ambient = state->world.ambient;
 	s->diffuse = state->world.diffuse;
-	s->specular = 0.0f;
+	s->specular = 0.9f;
 	s->shininess = 200.0f;
-	identity(&s->transform);
-	identity(&s->invs);
-	identity(&s->invs_trans);
+	scaling(&m1, s->radius, s->radius, s->radius);
+	translation(&m2, s->x, s->y, s->z);
+	matrix_multiply(&s->transform, &m2, &m1);
+	matrix_inverse(&s->invs, &s->transform);
+	matrix_transpose(&s->invs_trans, &s->invs);
 	s->next = NULL;
 	s->material = NULL;
 	add_object(state, &s);

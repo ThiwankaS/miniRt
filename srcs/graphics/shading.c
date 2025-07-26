@@ -6,122 +6,114 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 05:42:55 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/21 04:15:57 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/25 05:57:12 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/miniRt.h"
 
-void	normal_at(t_tuple *normal, t_object *s, t_tuple *world_point)
+t_tuple	normal_at(t_object *s, t_tuple *world_point)
 {
-	t_tuple	obj_p;
-	t_tuple	obj_nml;
+	t_tuple normal;
+	t_tuple	obj_point;
+	t_tuple	obj_normal;
 	t_tuple	world_normal;
-	float	dist;
+	t_tuple absolute_point;
+	//float	dist;
 
-	matrix_multiply_by_tuple(&obj_p, &s->invs, world_point);
-	if (s->type == PLANE)
-		vector(&obj_nml, 0.0f, 1.0f, 0.0f);
+	point(&absolute_point, 0.0f, 0.0f, 0.0f);
+	matrix_multiply_by_tuple(&obj_point, &s->invs, world_point);
+	/* if (s->type == PLANE)
+		vector(&obj_normal, 0.0f, 1.0f, 0.0f);
 	else if (s->type == SPHERE)
-		vector(&obj_nml, obj_p.t[0], obj_p.t[1], obj_p.t[2]);
+		tuple_subtract(&obj_normal, &obj_point, &absolute_point);
 	else if (s->type == CYLINDER)
 	{
-		dist = obj_p.t[0] * obj_p.t[0] + obj_p.t[2] * obj_p.t[2];
-		if (dist < 1.0f && obj_p.t[1] >= 0.99f)
-			vector(&obj_nml, 0, 1, 0);
-		else if (dist < 1.0f && obj_p.t[1] <= -0.99f)
-			vector(&obj_nml, 0, -1, 0);
+		dist = obj_point.t[0] * obj_point.t[0] + obj_point.t[2] * obj_point.t[2];
+		if (dist < 1.0f && obj_point.t[1] >= 0.99f)
+			vector(&obj_normal, 0, 1, 0);
+		else if (dist < 1.0f && obj_point.t[1] <= -0.99f)
+			vector(&obj_normal, 0, -1, 0);
 		else
-			vector(&obj_nml, obj_p.t[0], 0, obj_p.t[2]);
-	}
-	matrix_multiply_by_tuple(&world_normal, &s->invs_trans, &obj_nml);
+			vector(&obj_normal, obj_point.t[0], 0, obj_point.t[2]);
+	} */
+	tuple_subtract(&obj_normal, &obj_point, &absolute_point);//this only work for sphere need to uncomment
+	matrix_multiply_by_tuple(&world_normal, &s->invs_trans, &obj_normal);
 	world_normal.t[3] = 0.0f;
-	normalize(normal, &world_normal);
+	normalize(&normal, &world_normal);
+	return normal;
 }
 
-void	reflect(t_tuple *out, t_tuple *in, t_tuple *normal)
+t_tuple reflect(t_tuple *in, t_tuple *normal)
 {
+	t_tuple	reflect;
+	t_tuple temp;
 	float	product;
 
 	product = 2.0f * dot(in, normal);
-	out->t[0] = in->t[0] - normal->t[0] * product;
-	out->t[1] = in->t[1] - normal->t[1] * product;
-	out->t[2] = in->t[2] - normal->t[2] * product;
-	out->t[3] = 0.0f;
+	tuple_multiply_scalor(&temp, normal, product);
+	tuple_subtract(&reflect, in, &temp);
+	return reflect;
 }
 
-void	cal_diffuse(t_tuple *out, float *s, float *v)
+t_tuple	lighting(t_object *obj, t_light *light, t_compute *comp)
 {
-	out->t[0] += v[0] * s[4] * v[10];
-	out->t[1] += v[1] * s[4] * v[10];
-	out->t[2] += v[2] * s[4] * v[10];
-	v[11] = -(v[7] * s[16] + v[8] * s[17] + v[9] * s[18]);
-	v[12] = 2.0f * v[11];
-	v[13] = -v[7] - v[12] * s[16];
-	v[14] = -v[8] - v[12] * s[17];
-	v[15] = -v[9] - v[12] * s[18];
-	v[16] = v[13] * s[19] + v[14] * s[20] + v[15] * s[21];
-}
+	t_tuple colour;
+	t_tuple ambient;
+	t_tuple diffuse;
+	t_tuple specular;
+	t_tuple effective_color;
+	t_tuple lightv;
+	t_tuple reflectv;
+	t_tuple temp;
+	t_tuple neg;
+	float light_dot_normal;
+	float reflect_dot_eye;
+	float factor;
 
-void	cal_specular(t_tuple *out, float *s, float *v)
-{
-	v[18] = powf(v[16], s[6]);
-	out->t[0] += s[7] * s[5] * v[18];
-	out->t[1] += s[8] * s[5] * v[18];
-	out->t[2] += s[9] * s[5] * v[18];
-}
+	// Compute effective color = obj color * light intensity
+	schur_product(&effective_color, &obj->color, &light->color);
 
-void	cache_values(t_object *obj, t_light *light, t_compute *comp, float *s)
-{
-	s[0] = obj->color.t[0];
-	s[1] = obj->color.t[1];
-	s[2] = obj->color.t[2];
-	s[3] = obj->ambient;
-	s[4] = obj->diffuse;
-	s[5] = obj->specular;
-	s[6] = obj->shininess;
-	s[7] = light->color.t[0];
-	s[8] = light->color.t[1];
-	s[9] = light->color.t[2];
-	s[10] = light->position.t[0];
-	s[11] = light->position.t[1];
-	s[12] = light->position.t[2];
-	s[13] = comp->p.t[0];
-	s[14] = comp->p.t[1];
-	s[15] = comp->p.t[2];
-	s[16] = comp->normal_v.t[0];
-	s[17] = comp->normal_v.t[1];
-	s[18] = comp->normal_v.t[2];
-	s[19] = comp->eye_v.t[0];
-	s[20] = comp->eye_v.t[1];
-	s[21] = comp->eye_v.t[2];
-}
+	// Compute light direction vector
+	tuple_subtract(&temp, &light->position, &comp->p);
+	normalize(&lightv, &temp);
 
-void	lighting(t_tuple *out, t_object *obj, t_light *light, t_compute *comp)
-{
-	float	v[19];
-	float	s[22];
+	// AMBIENT = effective_color * ambient coefficient
+	tuple_multiply_scalor(&ambient , &effective_color, obj->ambient);
 
-	cache_values(obj, light, comp, s);
-	v[0] = s[0] * s[7];
-	v[1] = s[1] * s[8];
-	v[2] = s[2] * s[9];
-	out->t[0] = v[0] * s[3];
-	out->t[1] = v[1] * s[3];
-	out->t[2] = v[2] * s[3];
-	v[3] = s[10] - s[13];
-	v[4] = s[11] - s[14];
-	v[5] = s[12] - s[15];
-	v[6] = sqrtf(v[3] * v[3] + v[4] * v[4] + v[5] * v[5]);
-	v[7] = v[3] / v[6];
-	v[8] = v[4] / v[6];
-	v[9] = v[5] / v[6];
-	v[10] = v[7] * s[16] + v[8] * s[17] + v[9] * s[18];
-	if (v[10] >= 0.0f)
+	// light_dot_normal = dot(lightv, normalv)
+	light_dot_normal = dot(&lightv, &comp->normal_v);
+	if (light_dot_normal < 0.0f)
 	{
-		cal_diffuse(out, s, v);
-		if (v[16] > 0.0f)
-			cal_specular(out, s, v);
+		color(&diffuse, 0, 0, 0);
+		color(&specular, 0, 0, 0);
 	}
-	out->t[3] = 1.0f;
+	else
+	{
+		// DIFFUSE = effective_color * diffuse coefficient * light_dot_normal
+		tuple_multiply_scalor(&diffuse, &effective_color, obj->diffuse * light_dot_normal);
+
+		// REFLECT = reflect(-lightv, normalv)
+		tuple_negate(&neg, &lightv);
+		reflectv = reflect(&neg, &comp->normal_v);
+
+		// reflect_dot_eye = dot(reflectv, eyev)
+		reflect_dot_eye = dot(&reflectv, &comp->eye_v);
+
+		if (reflect_dot_eye <= 0.0f)
+			color(&specular, 0, 0, 0);
+		else
+		{
+			factor = powf(reflect_dot_eye, obj->shininess);
+			tuple_multiply_scalor(&specular, &light->color, obj->specular * factor);
+		}
+	}
+	colour.t[0] = ambient.t[0] + diffuse.t[0] + specular.t[0];
+	colour.t[1] = ambient.t[1] + diffuse.t[1] + specular.t[1];
+	colour.t[2] = ambient.t[2] + diffuse.t[2] + specular.t[2];
+	colour.t[0] = fminf(1.0f, colour.t[0]);
+	colour.t[1] = fminf(1.0f, colour.t[1]);
+	colour.t[2] = fminf(1.0f, colour.t[2]);
+	colour.t[3] = 1.0f;
+	return colour;
 }

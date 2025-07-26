@@ -93,6 +93,10 @@ void print_things(t_state *state)
 int	main(int argc, char *argv[])
 {
 	t_state	*state = ft_calloc(1, sizeof(t_state));
+	t_mat m;
+	scaling(&m, -1, 1, -1);
+	printf("scalling mattrix : \n");
+	matrix_print(&m);
 	if (!state)
 		return (1);
 	default_state(state);

@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 04:38:17 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/20 04:38:19 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/22 21:50:00 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ bool	set_light_color(t_world *world, char *line)
 		return (false);
 	if (v[2] < 0.0f || v[2] > 255.0f)
 		return (false);
-	color(&world->light.color, v[0], v[1], v[2]);
+	color(&world->light.color, v[0] / 255.0f, v[1] / 255.0f, v[2] / 255.0f);
 	free_split(values);
 	return (true);
 }

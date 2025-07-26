@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 06:35:49 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/21 02:24:35 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/23 04:29:08 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void	set_plane_values(t_state *state, t_object *s, float *v)
 	s->z = v[2];
 	s->radius = 0.0f;
 	s->height = 0.0f;
-	color(&s->color, v[6], v[7], v[8]);
+	color(&s->color, v[6] / 255.0f, v[7] / 255.0f, v[8] / 255.0f);
 	vector(&s->norm_v, v[3], v[4], v[5]);
 	s->ambient = state->world.ambient;
 	s->diffuse = state->world.diffuse;

@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 02:25:18 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/21 02:25:42 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/23 04:28:44 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ bool	get_radius_cy(float *v, char *line)
 	d = ft_atof(line);
 	if (d < 0.0f)
 		return (false);
-	v[3] = d / 2.0f;
+	v[6] = d / 2.0f;
 	return (true);
 }
 
@@ -78,7 +78,7 @@ bool	get_height_cy(float *v, char *line)
 	h = ft_atof(line);
 	if (h < 0.0f)
 		return (false);
-	v[3] = h;
+	v[7] = h;
 	return (true);
 }
 

@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 02:26:59 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/21 04:08:07 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/25 06:31:59 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,43 +21,61 @@ void	position(t_tuple *pp, t_ray *r, float t)
 	pp->t[0] = r->origin.t[0] + r->direction.t[0] * t;
 	pp->t[1] = r->origin.t[1] + r->direction.t[1] * t;
 	pp->t[2] = r->origin.t[2] + r->direction.t[2] * t;
-	pp->t[3] = r->origin.t[3] + r->direction.t[3] * t;
+	pp->t[3] = 1.0f;
 }
 
 void find_hit_sphere(t_object *object, t_ray *r, t_hit *h)
 {
 	float	v[14];
 
+	// ray origin
 	v[0] = r->origin.t[0];
 	v[1] = r->origin.t[1];
 	v[2] = r->origin.t[2];
+
+	// ray direction
 	v[3] = r->direction.t[0];
 	v[4] = r->direction.t[1];
 	v[5] = r->direction.t[2];
-	v[6] = v[3] * v[3] + v[4] * v[4] + v[5] * v[5];
-	v[7] = 2.0f * (v[3] * v[0] + v[4] * v[1] + v[5] * v[2]);
-	v[8] = v[0] * v[0] + v[1] * v[1] + v[2] * v[2] - 1.0f;
-	v[9] = v[7] * v[7] - 4.0f * v[6] * v[8];
-	if (v[9] >= 0.0f)
+
+	// subtract sphere center from ray origin
+	// v[6] = v[0] - object->x;  // dx = origin.x - center.x
+	// v[7] = v[1] - object->y;  // dy = origin.y - center.y
+	// v[8] = v[2] - object->z;  // dz = origin.z - center.z
+	v[6] = v[0] - 0;  // dx = origin.x - center.x
+	v[7] = v[1] - 0;  // dy = origin.y - center.y
+	v[8] = v[2] - 0;  // dz = origin.z - center.z
+
+	// quadratic coefficients (a, b, c)
+	v[9]  = v[3]*v[3] + v[4]*v[4] + v[5]*v[5];  // a = dot(direction, direction)
+	v[10] = 2.0f * (v[3]*v[6] + v[4]*v[7] + v[5]*v[8]);  // b = 2 * dot(direction, sphere_to_ray)
+	v[11] = v[6]*v[6] + v[7]*v[7] + v[8]*v[8] - (object->radius * object->radius);  // c = |sphere_to_ray|^2 - r^2
+	v[11] = v[6]*v[6] + v[7]*v[7] + v[8]*v[8] - 1;
+	// discriminant
+	v[12] = v[10]*v[10] - 4.0f * v[9] * v[11];
+	if (v[12] >= 0.0f)
 	{
-		v[10] = sqrtf(v[9]);
-		v[11] = 0.5f / v[6];
-		v[12] = (-v[7] - v[10]) * v[11];
-		v[13] = (-v[7] + v[10]) * v[11];
-		if (v[12] > 0.0f && v[12] < h->t)
+		v[13] = sqrtf(v[12]);
+		float inv_2a = 0.5f / v[9];
+		float t1 = (-v[10] - v[13]) * inv_2a;
+		float t2 = (-v[10] + v[13]) * inv_2a;
+
+		float min_t = INFINITY;
+
+		if (t1 > 0.0f && t1 < min_t)
+			min_t = t1;
+		if (t2 > 0.0f && t2 < min_t)
+			min_t = t2;
+
+		if (min_t < h->t)
 		{
-			h->t = v[12];
-			h->object = object;
-			h->hit = true;
-		}
-		if (v[13] > 0.0f && v[13] < h->t)
-		{
-			h->t = v[13];
+			h->t = min_t;
 			h->object = object;
 			h->hit = true;
 		}
 	}
 }
+
 
 void find_hit_plane(t_object *object, t_ray *r, t_hit *h)
 {
