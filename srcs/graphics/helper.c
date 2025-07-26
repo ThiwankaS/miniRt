@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 01:59:36 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/27 01:46:33 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/27 01:48:05 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ uint32_t tuple_to_color(t_tuple *tp)
 	return ((red << 24) | (green << 16) | (blue << 8) | alpha);
 }
 
-/*
 /**
  * Copies the contents of one 4x4 matrix (m2) into another (m1).
  */
