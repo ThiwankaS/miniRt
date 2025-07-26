@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 01:59:36 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/13 09:17:39 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/27 01:46:33 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,22 @@
  */
 t_mat copy_matrix(t_mat *src)
 {
-	t_mat dest;
-	int row, col;
+	t_mat	dest;
+	int		col;
+	int		row;
 
-	for (col = 0; col < SIZE; col++)
+	col = 0;
+	while(col < SIZE)
 	{
-		for (row = 0; row < SIZE; row++)
+		row = 0;
+		while(row < SIZE)
 		{
 			dest.m[col][row] = src->m[col][row];
+			row++;
 		}
+		col++;
 	}
-	return dest;
+	return (dest);
 }
 
 /**
@@ -87,4 +92,3 @@ uint32_t	tuple_to_color(t_tuple *tp)
 	alpha = (uint32_t)(tp->t[3] * 255.0f);
 	return ((red << 24) | (green << 16) | (blue << 8) | alpha);
 }
-*/
