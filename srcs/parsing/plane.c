@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 06:35:49 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/23 04:29:08 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/26 06:28:32 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,9 @@ bool	get_color_pl(float *v, char *line)
 
 void	set_plane_values(t_state *state, t_object *s, float *v)
 {
+	t_mat m1;
+	t_mat m2;
+
 	if (!state || !s)
 		return ;
 	s->id = 2;
