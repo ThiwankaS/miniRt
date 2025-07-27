@@ -8,13 +8,13 @@ t_compute	prepare_compute(float t, t_object *object, t_ray *r)
 	comp.value = t;
 	comp.object = object;
 	position(&comp.p, r, t);
-	tuple_negate(&comp.eye_v, &r->direction);
+	comp.eye_v = tuple_negate(&r->direction);
 	comp.normal_v = normal_at(object, &comp.p);
 	dot_val = dot(&comp.eye_v, &comp.normal_v);
 	if (dot_val < 0.0f)
 	{
 		comp.inside = true;
-		tuple_negate(&comp.normal_v, &comp.normal_v);
+		comp.normal_v = tuple_negate(&comp.normal_v);
 	}
 	else
 	{
@@ -49,13 +49,13 @@ void view_transformation(t_camera *camera, t_tuple *from, t_tuple *to, t_tuple *
 	t_mat orientation;
 	t_mat translate;
 
-	tuple_subtract(&sub, to, from);
-	normalize(&forward, &sub);
-	cross(&left, &forward, up);
-	normalize(&left, &left);
-	cross(&true_up, &left, &forward);
-	normalize(&true_up, &true_up);
-	identity(&orientation);
+	sub = tuple_subtract(to, from);
+	forward = normalize(&sub);
+	left = cross(&forward, up);
+	left = normalize(&left);
+	true_up = cross(&left, &forward);
+	true_up = normalize(&true_up);
+	orientation = identity();
 	orientation.m[0][0] = left.t[0];
 	orientation.m[0][1] = left.t[1];
 	orientation.m[0][2] = left.t[2];
@@ -66,8 +66,8 @@ void view_transformation(t_camera *camera, t_tuple *from, t_tuple *to, t_tuple *
 	orientation.m[2][1] = -forward.t[1];
 	orientation.m[2][2] = -forward.t[2];
 	orientation.m[3][3] = 1;
-	translation(&translate, -from->t[0], -from->t[1], -from->t[2]);
-	matrix_multiply(&camera->transform, &orientation, &translate);
+	translate = translation(-from->t[0], -from->t[1], -from->t[2]);
+	camera->transform = matrix_multiply(&orientation, &translate);
 	matrix_inverse(&camera->invs, &camera->transform);
 }
 
@@ -94,10 +94,10 @@ t_ray ray_for_pixel(t_camera *camera, int px, int py)
 	point(&abs_p, 0.0f, 0.0f, 0.0f);         // Camera origin
 
 	// Transform both to world space
-	matrix_multiply_by_tuple(&pixel, &camera->invs, &p);
-	matrix_multiply_by_tuple(&origin, &camera->invs, &abs_p);
-	tuple_subtract(&temp, &pixel, &origin); // Direction = pixel - origin
-	normalize(&direction, &temp);
+	pixel = matrix_multiply_by_tuple(&camera->invs, &p);
+	origin = matrix_multiply_by_tuple(&camera->invs, &abs_p);
+	temp = tuple_subtract(&pixel, &origin); // Direction = pixel - origin
+	direction = normalize(&temp);
 	point(&r.origin, origin.t[0], origin.t[1], origin.t[2]);
 	vector(&r.direction, direction.t[0], direction.t[1], direction.t[2]);
 	return (r);
@@ -172,8 +172,8 @@ void handle_drag(void *param)
 
 		// Move the object in X and Y direction
 		t_mat translate, result;
-		translation(&translate, move_x, move_y, 0.0f);
-		matrix_multiply(&result, &translate, &ms->selected_object->transform);
+		translate = translation(move_x, move_y, 0.0f);
+		result = matrix_multiply(&translate, &ms->selected_object->transform);
 		set_transform(&ms->selected_object->transform, &result);
 		matrix_inverse(&ms->selected_object->invs, &ms->selected_object->transform);
 
@@ -220,29 +220,29 @@ void key_handler(mlx_key_data_t keydata, void *param)
 
 	// Movement
 	if (keydata.key == MLX_KEY_W)
-		translation(&m, 0, 0.1f, 0);
+		m = translation(0, 0.1f, 0);
 	else if (keydata.key == MLX_KEY_S)
-		translation(&m, 0, -0.1f, 0);
+		m = translation(0, -0.1f, 0);
 	else if (keydata.key == MLX_KEY_A)
-		translation(&m, -0.1f, 0, 0);
+		m = translation(-0.1f, 0, 0);
 	else if (keydata.key == MLX_KEY_D)
-		translation(&m, 0.1f, 0, 0);
+		m = translation(0.1f, 0, 0);
 	else if (keydata.key == MLX_KEY_Q)
-		translation(&m, 0, 0, -0.1f);
+		m = translation(0, 0, -0.1f);
 	else if (keydata.key == MLX_KEY_E)
-		translation(&m, 0, 0, 0.1f);
+		m = translation(0, 0, 0.1f);
 
 	// Scaling
 	else if (keydata.key == MLX_KEY_Z)
-		scaling(&m, 0.9f, 0.9f, 0.9f);
+		m = scaling(0.9f, 0.9f, 0.9f);
 	else if (keydata.key == MLX_KEY_X)
-		scaling(&m, 1.1f, 1.1f, 1.1f);
+		m = scaling(1.1f, 1.1f, 1.1f);
 
 	// Rotation (Y-axis)
 	else if (keydata.key == MLX_KEY_R)
-		rotate_y(&m, 0.1f);
+		m = rotate_y(0.1f);
 	else if (keydata.key == MLX_KEY_T)
-		rotate_y(&m, -0.1f);
+		m = rotate_y(-0.1f);
 
 	// Deselect
 	else if (keydata.key == MLX_KEY_ESCAPE)
@@ -255,7 +255,7 @@ void key_handler(mlx_key_data_t keydata, void *param)
 		return;
 
 	// Apply transformation
-	matrix_multiply(&result, &m, &obj->transform);
+	result = matrix_multiply(&m, &obj->transform);
 	set_transform(&obj->transform, &result);
 	matrix_inverse(&obj->invs, &obj->transform);
 

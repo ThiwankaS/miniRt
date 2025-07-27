@@ -99,13 +99,13 @@ int main(int argc, char *argv[])
 {
 	t_state	*state = ft_calloc(1, sizeof(t_state));
 	t_mat m;
-	scaling(&m, -1, 1, -1);
+	m = scaling(-1, 1, -1);
 	printf("scalling mattrix : \n");
 	matrix_print(&m);
 	if (!state)
 		return (1);
 
-	t_mat m = scaling(-1.0f, 1.0f, -1.0f);
+	m = scaling(-1.0f, 1.0f, -1.0f);
 	printf("scaling matrix:\n");
 	matrix_print(&m);
 

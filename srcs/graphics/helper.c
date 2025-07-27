@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 01:59:36 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/27 07:08:42 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/27 07:15:13 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,22 +72,4 @@ void	set_transform(t_mat *m1, t_mat *m2)
 	m1->m[3][1] = m2->m[3][1];
 	m1->m[3][2] = m2->m[3][2];
 	m1->m[3][3] = m2->m[3][3];
-}
-
-/**
- * Converts a tuple representing a color (with values in range 0.0–1.0)
- * into a packed 32-bit integer in RGBA format.
- */
-uint32_t	tuple_to_color(t_tuple *tp)
-{
-	uint32_t	red;
-	uint32_t	green;
-	uint32_t	blue;
-	uint32_t	alpha;
-
-	red = (uint32_t)(tp->t[0] * 255.0f);
-	green = (uint32_t)(tp->t[1] * 255.0f);
-	blue = (uint32_t)(tp->t[2] * 255.0f);
-	alpha = (uint32_t)(tp->t[3] * 255.0f);
-	return ((red << 24) | (green << 16) | (blue << 8) | alpha);
 }

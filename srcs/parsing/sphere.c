@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 06:35:49 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/27 06:51:39 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/27 07:36:02 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,11 +89,11 @@ void	set_sphere_values(t_state *state, t_object *s, float *v)
 	s->diffuse = state->world.diffuse;
 	s->specular = 0.9f;
 	s->shininess = 200.0f;
-	scaling(&m1, s->radius, s->radius, s->radius);
-	translation(&m2, s->x, s->y, s->z);
-	matrix_multiply(&s->transform, &m2, &m1);
+	m1 = scaling(s->radius, s->radius, s->radius);
+	m2 = translation(s->x, s->y, s->z);
+	s->transform = matrix_multiply(&m2, &m1);
 	matrix_inverse(&s->invs, &s->transform);
-	matrix_transpose(&s->invs_trans, &s->invs);
+	s->invs_trans = matrix_transpose(&s->invs);
 	s->next = NULL;
 	s->material = NULL;
 	add_object(state, &s);

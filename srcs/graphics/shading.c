@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 05:42:55 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/25 05:57:12 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/27 07:22:21 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_tuple	normal_at(t_object *s, t_tuple *world_point)
 	//float	dist;
 
 	point(&absolute_point, 0.0f, 0.0f, 0.0f);
-	matrix_multiply_by_tuple(&obj_point, &s->invs, world_point);
+	obj_point = matrix_multiply_by_tuple(&s->invs, world_point);
 	/* if (s->type == PLANE)
 		vector(&obj_normal, 0.0f, 1.0f, 0.0f);
 	else if (s->type == SPHERE)
@@ -37,10 +37,10 @@ t_tuple	normal_at(t_object *s, t_tuple *world_point)
 		else
 			vector(&obj_normal, obj_point.t[0], 0, obj_point.t[2]);
 	} */
-	tuple_subtract(&obj_normal, &obj_point, &absolute_point);//this only work for sphere need to uncomment
-	matrix_multiply_by_tuple(&world_normal, &s->invs_trans, &obj_normal);
+	obj_normal = tuple_subtract(&obj_point, &absolute_point);//this only work for sphere need to uncomment
+	world_normal = matrix_multiply_by_tuple(&s->invs_trans, &obj_normal);
 	world_normal.t[3] = 0.0f;
-	normalize(&normal, &world_normal);
+	normal = normalize(&world_normal);
 	return normal;
 }
 
@@ -51,8 +51,8 @@ t_tuple reflect(t_tuple *in, t_tuple *normal)
 	float	product;
 
 	product = 2.0f * dot(in, normal);
-	tuple_multiply_scalor(&temp, normal, product);
-	tuple_subtract(&reflect, in, &temp);
+	temp = tuple_multiply_scalar(normal, product);
+	reflect = tuple_subtract(in, &temp);
 	return reflect;
 }
 
@@ -72,14 +72,14 @@ t_tuple	lighting(t_object *obj, t_light *light, t_compute *comp)
 	float factor;
 
 	// Compute effective color = obj color * light intensity
-	schur_product(&effective_color, &obj->color, &light->color);
+	effective_color = schur_product(&obj->color, &light->color);
 
 	// Compute light direction vector
-	tuple_subtract(&temp, &light->position, &comp->p);
-	normalize(&lightv, &temp);
+	temp = tuple_subtract(&light->position, &comp->p);
+	lightv = normalize(&temp);
 
 	// AMBIENT = effective_color * ambient coefficient
-	tuple_multiply_scalor(&ambient , &effective_color, obj->ambient);
+	ambient = tuple_multiply_scalar(&effective_color, obj->ambient);
 
 	// light_dot_normal = dot(lightv, normalv)
 	light_dot_normal = dot(&lightv, &comp->normal_v);
@@ -91,10 +91,10 @@ t_tuple	lighting(t_object *obj, t_light *light, t_compute *comp)
 	else
 	{
 		// DIFFUSE = effective_color * diffuse coefficient * light_dot_normal
-		tuple_multiply_scalor(&diffuse, &effective_color, obj->diffuse * light_dot_normal);
+		diffuse = tuple_multiply_scalar(&effective_color, obj->diffuse * light_dot_normal);
 
 		// REFLECT = reflect(-lightv, normalv)
-		tuple_negate(&neg, &lightv);
+		neg = tuple_negate(&lightv);
 		reflectv = reflect(&neg, &comp->normal_v);
 
 		// reflect_dot_eye = dot(reflectv, eyev)
@@ -105,7 +105,7 @@ t_tuple	lighting(t_object *obj, t_light *light, t_compute *comp)
 		else
 		{
 			factor = powf(reflect_dot_eye, obj->shininess);
-			tuple_multiply_scalor(&specular, &light->color, obj->specular * factor);
+			specular = tuple_multiply_scalar(&light->color, obj->specular * factor);
 		}
 	}
 	colour.t[0] = ambient.t[0] + diffuse.t[0] + specular.t[0];

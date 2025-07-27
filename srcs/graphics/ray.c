@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 02:26:59 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/26 05:53:38 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/27 07:14:10 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,7 +152,7 @@ t_hit find_hit(t_world *world, t_ray *ray)
 	object = world->components;
 	while (object)
 	{
-		transform(&local_ray, ray, &object->invs);
+		local_ray = transform(ray, &object->invs);
 		if (object->type == SPHERE)
 			find_hit_sphere(object, &local_ray, &closest);
 		else if (object->type == PLANE)

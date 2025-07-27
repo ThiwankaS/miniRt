@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 06:35:49 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/27 06:52:28 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/27 07:36:57 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,9 +101,9 @@ void	set_plane_values(t_state *state, t_object *s, float *v)
 	s->diffuse = state->world.diffuse;
 	s->specular = 0.0f;
 	s->shininess = 200.0f;
-	identity(&s->transform);
-	identity(&s->invs);
-	identity(&s->invs_trans);
+	s->transform = identity();
+	s->invs = identity();
+	s->invs_trans = identity();
 	s->next = NULL;
 	s->material = NULL;
 	add_object(state, &s);

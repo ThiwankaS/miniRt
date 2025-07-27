@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 04:37:43 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/25 04:31:33 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/27 07:34:39 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ void	update_view(t_camera *camera, t_tuple *p, t_tuple *d)
 	point(&from, p->t[0], p->t[1], p->t[2]);
 	vector(&forward, d->t[0], d->t[1], d->t[2]);
 	vector(&up, 0.0f, 1.0f, 0.0f);
-	normalize(&up, &up);
-	tuple_add(&to, &from, &forward);
+	up = normalize(&up);
+	to = tuple_add(&from, &forward);
 	view_transformation(camera, &from, &to, &up);
 }
 
