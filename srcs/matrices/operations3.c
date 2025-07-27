@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 20:54:00 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/09 10:39:15 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/27 02:25:50 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ float	det4x4(t_mat *m)
 	det = 0.0;
 	while (j < SIZE)
 	{
-		submatrix4x4(&sub, m, 0, j);
+		sub = submatrix4x4(m, 0, j);
 		cofactor = det3x3(&sub);
 		if (j % 2 != 0)
 			cofactor = -cofactor;
@@ -87,7 +87,7 @@ bool	matrix_inverse(t_mat *out, t_mat *in)
 		col = 0;
 		while (col < SIZE)
 		{
-			submatrix4x4(&sub, in, row, col);
+			sub = submatrix4x4(in, row, col);
 			cofactor = det3x3(&sub);
 			if ((row + col) % 2 != 0)
 				cofactor = -cofactor;
@@ -99,8 +99,15 @@ bool	matrix_inverse(t_mat *out, t_mat *in)
 	return (true);
 }
 
-void transform(t_ray *rp, t_ray *r, t_mat *m)
+/**
+ * Applies a transformation matrix to a ray.
+ * Returns the transformed ray.
+ */
+t_ray	transform(t_ray *r, t_mat *m)
 {
-	matrix_multiply_by_tuple(&rp->origin, m, &r->origin);
-	matrix_multiply_by_tuple(&rp->direction, m, &r->direction);
+	t_ray	rp;
+
+	rp.origin = matrix_multiply_by_tuple(m, &r->origin);
+	rp.direction = matrix_multiply_by_tuple(m, &r->direction);
+	return (rp);
 }

@@ -26,27 +26,31 @@ typedef struct s_ray
 	t_tuple direction;
 } t_ray;
 
-void matrix(t_mat *m);
-void matrix_print(t_mat *mt);
-void matrix_multiply(t_mat *m0, t_mat *m1, t_mat *m2);
-void identity(t_mat *m0);
-void matrix_transpose(t_mat *m0, t_mat *m1);
 
-void	submatrix4x4(t_mat3 *m0, t_mat *m1, int column, int row);
-void	submatrix3x3(t_mat2 *m0, t_mat3 *m1, int column, int row);
-void	matrix_multiply_by_tuple(t_tuple *t0, t_mat *m0, t_tuple *t1);
-float	det2x2(t_mat2 *m0);
-float	minor(t_mat3 *m0, int column, int row);
+t_mat matrix(void);
+t_mat matrix_multiply(t_mat *m1, t_mat *m2);
+t_mat identity(void);
+t_mat matrix_transpose(t_mat *m1);
+void  matrix_print(t_mat *mt);
+
+t_tuple matrix_multiply_by_tuple(t_mat *m0, t_tuple *t1);
+float   det2x2(t_mat2 *m0);
+t_mat3  submatrix4x4(t_mat *m1, int column, int row);
+t_mat2  submatrix3x3(t_mat3 *m1, int column, int row);
+float   minor(t_mat3 *m0, int column, int row);
+
 
 
 float det3x3(t_mat3 *m);
 float det4x4(t_mat *m);
 bool matrix_inverse(t_mat *out, t_mat *in);
-void transform(t_ray *rp, t_ray *r, t_mat *m);
+//void transform(t_ray *rp, t_ray *r, t_mat *m);
+t_ray	transform(t_ray *r, t_mat *m);
 
-void translation(t_mat *m0, float x, float y, float z);
-void scaling(t_mat *m0, float x, float y, float z);
-void rotate_x(t_mat *m0, float r);
-void rotate_y(t_mat *m0, float r);
-void rotate_z(t_mat *m0, float r);
+t_mat translation(float x, float y, float z);
+t_mat scaling(float x, float y, float z);
+t_mat rotate_x(float r);
+t_mat rotate_y(float r);
+t_mat rotate_z(float r);
+
 # endif
