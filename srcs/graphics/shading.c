@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 05:42:55 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/27 10:17:05 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/27 13:07:52 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ t_tuple	lighting(t_object *obj, t_light *light, t_compute *comp)
 	effective_color = schur_product(&obj->color, &light->color);
 
 	// Compute light direction vector
-	temp = tuple_subtract(&light->position, &comp->p);
+	temp = tuple_subtract(&light->position, &comp->over_p);
 	lightv = normalize(&temp);
 
 	// AMBIENT = effective_color * ambient coefficient
@@ -86,7 +86,7 @@ t_tuple	lighting(t_object *obj, t_light *light, t_compute *comp)
 
 	// light_dot_normal = dot(lightv, normalv)
 	light_dot_normal = dot(&lightv, &comp->normal_v);
-	if (light_dot_normal < 0.0f)
+	if (light_dot_normal < 0.0f || comp->shadowed)
 	{
 		color(&diffuse, 0, 0, 0);
 		color(&specular, 0, 0, 0);

@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 05:22:24 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/22 20:44:46 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/27 13:25:06 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINIRT_H
 
 # define _GNU_SOURCE
+# define EPSILON 0.001f
 # define WIDTH 1024
 # define HEIGHT 768
 # define TILE_SIZE 64

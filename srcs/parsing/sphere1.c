@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sphere.c                                           :+:      :+:    :+:   */
+/*   sphere1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 06:35:49 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/27 07:36:02 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/27 14:00:12 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,6 @@ bool	get_color_s(float *v, char *line)
 
 void	set_sphere_values(t_state *state, t_object *s, float *v)
 {
-	t_mat m1, m2;
-	//float angle;
 
 	if (!state || !s)
 		return ;
@@ -89,13 +87,9 @@ void	set_sphere_values(t_state *state, t_object *s, float *v)
 	s->diffuse = state->world.diffuse;
 	s->specular = 0.9f;
 	s->shininess = 200.0f;
-	m1 = scaling(s->radius, s->radius, s->radius);
-	m2 = translation(s->x, s->y, s->z);
-	s->transform = matrix_multiply(&m2, &m1);
-	matrix_inverse(&s->invs, &s->transform);
-	s->invs_trans = matrix_transpose(&s->invs);
 	s->next = NULL;
 	s->material = NULL;
+	creating_sphere_object(s);
 	add_object(state, &s);
 }
 

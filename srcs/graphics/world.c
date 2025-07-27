@@ -1,8 +1,36 @@
 #include "../../include/miniRt.h"
 
-t_compute	prepare_compute(float t, t_object *object, t_ray *r)
+bool is_shadow(t_world *world, t_tuple *p)
+{
+	float	distance;
+	t_tuple	direction;
+	t_tuple	v;
+	t_ray	shadow_ray;
+	t_hit	h;
+
+	distance = 0.0f;
+	v = tuple_subtract(&world->light.position, p);
+	distance = tuple_magnitute(&v);
+	if (distance != 0)
+		direction = tuple_divide_scalar(&v, distance);
+	else
+		vector(&direction, 0.0f, 0.0f, 0.0f);
+	shadow_ray.direction = direction;
+	shadow_ray.origin = *p;
+	h = find_hit(world, &shadow_ray);
+	if (h.hit)
+	{
+		if (h.t < distance)
+			return true;
+		return false;
+	}
+	return false;
+}
+
+t_compute	prepare_compute(float t, t_object *object, t_ray *r, t_world *world)
 {
 	t_compute comp;
+	t_tuple offset;
 	float dot_val;
 
 	comp.value = t;
@@ -20,6 +48,9 @@ t_compute	prepare_compute(float t, t_object *object, t_ray *r)
 	{
 		comp.inside = false;
 	}
+	offset = tuple_multiply_scalar(&comp.normal_v, EPSILON);
+	comp.over_p = tuple_add(&comp.p, &offset);
+	comp.shadowed = is_shadow(world, &comp.over_p);
 	return comp;
 }
 
@@ -33,7 +64,7 @@ t_tuple	color_at(t_world *world, t_ray *r)
 	color(&colour, 0.3f, 0.3f, 0.3f);
 	if (h.hit)
 	{
-		comp = prepare_compute(h.t, h.object, r);
+		comp = prepare_compute(h.t, h.object, r, world);
 		colour = lighting(h.object, &world->light, &comp);
 		return (colour);
 	}

@@ -42,7 +42,8 @@ SRCS = \
 	srcs/parsing/light.c\
 	srcs/parsing/camera.c\
 	srcs/parsing/common.c\
-	srcs/parsing/sphere.c\
+	srcs/parsing/sphere1.c\
+	srcs/parsing/sphere2.c\
 	srcs/parsing/plane1.c\
 	srcs/parsing/plane2.c\
 	srcs/parsing/cylinder1.c\

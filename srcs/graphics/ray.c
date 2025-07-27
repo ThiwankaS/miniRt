@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 02:26:59 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/27 11:26:57 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/27 13:20:21 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,10 +86,10 @@ void find_hit_plane(t_object *object, t_ray *r, t_hit *h)
 	vector(&normal, 0.0f, 1.0f , 0.0f);
 	local_ray.origin = matrix_multiply_by_tuple(&object->invs, &r->origin);
 	local_ray.direction = matrix_multiply_by_tuple(&object->invs, &r->direction);
-	if (fabsf(local_ray.direction.t[1]) >= 1e-6f)
+	if (fabsf(local_ray.direction.t[1]) >= EPSILON)
 	{
 		t = -local_ray.origin.t[1] / local_ray.direction.t[1];
-		if ( t > 0.0f && t < h->t)
+		if ( t > EPSILON && t < h->t)
 		{
 			h->t = t;
 			h->object = object;
