@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   plane.c                                            :+:      :+:    :+:   */
+/*   plane1.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 06:35:49 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/27 07:49:02 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/27 08:13:35 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,7 @@ bool	get_position_pl(float *v, char *line)
 
 	if (!line || !values_validation(line))
 		return (false);
-	values = ft_split(line, ',');	t_mat m1;
-	t_mat m2;
-	t_mat m3;
+	values = ft_split(line, ',');
 	if (!values || !values[0] || !values[1] || !values[2])
 	{
 		free_split(values);
@@ -105,6 +103,7 @@ void	set_plane_values(t_state *state, t_object *s, float *v)
 	s->invs_trans = identity();
 	s->next = NULL;
 	s->material = NULL;
+	creating_plane_object(s);
 	add_object(state, &s);
 }
 

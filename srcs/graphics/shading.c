@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 05:42:55 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/27 07:22:21 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/27 10:17:05 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,21 +23,24 @@ t_tuple	normal_at(t_object *s, t_tuple *world_point)
 
 	point(&absolute_point, 0.0f, 0.0f, 0.0f);
 	obj_point = matrix_multiply_by_tuple(&s->invs, world_point);
-	/* if (s->type == PLANE)
+	if (s->type == PLANE)
 		vector(&obj_normal, 0.0f, 1.0f, 0.0f);
 	else if (s->type == SPHERE)
-		tuple_subtract(&obj_normal, &obj_point, &absolute_point);
-	else if (s->type == CYLINDER)
+		obj_normal = tuple_subtract(&obj_point, &absolute_point);
+	// else if (s->type == CYLINDER)
+	// {
+	// 	dist = obj_point.t[0] * obj_point.t[0] + obj_point.t[2] * obj_point.t[2];
+	// 	if (dist < 1.0f && obj_point.t[1] >= 0.99f)
+	// 		vector(&obj_normal, 0, 1, 0);
+	// 	else if (dist < 1.0f && obj_point.t[1] <= -0.99f)
+	// 		vector(&obj_normal, 0, -1, 0);
+	// 	else
+	// 		vector(&obj_normal, obj_point.t[0], 0, obj_point.t[2]);
+	// }
+	else
 	{
-		dist = obj_point.t[0] * obj_point.t[0] + obj_point.t[2] * obj_point.t[2];
-		if (dist < 1.0f && obj_point.t[1] >= 0.99f)
-			vector(&obj_normal, 0, 1, 0);
-		else if (dist < 1.0f && obj_point.t[1] <= -0.99f)
-			vector(&obj_normal, 0, -1, 0);
-		else
-			vector(&obj_normal, obj_point.t[0], 0, obj_point.t[2]);
-	} */
-	obj_normal = tuple_subtract(&obj_point, &absolute_point);//this only work for sphere need to uncomment
+		vector(&obj_normal, 0.0f, 0.0f, 0.0f);
+	}
 	world_normal = matrix_multiply_by_tuple(&s->invs_trans, &obj_normal);
 	world_normal.t[3] = 0.0f;
 	normal = normalize(&world_normal);

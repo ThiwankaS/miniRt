@@ -8,7 +8,7 @@ void	render(t_state *state)
 	t_tuple	c;
 
 	y = 0;
-	print_things(state);
+	// print_things(state);
 	while(y < HEIGHT)
 	{
 		x = 0;

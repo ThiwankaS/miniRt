@@ -107,6 +107,8 @@ typedef struct s_mouse_state
 void position(t_tuple *pp, t_ray *r, float t);
 t_hit	find_hit(t_world *world, t_ray *ray);
 
+void	creating_plane_object(t_object *s);
+
 void set_transform(t_mat *m1, t_mat *m2);
 uint32_t tuple_to_color(t_tuple *tp);
 
