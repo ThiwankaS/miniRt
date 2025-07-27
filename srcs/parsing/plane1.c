@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 06:35:49 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/27 07:36:57 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/27 07:49:02 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,9 @@ bool	get_position_pl(float *v, char *line)
 
 	if (!line || !values_validation(line))
 		return (false);
-	values = ft_split(line, ',');
+	values = ft_split(line, ',');	t_mat m1;
+	t_mat m2;
+	t_mat m3;
 	if (!values || !values[0] || !values[1] || !values[2])
 	{
 		free_split(values);
@@ -83,9 +85,6 @@ bool	get_color_pl(float *v, char *line)
 
 void	set_plane_values(t_state *state, t_object *s, float *v)
 {
-	// t_mat m1;
-	// t_mat m2;
-
 	if (!state || !s)
 		return ;
 	s->id = 2;
