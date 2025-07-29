@@ -49,6 +49,7 @@ SRCS = \
 	srcs/parsing/cylinder1.c\
 	srcs/parsing/cylinder2.c\
 	srcs/render/draw.c\
+	srcs/render/hook.c\
 	main.c
 
 OBJS = $(SRCS:.c=.o)
