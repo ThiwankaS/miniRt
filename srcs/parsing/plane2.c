@@ -6,18 +6,18 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 07:49:12 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/29 17:54:54 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/29 21:11:59 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/miniRt.h"
 
-t_mat rotate_axis(t_tuple *axis, float angle)
+t_mat	rotate_axis(t_tuple *axis, float angle)
 {
-	float c;
-	float s;
-	float t;
-	t_mat rotate;
+	float	c;
+	float	s;
+	float	t;
+	t_mat	rotate;
 
 	c = cosf(angle);
 	s = sinf(angle);
@@ -45,9 +45,9 @@ void	creating_plane_object(t_object *s)
 
 	vector(&v0, 0, 1, 0);
 	axis = cross(&v0, &s->norm_v);
-	if(tuple_magnitute(&axis) == 0)
+	if (tuple_magnitute(&axis) == 0)
 	{
-		if(dot(&v0, &s->norm_v) > 0)
+		if (dot(&v0, &s->norm_v) > 0)
 			rotate = identity();
 		else
 			rotate = rotate_x(M_PI);

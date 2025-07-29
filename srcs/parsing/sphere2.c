@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 13:53:50 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/27 13:59:23 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/29 20:49:32 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	creating_sphere_object(t_object *s)
 {
-	t_mat m1;
-	t_mat m2;
+	t_mat	m1;
+	t_mat	m2;
 
 	m1 = scaling(s->radius, s->radius, s->radius);
 	m2 = translation(s->x, s->y, s->z);
