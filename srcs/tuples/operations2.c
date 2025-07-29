@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 20:28:36 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/25 06:14:22 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/29 20:40:29 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,15 @@
  */
 float	tuple_magnitute(t_tuple *t0)
 {
-	float	x_squared = t0->t[0] * t0->t[0];
-	float	y_squared = t0->t[1] * t0->t[1];
-	float	z_squared = t0->t[2] * t0->t[2];
-	float	w_squared = t0->t[3] * t0->t[3];
+	float	x_squared;
+	float	y_squared;
+	float	z_squared;
+	float	w_squared;
+
+	x_squared = t0->t[0] * t0->t[0];
+	y_squared = t0->t[1] * t0->t[1];
+	z_squared = t0->t[2] * t0->t[2];
+	w_squared = t0->t[3] * t0->t[3];
 	return (sqrtf(x_squared + y_squared + z_squared + w_squared));
 }
 
@@ -32,8 +37,9 @@ float	tuple_magnitute(t_tuple *t0)
  */
 float	dot(t_tuple *t1, t_tuple *t2)
 {
-	float	sum = 0.0;
+	float	sum;
 
+	sum = 0.0f;
 	sum += t1->t[0] * t2->t[0];
 	sum += t1->t[1] * t2->t[1];
 	sum += t1->t[2] * t2->t[2];
@@ -48,7 +54,9 @@ float	dot(t_tuple *t1, t_tuple *t2)
  */
 t_tuple	normalize(t_tuple *t1)
 {
-	float	mag = tuple_magnitute(t1);
+	float	mag;
+
+	mag = tuple_magnitute(t1);
 	return (tuple_divide_scalar(t1, mag));
 }
 
@@ -82,4 +90,3 @@ t_tuple	schur_product(t_tuple *t1, t_tuple *t2)
 	result.t[3] = t1->t[3] * t2->t[3];
 	return (result);
 }
-
