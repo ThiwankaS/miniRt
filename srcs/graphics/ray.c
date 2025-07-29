@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 02:26:59 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/29 11:31:29 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/29 16:19:22 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ void find_hit_plane(t_object *object, t_ray *r, t_hit *h)
 void hit_cap(t_object *object, t_ray *r, t_hit *h)
 {
 	float dx,dy,dz,ox,oy,oz,t,px,pz;
-	float min, proc, max;
+	float min, proc, max, radius_sq;
 
 	dx = r->direction.t[0];
 	dy = r->direction.t[1];
@@ -106,7 +106,8 @@ void hit_cap(t_object *object, t_ray *r, t_hit *h)
 	oz = r->origin.t[2];
 	min = -object->height / 2.0f;
 	max =  object->height / 2.0f;
-	if(dy != 0.0f)
+	radius_sq = object->radius * object->radius;
+	if(fabsf(dy) > EPSILON)
 	{
 		t = (min - oy) / dy;
 		if(t > EPSILON && t < h->t)
@@ -114,7 +115,7 @@ void hit_cap(t_object *object, t_ray *r, t_hit *h)
 			px = ox + dx * t;
 			pz = oz + dz * t;
 			proc = px * px + pz * pz;
-			if(proc < (object->radius * object->radius))
+			if(proc <= radius_sq)
 			{
 				h->t = t;
 				h->object = object;
@@ -127,7 +128,7 @@ void hit_cap(t_object *object, t_ray *r, t_hit *h)
 			px = ox + dx * t;
 			pz = oz + dz * t;
 			proc = px * px + pz * pz;
-			if(proc <= (object->radius * object->radius))
+			if(proc <= radius_sq)
 			{
 				h->t = t;
 				h->object = object;
@@ -139,26 +140,31 @@ void hit_cap(t_object *object, t_ray *r, t_hit *h)
 
 void find_hit_cylinder(t_object *object, t_ray *r, t_hit *h)
 {
-	float dx,dy,dz,ox,oy,oz,radius;
+	float dx,dy,dz,ox,oy,oz;
 	float a,b,c,disc, sqrt_disc;
 	float t1,t2,y1,y2, min_t;
-	float min, max;
+	float min, max, radius_sq;
+	t_ray local_ray;
 
 	min = -object->height / 2.0f;
 	max =  object->height / 2.0f;
-
-	dx = r->direction.t[0];
-	dy = r->direction.t[1];
-	dz = r->direction.t[2];
-	ox = r->origin.t[0];
-	oy = r->origin.t[1];
-	oz = r->origin.t[2];
-	radius = 1.0f;
+	local_ray.origin = matrix_multiply_by_tuple(&object->invs, &r->origin);
+	local_ray.direction = matrix_multiply_by_tuple(&object->invs, &r->direction);
+	dx = local_ray.direction.t[0];
+	dy = local_ray.direction.t[1];
+	dz = local_ray.direction.t[2];
+	ox = local_ray.origin.t[0];
+	oy = local_ray.origin.t[1];
+	oz = local_ray.origin.t[2];
+	radius_sq = object->radius * object->radius;
 	a = dx * dx + dz * dz;
 	if (fabsf(a) < EPSILON)
+	{
+		hit_cap(object, r, h);
 		return ;
+	}
 	b = 2.0f * ox * dx + 2.0f * oz * dz;
-	c = ox * ox + oz * oz - radius; //have used radius instead of radius * radius  because radius = 1.0
+	c = ox * ox + oz * oz - radius_sq; //have used radius instead of radius * radius  because radius = 1.0
 	disc = b * b - 4 * a * c;
 	if (disc < 0)
 		return ;
@@ -168,10 +174,15 @@ void find_hit_cylinder(t_object *object, t_ray *r, t_hit *h)
 	y1 = oy + t1 * dy;
 	y2 = oy + t2 * dy;
 	min_t = INFINITY;
-	if (t1 > EPSILON && t1 < min_t && y1 > min && y1 < max)
+	if (t1 > EPSILON && y1 >= min && y1 <= max)
 		min_t = t1;
-	if (t2 > EPSILON && t2 < min_t && y2 > min && y2 < max)
-		min_t = t2;
+	if (t2 > EPSILON && y2 >= min && y2 <= max)
+	{
+		if (t2 < min_t)
+		{
+			min_t = t2;
+		}
+	}
 	if (min_t < h->t)
 	{
 		h->t = min_t;
