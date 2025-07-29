@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 05:42:55 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/27 13:07:52 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/29 11:11:41 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,12 @@ t_tuple	normal_at(t_object *s, t_tuple *world_point)
 	t_tuple	obj_normal;
 	t_tuple	world_normal;
 	t_tuple absolute_point;
-	//float	dist;
+	float	dist;
+	float min;
+	float max;
+
+	min = -s->height / 2.0f;
+	max = s->height / 2.0f;
 
 	point(&absolute_point, 0.0f, 0.0f, 0.0f);
 	obj_point = matrix_multiply_by_tuple(&s->invs, world_point);
@@ -27,16 +32,16 @@ t_tuple	normal_at(t_object *s, t_tuple *world_point)
 		vector(&obj_normal, 0.0f, 1.0f, 0.0f);
 	else if (s->type == SPHERE)
 		obj_normal = tuple_subtract(&obj_point, &absolute_point);
-	// else if (s->type == CYLINDER)
-	// {
-	// 	dist = obj_point.t[0] * obj_point.t[0] + obj_point.t[2] * obj_point.t[2];
-	// 	if (dist < 1.0f && obj_point.t[1] >= 0.99f)
-	// 		vector(&obj_normal, 0, 1, 0);
-	// 	else if (dist < 1.0f && obj_point.t[1] <= -0.99f)
-	// 		vector(&obj_normal, 0, -1, 0);
-	// 	else
-	// 		vector(&obj_normal, obj_point.t[0], 0, obj_point.t[2]);
-	// }
+	else if (s->type == CYLINDER)
+	{
+		dist = world_point->t[0] * world_point->t[0] + world_point->t[2] * world_point->t[2];
+		if (dist < 1.0f && world_point->t[1] >= max - EPSILON)
+			vector(&obj_normal, 0.0f, 1.0f, 0.0f);
+		else if (dist < 1.0f && world_point->t[1] <= min + EPSILON)
+			vector(&obj_normal, 0.0f, -1.0f, 0.0f);
+		else
+			vector(&obj_normal, world_point->t[0], 0.0f, world_point->t[2]);
+	}
 	else
 	{
 		vector(&obj_normal, 0.0f, 0.0f, 0.0f);
