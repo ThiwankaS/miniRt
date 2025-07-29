@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 05:42:55 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/29 11:11:41 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/29 16:43:45 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,13 @@ t_tuple	normal_at(t_object *s, t_tuple *world_point)
 		obj_normal = tuple_subtract(&obj_point, &absolute_point);
 	else if (s->type == CYLINDER)
 	{
-		dist = world_point->t[0] * world_point->t[0] + world_point->t[2] * world_point->t[2];
-		if (dist < 1.0f && world_point->t[1] >= max - EPSILON)
+		dist = obj_point.t[0] * obj_point.t[0] + obj_point.t[2] * obj_point.t[2];
+		if (dist < 1.0f && obj_point.t[1] >= max - EPSILON)
 			vector(&obj_normal, 0.0f, 1.0f, 0.0f);
-		else if (dist < 1.0f && world_point->t[1] <= min + EPSILON)
+		else if (dist < 1.0f && obj_point.t[1] <= min + EPSILON)
 			vector(&obj_normal, 0.0f, -1.0f, 0.0f);
 		else
-			vector(&obj_normal, world_point->t[0], 0.0f, world_point->t[2]);
+			vector(&obj_normal, obj_point.t[0], 0.0f, obj_point.t[2]);
 	}
 	else
 	{

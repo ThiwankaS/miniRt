@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 02:26:59 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/29 16:19:22 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/29 16:47:15 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,16 +73,11 @@ void find_hit_sphere(t_object *object, t_ray *r, t_hit *h)
 
 void find_hit_plane(t_object *object, t_ray *r, t_hit *h)
 {
-	t_ray	local_ray;
-	t_tuple	normal;
 	float	t;
 
-	vector(&normal, 0.0f, 1.0f , 0.0f);
-	local_ray.origin = matrix_multiply_by_tuple(&object->invs, &r->origin);
-	local_ray.direction = matrix_multiply_by_tuple(&object->invs, &r->direction);
-	if (fabsf(local_ray.direction.t[1]) >= EPSILON)
+	if (fabsf(r->direction.t[1]) >= EPSILON)
 	{
-		t = -local_ray.origin.t[1] / local_ray.direction.t[1];
+		t = -r->origin.t[1] / r->direction.t[1];
 		if ( t > EPSILON && t < h->t)
 		{
 			h->t = t;
@@ -144,18 +139,15 @@ void find_hit_cylinder(t_object *object, t_ray *r, t_hit *h)
 	float a,b,c,disc, sqrt_disc;
 	float t1,t2,y1,y2, min_t;
 	float min, max, radius_sq;
-	t_ray local_ray;
 
 	min = -object->height / 2.0f;
 	max =  object->height / 2.0f;
-	local_ray.origin = matrix_multiply_by_tuple(&object->invs, &r->origin);
-	local_ray.direction = matrix_multiply_by_tuple(&object->invs, &r->direction);
-	dx = local_ray.direction.t[0];
-	dy = local_ray.direction.t[1];
-	dz = local_ray.direction.t[2];
-	ox = local_ray.origin.t[0];
-	oy = local_ray.origin.t[1];
-	oz = local_ray.origin.t[2];
+	dx = r->direction.t[0];
+	dy = r->direction.t[1];
+	dz = r->direction.t[2];
+	ox = r->origin.t[0];
+	oy = r->origin.t[1];
+	oz = r->origin.t[2];
 	radius_sq = object->radius * object->radius;
 	a = dx * dx + dz * dz;
 	if (fabsf(a) < EPSILON)
