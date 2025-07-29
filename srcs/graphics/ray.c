@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 02:26:59 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/27 13:20:21 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/29 11:31:29 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,6 @@ void find_hit_sphere(t_object *object, t_ray *r, t_hit *h)
 	v[3] = r->direction.t[0];
 	v[4] = r->direction.t[1];
 	v[5] = r->direction.t[2];
-
-	// subtract sphere center from ray origin
-	// v[6] = v[0] - object->x;  // dx = origin.x - center.x
-	// v[7] = v[1] - object->y;  // dy = origin.y - center.y
-	// v[8] = v[2] - object->z;  // dz = origin.z - center.z
 	v[6] = v[0] - 0;  // dx = origin.x - center.x
 	v[7] = v[1] - 0;  // dy = origin.y - center.y
 	v[8] = v[2] - 0;  // dz = origin.z - center.z
@@ -49,7 +44,6 @@ void find_hit_sphere(t_object *object, t_ray *r, t_hit *h)
 	// quadratic coefficients (a, b, c)
 	v[9]  = v[3]*v[3] + v[4]*v[4] + v[5]*v[5];  // a = dot(direction, direction)
 	v[10] = 2.0f * (v[3]*v[6] + v[4]*v[7] + v[5]*v[8]);  // b = 2 * dot(direction, sphere_to_ray)
-	v[11] = v[6]*v[6] + v[7]*v[7] + v[8]*v[8] - (object->radius * object->radius);  // c = |sphere_to_ray|^2 - r^2
 	v[11] = v[6]*v[6] + v[7]*v[7] + v[8]*v[8] - 1;
 	// discriminant
 	v[12] = v[10]*v[10] - 4.0f * v[9] * v[11];
@@ -98,49 +92,93 @@ void find_hit_plane(t_object *object, t_ray *r, t_hit *h)
 	}
 }
 
-void find_hit_cylinder(t_object *object, t_ray *r, t_hit *h)
+
+void hit_cap(t_object *object, t_ray *r, t_hit *h)
 {
-	const float min_y = -1.0f;
-	const float max_y =  1.0f;
+	float dx,dy,dz,ox,oy,oz,t,px,pz;
+	float min, proc, max;
 
-	float ox = r->origin.t[0];
-	float oz = r->origin.t[2];
-	float dx = r->direction.t[0];
-	float dz = r->direction.t[2];
-
-	float a = dx*dx + dz*dz;
-
-	if (fabsf(a) >= 1e-6f)
+	dx = r->direction.t[0];
+	dy = r->direction.t[1];
+	dz = r->direction.t[2];
+	ox = r->origin.t[0];
+	oy = r->origin.t[1];
+	oz = r->origin.t[2];
+	min = -object->height / 2.0f;
+	max =  object->height / 2.0f;
+	if(dy != 0.0f)
 	{
-		float b = 2.0f * (ox*dx + oz*dz);
-		float c = ox*ox + oz*oz - 1.0f;
-		float discriminant = b*b - 4.0f*a*c;
-
-		if (discriminant >= 0.0f)
+		t = (min - oy) / dy;
+		if(t > EPSILON && t < h->t)
 		{
-			float sqrt_d = sqrtf(discriminant);
-			float inv2a = 0.5f / a;
-
-			float t1 = (-b - sqrt_d) * inv2a;
-			float t2 = (-b + sqrt_d) * inv2a;
-
-			float y1 = r->origin.t[1] + t1 * r->direction.t[1];
-			float y2 = r->origin.t[1] + t2 * r->direction.t[1];
-
-			if (t1 > 0.0f && t1 < h->t && y1 >= min_y && y1 <= max_y)
+			px = ox + dx * t;
+			pz = oz + dz * t;
+			proc = px * px + pz * pz;
+			if(proc < (object->radius * object->radius))
 			{
-				h->t = t1;
+				h->t = t;
 				h->object = object;
 				h->hit = true;
 			}
-			if (t2 > 0.0f && t2 < h->t && y2 >= min_y && y2 <= max_y)
+		}
+		t = (max - oy) / dy;
+		if(t > EPSILON && t < h->t)
+		{
+			px = ox + dx * t;
+			pz = oz + dz * t;
+			proc = px * px + pz * pz;
+			if(proc <= (object->radius * object->radius))
 			{
-				h->t = t2;
+				h->t = t;
 				h->object = object;
 				h->hit = true;
 			}
 		}
 	}
+}
+
+void find_hit_cylinder(t_object *object, t_ray *r, t_hit *h)
+{
+	float dx,dy,dz,ox,oy,oz,radius;
+	float a,b,c,disc, sqrt_disc;
+	float t1,t2,y1,y2, min_t;
+	float min, max;
+
+	min = -object->height / 2.0f;
+	max =  object->height / 2.0f;
+
+	dx = r->direction.t[0];
+	dy = r->direction.t[1];
+	dz = r->direction.t[2];
+	ox = r->origin.t[0];
+	oy = r->origin.t[1];
+	oz = r->origin.t[2];
+	radius = 1.0f;
+	a = dx * dx + dz * dz;
+	if (fabsf(a) < EPSILON)
+		return ;
+	b = 2.0f * ox * dx + 2.0f * oz * dz;
+	c = ox * ox + oz * oz - radius; //have used radius instead of radius * radius  because radius = 1.0
+	disc = b * b - 4 * a * c;
+	if (disc < 0)
+		return ;
+	sqrt_disc = sqrtf(disc);
+	t1 = (-b - sqrt_disc) / (2.0 * a);
+	t2 = (-b + sqrt_disc) / (2.0 * a);
+	y1 = oy + t1 * dy;
+	y2 = oy + t2 * dy;
+	min_t = INFINITY;
+	if (t1 > EPSILON && t1 < min_t && y1 > min && y1 < max)
+		min_t = t1;
+	if (t2 > EPSILON && t2 < min_t && y2 > min && y2 < max)
+		min_t = t2;
+	if (min_t < h->t)
+	{
+		h->t = min_t;
+		h->object = object;
+		h->hit = true;
+	}
+	hit_cap(object, r, h);
 }
 
 t_hit find_hit(t_world *world, t_ray *ray)
@@ -160,8 +198,8 @@ t_hit find_hit(t_world *world, t_ray *ray)
 			find_hit_sphere(object, &local_ray, &closest);
 		else if (object->type == PLANE)
 			find_hit_plane(object, &local_ray, &closest);
-		// else if (object->type == CYLINDER)
-		// 	find_hit_cylinder(object, &local_ray, &closest);
+		else if (object->type == CYLINDER)
+			find_hit_cylinder(object, &local_ray, &closest);
 		object = object->next;
 	}
 	return closest;

@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 07:49:12 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/27 09:50:56 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/29 10:10:07 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ t_mat rotate_axis(t_tuple *axis, float angle)
 	float t;
 	t_mat rotate;
 
-	c = cos(angle);
-	s = sin(angle);
+	c = cosf(angle);
+	s = sinf(angle);
 	t = 1.0f - c;
 	rotate = identity();
 	rotate.m[0][0] = t * axis->t[0] * axis->t[0] + c;
