@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   graphics.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoshinth <aoshinth@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 11:39:48 by aoshinth          #+#    #+#             */
-/*   Updated: 2025/07/30 12:06:36 by aoshinth         ###   ########.fr       */
+/*   Updated: 2025/07/30 12:21:14 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,44 +98,31 @@ typedef struct s_state
 	bool		done;
 }	t_state;
 
-void	position(t_tuple *pp, t_ray *r, float t);
-t_hit	find_hit(t_world *world, t_ray *ray);
-
-void	creating_plane_object(t_object *s);
-void	creating_sphere_object(t_object *s);
-
-void	find_hit_cylinder(t_object *object, t_ray *r, t_hit *h);
-void	hit_cap(t_object *object, t_ray *r, t_hit *h);
-void	find_hit_plane(t_object *object, t_ray *r, t_hit *h);
-void	find_hit_sphere(t_object *object, t_ray *r, t_hit *h);
-void	set_transform(t_mat *m1, t_mat *m2);
+void		position(t_tuple *pp, t_ray *r, float t);
+t_hit		find_hit(t_world *world, t_ray *ray);
+void		creating_plane_object(t_object *s);
+void		creating_sphere_object(t_object *s);
+void		find_hit_cylinder(t_object *object, t_ray *r, t_hit *h);
+void		hit_cap(t_object *object, t_ray *r, t_hit *h);
+void		find_hit_plane(t_object *object, t_ray *r, t_hit *h);
+void		find_hit_sphere(t_object *object, t_ray *r, t_hit *h);
+void		set_transform(t_mat *m1, t_mat *m2);
 uint32_t	tuple_to_color(t_tuple *tp);
-
-t_tuple	normal_at(t_object *s, t_tuple *world_point);
-t_tuple	reflect(t_tuple *in, t_tuple *normal);
-t_tuple	lighting(t_object *obj, t_light *light, t_compute *comp);
-
+t_tuple		normal_at(t_object *s, t_tuple *world_point);
+t_tuple		reflect(t_tuple *in, t_tuple *normal);
+t_tuple		lighting(t_object *obj, t_light *light, t_compute *comp);
 t_compute	prepare_compute(float t, t_object *object, t_ray *r,
-			t_world *world);
-t_tuple	color_at(t_world *world, t_ray *r);
-void	view_trans(t_camera *camera, t_tuple *from, t_tuple *to, t_tuple *up);
-t_ray	ray_for_pixel(t_camera *camera, int px, int py);
-
-void	handle_drag(void *param);
-t_object	*pick_object_at(int px, int py, t_camera *camera, t_world *world);
-void	key_handler(mlx_key_data_t keydata, void *param);
-void	mouse_handler(mouse_key_t button, action_t action, modifier_key_t mods,
-			void *param);
-
-void	update_fov(t_camera *camera, float fov);
-void	render_if_resized(void *param);
-// In miniRt.h or ft_graphics.h
-void	render(t_state *state);
-void	keypress(mlx_key_data_t keydata, void *param);
-void	resize_selected_object(mlx_key_data_t keydata, t_state *state);
-t_object	*pick_object_at(int px, int py, t_camera *camera, t_world *world);
-int		change_value(mlx_key_data_t keydata, t_object *selected);
-void	handle_resize(t_state *state, int32_t cur_w, int32_t cur_h);
-void	select_next_object(t_state *state);
+				t_world *world);
+t_tuple		color_at(t_world *world, t_ray *r);
+void		view_trans(t_camera *camera, t_tuple *from, t_tuple *to,
+				t_tuple *up);
+t_ray		ray_for_pixel(t_camera *camera, int px, int py);
+void		update_fov(t_camera *camera, float fov);
+void		render_if_resized(void *param);
+void		render(t_state *state);
+void		keypress(mlx_key_data_t keydata, void *param);
+int			change_value(mlx_key_data_t keydata, t_object *selected);
+void		handle_resize(t_state *state, int32_t cur_w, int32_t cur_h);
+void		select_next_object(t_state *state);
 
 #endif

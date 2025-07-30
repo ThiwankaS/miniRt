@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hit_sp.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoshinth <aoshinth@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 22:35:53 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/30 11:28:25 by aoshinth         ###   ########.fr       */
+/*   Updated: 2025/07/30 12:28:24 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	set_closet_hit_sp(t_object *object, t_hit *h, float *v)
 void	find_hit_sphere(t_object *object, t_ray *r, t_hit *h)
 {
 	float	v[14];
-	float 	radius_sq;
+	float	radius_sq;
 
 	radius_sq = object->radius * object->radius;
 	v[0] = r->origin.t[0];

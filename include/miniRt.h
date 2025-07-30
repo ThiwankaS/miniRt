@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   miniRt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoshinth <aoshinth@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 05:22:24 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/30 00:50:14 by aoshinth         ###   ########.fr       */
+/*   Updated: 2025/07/30 12:18:47 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,7 @@
 # include "../ft_libft/get_next_line.h"
 
 int			render_image(t_state *state);
-void print_object(t_object *s);
-
+void		print_object(t_object *s);
 int			ft_error(char *msg);
 int			values_validation(char *str);
 t_object	*init_object(void);
@@ -57,7 +56,6 @@ int			set_sphere(char *line, t_state *state, int *index);
 int			set_plane(char *line, t_state *state, int *index);
 int			set_cylinder(char *line, t_state *state, int *index);
 bool		init_file_reader(char *filename, t_state *state);
-
-void print_things(t_state *state);
+void		print_things(t_state *state);
 
 #endif

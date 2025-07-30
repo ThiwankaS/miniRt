@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoshinth <aoshinth@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 20:42:29 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/30 11:42:54 by aoshinth         ###   ########.fr       */
+/*   Updated: 2025/07/30 12:30:17 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ void	print_object(t_object *s)
 
 void	print_things(t_state *state)
 {
+	t_object	*s;
+
 	printf("state.world.ambient : %.3f\n", state->world.ambient);
 	printf("state.world.colour :\n");
 	tuple_print(&state->world.colour);
@@ -92,7 +94,7 @@ void	print_things(t_state *state)
 	printf("state.camera.invs :\n");
 	matrix_print(&state->camera.invs);
 	printf("object list :\n");
-	t_object *s = state->world.components;
+	s = state->world.components;
 	while (s)
 	{
 		print_object(s);
