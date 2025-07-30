@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/29 20:42:29 by tsomacha          #+#    #+#             */
+/*   Updated: 2025/07/29 20:44:53 by tsomacha         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "include/miniRt.h"
 
-void camera_init(t_camera *camera, int hsize, int vsize, float fov)
+void	camera_init(t_camera *camera, int hsize, int vsize, float fov)
 {
 	float	half_view;
 	float	aspect;
@@ -10,10 +22,8 @@ void camera_init(t_camera *camera, int hsize, int vsize, float fov)
 	camera->fov = fov;
 	camera->transform = identity();
 	camera->invs = identity();
-
 	half_view = tanf(fov / 2.0f);
 	aspect = hsize / (float)vsize;
-
 	if (aspect >= 1.0f)
 	{
 		camera->half_width = half_view;
@@ -27,26 +37,23 @@ void camera_init(t_camera *camera, int hsize, int vsize, float fov)
 	camera->pixel_size = (camera->half_width * 2.0f) / camera->hsize;
 }
 
-void default_state(t_state *state)
+void	default_state(t_state *state)
 {
 	state->world.ambient = 0.0f;
 	state->world.diffuse = 0.0f;
 	state->world.set_ambient = false;
 	state->world.set_light = false;
-
 	color(&state->world.colour, 1.0f, 1.0f, 1.0f);
 	point(&state->world.light.position, 0.0f, 0.0f, 0.0f);
 	color(&state->world.light.color, 1.0f, 1.0f, 1.0f);
-
 	camera_init(&state->camera, WIDTH, HEIGHT, M_PI / 3.0f);
 	state->camera.set_camera = false;
 }
 
-void print_object(t_object *s)
+void	print_object(t_object *s)
 {
 	if (!s)
-		return;
-
+		return ;
 	printf("id : %d\n", s->id);
 	printf("type : %d\n", s->type);
 	printf("s.ambient : %.3f\n", s->ambient);
@@ -63,7 +70,7 @@ void print_object(t_object *s)
 	matrix_print(&s->transform);
 }
 
-void print_things(t_state *state)
+void	print_things(t_state *state)
 {
 	printf("state.world.ambient : %.3f\n", state->world.ambient);
 	printf("state.world.colour :\n");
@@ -73,19 +80,16 @@ void print_things(t_state *state)
 	tuple_print(&state->world.light.color);
 	printf("state.world.light.position :\n");
 	tuple_print(&state->world.light.position);
-
 	printf("state.camera.hsize : %d\n", state->camera.hsize);
 	printf("state.camera.vsize : %d\n", state->camera.vsize);
 	printf("state.camera.half_height : %.3f\n", state->camera.half_height);
 	printf("state.camera.half_width : %.3f\n", state->camera.half_width);
 	printf("state.camera.pixel_size : %.3f\n", state->camera.pixel_size);
 	printf("state.camera.fov : %.3f\n", state->camera.fov);
-
 	printf("state.camera.transform :\n");
 	matrix_print(&state->camera.transform);
 	printf("state.camera.invs :\n");
 	matrix_print(&state->camera.invs);
-
 	printf("object list :\n");
 	t_object *s = state->world.components;
 	while (s)
@@ -95,24 +99,23 @@ void print_things(t_state *state)
 	}
 }
 
-int main(int argc, char *argv[])
+int	main(int argc, char *argv[])
 {
-	t_state	*state = ft_calloc(1, sizeof(t_state));
+	t_state	*state;
 
+	state = ft_calloc(1, sizeof(t_state));
 	if (!state)
 		return (1);
 	default_state(state);
-
 	if (argc == 2)
 	{
-		if(init_file_reader(argv[1], state))
+		if (init_file_reader(argv[1], state))
 		{
 			render_image(state);
 		}
 	}
 	else
 		ft_error("[ incorrect arguments! ]\n");
-
 	clean_up(state);
 	free(state);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 06:35:49 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/27 14:00:12 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/29 20:49:06 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ bool	get_color_s(float *v, char *line)
 
 void	set_sphere_values(t_state *state, t_object *s, float *v)
 {
-
 	if (!state || !s)
 		return ;
 	s->id = 1;

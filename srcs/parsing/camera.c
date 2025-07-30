@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 04:38:29 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/23 05:55:57 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/29 20:47:58 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,11 +119,7 @@ int	set_camera(char *line, t_state *state, int *index)
 	if (!get_fov(&fov, items[2]))
 		return (free_split(items), 1);
 	update_fov(&state->camera, fov);
-	// printf("before : \n");
-	// matrix_print(&state->camera.invs);
 	update_view(&state->camera, &p, &d);
-	// printf("after : \n");
-	// matrix_print(&state->camera.invs);
 	state->camera.set_camera = true;
 	free_split(items);
 	return (0);

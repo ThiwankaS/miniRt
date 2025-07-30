@@ -6,28 +6,26 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 01:59:36 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/27 07:15:13 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/29 22:35:37 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "../../include/miniRt.h"
 
 #include "../../include/miniRt.h"
 
 /**
  * Returns a copy of the given 4x4 matrix.
  */
-t_mat copy_matrix(t_mat *src)
+t_mat	copy_matrix(t_mat *src)
 {
 	t_mat	dest;
 	int		col;
 	int		row;
 
 	col = 0;
-	while(col < SIZE)
+	while (col < SIZE)
 	{
 		row = 0;
-		while(row < SIZE)
+		while (row < SIZE)
 		{
 			dest.m[col][row] = src->m[col][row];
 			row++;
@@ -41,13 +39,17 @@ t_mat copy_matrix(t_mat *src)
  * Converts a tuple representing a color (with values in range 0.0–1.0)
  * into a packed 32-bit integer in RGBA format.
  */
-uint32_t tuple_to_color(t_tuple *tp)
+uint32_t	tuple_to_color(t_tuple *tp)
 {
-	uint32_t red = (uint32_t)(tp->t[0] * 255.0f);
-	uint32_t green = (uint32_t)(tp->t[1] * 255.0f);
-	uint32_t blue = (uint32_t)(tp->t[2] * 255.0f);
-	uint32_t alpha = (uint32_t)(tp->t[3] * 255.0f);
+	uint32_t	red;
+	uint32_t	green;
+	uint32_t	blue;
+	uint32_t	alpha;
 
+	red = (uint32_t)(tp->t[0] * 255.0f);
+	green = (uint32_t)(tp->t[1] * 255.0f);
+	blue = (uint32_t)(tp->t[2] * 255.0f);
+	alpha = (uint32_t)(tp->t[3] * 255.0f);
 	return ((red << 24) | (green << 16) | (blue << 8) | alpha);
 }
 

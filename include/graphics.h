@@ -114,6 +114,10 @@ t_hit	find_hit(t_world *world, t_ray *ray);
 void	creating_plane_object(t_object *s);
 void	creating_sphere_object(t_object *s);
 
+void find_hit_cylinder(t_object *object, t_ray *r, t_hit *h);
+void hit_cap(t_object *object, t_ray *r, t_hit *h);
+void find_hit_plane(t_object *object, t_ray *r, t_hit *h);
+void find_hit_sphere(t_object *object, t_ray *r, t_hit *h);
 void set_transform(t_mat *m1, t_mat *m2);
 uint32_t tuple_to_color(t_tuple *tp);
 
@@ -123,7 +127,7 @@ t_tuple	lighting(t_object *obj, t_light *light, t_compute *comp);
 
 t_compute	prepare_compute(float t, t_object *object, t_ray *r, t_world *world);
 t_tuple	color_at(t_world *world, t_ray *r);
-void view_transformation(t_camera *camera, t_tuple *from, t_tuple *to, t_tuple *up);
+void view_trans(t_camera *camera, t_tuple *from, t_tuple *to, t_tuple *up);
 t_ray ray_for_pixel(t_camera *camera, int px, int py);
 
 void handle_drag(void *param);

@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 20:21:24 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/08 20:25:58 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/29 20:37:45 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,4 +79,3 @@ t_tuple	tuple_divide_scalar(t_tuple *t1, float a)
 		return ((t_tuple){{0.0, 0.0, 0.0, 0.0}});
 	return (tuple_multiply_scalar(t1, 1.0f / a));
 }
-
