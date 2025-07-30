@@ -88,6 +88,8 @@ typedef struct s_state
 	mlx_image_t	*img;
 	t_camera	camera;
 	t_world		world;
+	int			width;
+	int			height;
 	int			tiles_x;
 	int			tiles_y;
 	int			current_tile;
@@ -132,4 +134,10 @@ void handle_drag(void *param);
 t_object *pick_object_at(int px, int py, t_camera *camera, t_world *world);
 void key_handler(mlx_key_data_t keydata, void *param);
 void mouse_handler(mouse_key_t button, action_t action, modifier_key_t mods, void *param);
+
+void	update_fov(t_camera *camera, float fov);
+void	render_if_resized(void *param);
+// In miniRt.h or ft_graphics.h
+void	render(t_state *state);
+
 # endif
