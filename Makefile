@@ -32,8 +32,13 @@ SRCS = \
 	srcs/matrices/operations2.c\
 	srcs/matrices/operations3.c\
 	srcs/graphics/ray.c\
+	srcs/graphics/hit_cy1.c\
+	srcs/graphics/hit_cy2.c\
+	srcs/graphics/hit_sp.c\
+	srcs/graphics/hit_pl.c\
 	srcs/graphics/helper.c\
 	srcs/graphics/shading.c\
+	srcs/graphics/normal.c\
 	srcs/graphics/world.c\
 	srcs/error/file.c\
 	srcs/parsing/atof.c\
