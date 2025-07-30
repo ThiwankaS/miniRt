@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   miniRt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: aoshinth <aoshinth@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 05:22:24 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/27 13:25:06 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/30 00:50:14 by aoshinth         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 # define SPHERE   1
 # define PLANE    2
 # define CYLINDER 3
+# define SUCCESS 0
+# define FAILURE 1
 
 # include <math.h>
 # include <stdlib.h>

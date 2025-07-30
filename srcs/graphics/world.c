@@ -120,11 +120,8 @@ t_ray ray_for_pixel(t_camera *camera, int px, int py)
 	yoffset = (py + 0.5f) * camera->pixel_size;
 	world_x = camera->half_width - xoffset;
 	world_y = camera->half_height - yoffset;
-
 	point(&p, world_x, world_y, -1.0f);      // Camera space
 	point(&abs_p, 0.0f, 0.0f, 0.0f);         // Camera origin
-
-	// Transform both to world space
 	pixel = matrix_multiply_by_tuple(&camera->invs, &p);
 	origin = matrix_multiply_by_tuple(&camera->invs, &abs_p);
 	temp = tuple_subtract(&pixel, &origin); // Direction = pixel - origin
@@ -134,16 +131,11 @@ t_ray ray_for_pixel(t_camera *camera, int px, int py)
 	return (r);
 }
 
-t_object *pick_object_at(int px, int py, t_camera *camera, t_world *world)
-{
-	t_ray ray = ray_for_pixel(camera, px, py);
-	t_hit hit = find_hit(world, &ray);
-	if (hit.hit)
-		return hit.object;
-	return NULL;
-}
 
-void handle_drag(void *param)
+
+
+
+/* void handle_drag(void *param)
 {
 	t_mouse_state *ms = (t_mouse_state *)param;
 	int x, y;
@@ -169,7 +161,6 @@ void handle_drag(void *param)
 		matrix_inverse(&ms->selected_object->invs, &ms->selected_object->transform);
 
 		// Reset renderer
-		ms->render_state->current_tile = 0;
 		ms->render_state->done = false;
 		ms->last_x = x;
 		ms->last_y = y;
@@ -251,6 +242,5 @@ void key_handler(mlx_key_data_t keydata, void *param)
 	matrix_inverse(&obj->invs, &obj->transform);
 
 	// Trigger rerender
-	ms->render_state->current_tile = 0;
 	ms->render_state->done = false;
-}
+} */

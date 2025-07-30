@@ -50,6 +50,7 @@ SRCS = \
 	srcs/parsing/cylinder2.c\
 	srcs/render/draw.c\
 	srcs/render/hook.c\
+	srcs/render/resize.c\
 	main.c
 
 OBJS = $(SRCS:.c=.o)

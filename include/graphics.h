@@ -48,6 +48,8 @@ typedef struct s_world
 	t_tuple		colour;
 	t_light		light;
 	t_object	*components;
+	 t_object    *objects;     // array of all objects
+    int         obj_count;    // number of objects
 } t_world;
 
 typedef struct s_compute
@@ -90,9 +92,7 @@ typedef struct s_state
 	t_world		world;
 	int			width;
 	int			height;
-	int			tiles_x;
-	int			tiles_y;
-	int			current_tile;
+	t_object	*selected_object;
 	bool		done;
 }	t_state;
 
@@ -135,5 +135,11 @@ void	update_fov(t_camera *camera, float fov);
 void	render_if_resized(void *param);
 // In miniRt.h or ft_graphics.h
 void	render(t_state *state);
+void	keypress(mlx_key_data_t keydata, void *param);
+void	resize_selected_object(mlx_key_data_t keydata, t_state *state);
+t_object *pick_object_at(int px, int py, t_camera *camera, t_world *world);
+int change_value(mlx_key_data_t keydata, t_object *selected);
+
+
 
 # endif
