@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sphere1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: aoshinth <aoshinth@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 06:35:49 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/29 20:49:06 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/30 11:42:17 by aoshinth         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,9 +87,9 @@ void	set_sphere_values(t_state *state, t_object *s, float *v)
 	s->specular = 0.9f;
 	s->shininess = 200.0f;
 	s->next = NULL;
-	s->material = NULL;
 	creating_sphere_object(s);
 	add_object(state, &s);
+	state->world.obj_count++;
 }
 
 int	set_sphere(char *line, t_state *state, int *index)

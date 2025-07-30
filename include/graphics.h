@@ -1,44 +1,47 @@
-# ifndef FT_GRAPHICS_H
-# define FT_GRAPHICS_H
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   graphics.h                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aoshinth <aoshinth@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/30 11:39:48 by aoshinth          #+#    #+#             */
+/*   Updated: 2025/07/30 11:52:16 by aoshinth         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef GRAPHICS_H
+# define GRAPHICS_H
 
 # include "miniRt.h"
 
-typedef struct s_material
-{
-	float ambient;
-	float diffuse;
-	float specular;
-	float shininess;
-	t_tuple color;
-} t_material;
-
 typedef struct s_light
 {
-	t_tuple color;
-	t_tuple position;
-} t_light;
+	t_tuple	color;
+	t_tuple	position;
+}	t_light;
 
 typedef struct s_object
 {
-	int   id;
-	int   type;
-	float x;
-	float y;
-	float z;
-	float radius;
-	float height;
-	float ambient;
-	float diffuse;
-	float specular;
-	float shininess;
-	t_tuple color;
-	t_tuple norm_v;
-	t_mat transform;
-	t_mat invs;
-	t_mat invs_trans;
-	t_material *material;
-	struct s_object *next;
-} t_object;
+	int				id;
+	int				type;
+	float			x;
+	float			y;
+	float			z;
+	float			radius;
+	float			height;
+	float			ambient;
+	float			diffuse;
+	float			specular;
+	float			shininess;
+	t_tuple			color;
+	t_tuple			norm_v;
+	t_mat			transform;
+	t_mat			invs;
+	t_mat			invs_trans;
+	struct s_object	*next;
+}	t_object;
+
 typedef struct s_world
 {
 	bool		set_ambient;
@@ -48,9 +51,8 @@ typedef struct s_world
 	t_tuple		colour;
 	t_light		light;
 	t_object	*components;
-	 t_object    *objects;     // array of all objects
-    int         obj_count;    // number of objects
-} t_world;
+	int			obj_count;
+} 	t_world;
 
 typedef struct s_compute
 {
@@ -96,18 +98,6 @@ typedef struct s_state
 	bool		done;
 }	t_state;
 
-typedef struct s_mouse_state
-{
-	mlx_t		*mlx;
-	t_camera	*camera;
-	t_world		*world;
-	t_state *render_state;
-	bool		is_dragging;
-	int			last_x;
-	int			last_y;
-	t_object	*selected_object;
-}	t_mouse_state;
-
 void position(t_tuple *pp, t_ray *r, float t);
 t_hit	find_hit(t_world *world, t_ray *ray);
 
@@ -143,7 +133,7 @@ void	keypress(mlx_key_data_t keydata, void *param);
 void	resize_selected_object(mlx_key_data_t keydata, t_state *state);
 t_object *pick_object_at(int px, int py, t_camera *camera, t_world *world);
 int change_value(mlx_key_data_t keydata, t_object *selected);
-
-
+void	handle_resize(t_state *state, int32_t cur_w, int32_t cur_h);
+void	select_next_object(t_state *state);
 
 # endif

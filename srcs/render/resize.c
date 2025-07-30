@@ -6,12 +6,63 @@
 /*   By: aoshinth <aoshinth@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 23:00:00 by aoshinth          #+#    #+#             */
-/*   Updated: 2025/07/30 07:34:27 by aoshinth         ###   ########.fr       */
+/*   Updated: 2025/07/30 11:45:14 by aoshinth         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "../../include/miniRt.h"
+
+int	count_objects(t_state *state)
+{
+	t_object	*cur;
+	int			count;
+
+	count = 0;
+	cur = state->world.components;
+	while (cur)
+	{
+		count++;
+		cur = cur->next;
+	}
+	state->world.obj_count = count;
+	return (count);
+}
+
+void	select_next_object(t_state *state)
+{
+	static int	index = -1;
+	t_object	*cur;
+	int			i;
+
+	i = 0;
+	if (!state->world.components)
+	{
+		printf("⚠️ No objects in scene.\n");
+		return ;
+	}
+	if (state->world.obj_count == 0)
+		count_objects(state);
+	index = (index + 1) % state->world.obj_count;
+	cur = state->world.components;
+	while (cur && i++ < index)
+		cur = cur->next;
+	state->selected_object = cur;
+	if (cur)
+		printf("🔄 Selected [%d]: type=%d radius=%.2f height=%.2f\n",
+			index, cur->type, cur->radius, cur->height);
+}
+
+void	handle_resize(t_state *state, int32_t cur_w, int32_t cur_h)
+{
+	state->camera.hsize = cur_w;
+	state->camera.vsize = cur_h;
+	update_fov(&state->camera, state->camera.fov);
+	if (state->img)
+		mlx_delete_image(state->mlx, state->img);
+	state->img = mlx_new_image(state->mlx, cur_w, cur_h);
+	mlx_image_to_window(state->mlx, state->img, 0, 0);
+	render(state);
+}
 
 int	resize_object(mlx_key_data_t key, t_object *obj)
 {
@@ -42,14 +93,3 @@ int	change_value(mlx_key_data_t keydata, t_object *selected)
 		return (resize_object(keydata, selected));
 	return (FAILURE);
 }
-
-
-
-
-
-
-
-
-
-
-

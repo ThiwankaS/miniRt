@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cylinder1.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: aoshinth <aoshinth@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 02:25:04 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/29 21:03:32 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/30 11:42:44 by aoshinth         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,8 @@ void	set_cylinder_values(t_state *state, t_object *s, float *v)
 	s->invs = identity();
 	s->invs_trans = identity();
 	s->next = NULL;
-	s->material = NULL;
 	add_object(state, &s);
+	state->world.obj_count++;
 }
 
 int	set_cylinder(char *line, t_state *state, int *index)

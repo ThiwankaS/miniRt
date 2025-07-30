@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   plane1.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: aoshinth <aoshinth@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 06:35:49 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/29 17:48:39 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/30 11:42:36 by aoshinth         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,9 +103,9 @@ void	set_plane_values(t_state *state, t_object *s, float *v)
 	s->invs = identity();
 	s->invs_trans = identity();
 	s->next = NULL;
-	s->material = NULL;
 	creating_plane_object(s);
 	add_object(state, &s);
+	state->world.obj_count++;
 }
 
 int	set_plane(char *line, t_state *state, int *index)

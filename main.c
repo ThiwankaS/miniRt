@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: aoshinth <aoshinth@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 20:42:29 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/29 20:44:53 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/30 11:42:54 by aoshinth         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ void	default_state(t_state *state)
 	state->world.diffuse = 0.0f;
 	state->world.set_ambient = false;
 	state->world.set_light = false;
+	state->world.obj_count = 0;
 	color(&state->world.colour, 1.0f, 1.0f, 1.0f);
 	point(&state->world.light.position, 0.0f, 0.0f, 0.0f);
 	color(&state->world.light.color, 1.0f, 1.0f, 1.0f);

@@ -6,7 +6,7 @@
 /*   By: aoshinth <aoshinth@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 20:49:45 by aoshinth          #+#    #+#             */
-/*   Updated: 2025/07/30 07:01:54 by aoshinth         ###   ########.fr       */
+/*   Updated: 2025/07/30 11:35:23 by aoshinth         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,21 +30,6 @@ void	key_hook(mlx_key_data_t k_data, void *ptr)
 {
 	if (k_data.key == MLX_KEY_ESCAPE && k_data.action == MLX_PRESS)
 		close_hook(ptr);
-}
-
-// Second part: checks if resize is needed and calls handle_resize
-
-// First part: handles resize detection and camera update
-void	handle_resize(t_state *state, int32_t cur_w, int32_t cur_h)
-{
-	state->camera.hsize = cur_w;
-	state->camera.vsize = cur_h;
-	update_fov(&state->camera, state->camera.fov);
-	if (state->img)
-		mlx_delete_image(state->mlx, state->img);
-	state->img = mlx_new_image(state->mlx, cur_w, cur_h);
-	mlx_image_to_window(state->mlx, state->img, 0, 0);
-	render(state);
 }
 
 void	render_if_resized(void *param)
@@ -73,11 +58,9 @@ void	render_if_resized(void *param)
 	handle_resize(state, cur_w, cur_h);
 }
 
-
-void setup_hooks(t_state *state)
+void	setup_hooks(t_state *state)
 {
-    mlx_close_hook(state->mlx, close_hook, state);
-    mlx_key_hook(state->mlx, keypress, state);
-    mlx_loop_hook(state->mlx, render_if_resized, state);
+	mlx_close_hook(state->mlx, close_hook, state);
+	mlx_key_hook(state->mlx, keypress, state);
+	mlx_loop_hook(state->mlx, render_if_resized, state);
 }
-

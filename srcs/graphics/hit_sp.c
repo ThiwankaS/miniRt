@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hit_sp.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: aoshinth <aoshinth@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 22:35:53 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/29 23:21:53 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/30 11:28:25 by aoshinth         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,9 @@ void	set_closet_hit_sp(t_object *object, t_hit *h, float *v)
 void	find_hit_sphere(t_object *object, t_ray *r, t_hit *h)
 {
 	float	v[14];
+	float 	radius_sq;
 
+	radius_sq = object->radius * object->radius;
 	v[0] = r->origin.t[0];
 	v[1] = r->origin.t[1];
 	v[2] = r->origin.t[2];
@@ -50,7 +52,7 @@ void	find_hit_sphere(t_object *object, t_ray *r, t_hit *h)
 	v[8] = v[2] - 0;
 	v[9] = v[3] * v[3] + v[4] * v[4] + v[5] * v[5];
 	v[10] = 2.0f * (v[3] * v[6] + v[4] * v[7] + v[5] * v[8]);
-	v[11] = v[6] * v[6] + v[7] * v[7] + v[8] * v[8] - 1;
+	v[11] = v[6] * v[6] + v[7] * v[7] + v[8] * v[8] - radius_sq;
 	v[12] = v[10] * v[10] - 4.0f * v[9] * v[11];
 	if (v[12] >= 0.0f)
 	{
