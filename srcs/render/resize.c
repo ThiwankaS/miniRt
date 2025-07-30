@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   resize.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoshinth <aoshinth@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 23:00:00 by aoshinth          #+#    #+#             */
-/*   Updated: 2025/07/30 11:45:14 by aoshinth         ###   ########.fr       */
+/*   Updated: 2025/07/30 13:44:17 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,9 @@ int	resize_object(mlx_key_data_t key, t_object *obj)
 	if (obj->type == SPHERE || obj->type == CYLINDER)
 	{
 		if (key.key == MLX_KEY_UP)
+		{
 			obj->radius += 0.1f;
+		}
 		else if (key.key == MLX_KEY_DOWN)
 			obj->radius = fmaxf(0.1f, obj->radius - 0.1f);
 	}

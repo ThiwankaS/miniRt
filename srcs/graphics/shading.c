@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 05:42:55 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/30 08:24:56 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/30 15:05:32 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ t_tuple	lighting(t_object *obj, t_light *light, t_compute *comp)
 	vec[0] = schur_product(&obj->color, &light->color);
 	vec[1] = tuple_subtract(&light->position, &comp->over_p);
 	vec[2] = normalize(&vec[1]);
-	ambient = tuple_multiply_scalar(&vec[0], obj->ambient);
+	ambient = tuple_multiply_scalar(&vec[0], *obj->ambient);
 	product = dot(&vec[2], &comp->normal_v);
 	if (product < 0.0f || comp->shadowed)
 	{
@@ -79,7 +79,7 @@ t_tuple	lighting(t_object *obj, t_light *light, t_compute *comp)
 	}
 	else
 	{
-		diffuse = tuple_multiply_scalar(&vec[0], obj->diffuse * product);
+		diffuse = tuple_multiply_scalar(&vec[0], *obj->diffuse * product);
 		specular = spec_color(obj, light, comp, &vec[2]);
 	}
 	return (final_color(&ambient, &diffuse, &specular));

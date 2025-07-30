@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 20:42:29 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/30 12:30:17 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/30 15:06:30 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void	default_state(t_state *state)
 	state->world.set_ambient = false;
 	state->world.set_light = false;
 	state->world.obj_count = 0;
+	state->world.components = NULL;
 	color(&state->world.colour, 1.0f, 1.0f, 1.0f);
 	point(&state->world.light.position, 0.0f, 0.0f, 0.0f);
 	color(&state->world.light.color, 1.0f, 1.0f, 1.0f);
@@ -57,8 +58,8 @@ void	print_object(t_object *s)
 		return ;
 	printf("id : %d\n", s->id);
 	printf("type : %d\n", s->type);
-	printf("s.ambient : %.3f\n", s->ambient);
-	printf("s.diffuse : %.3f\n", s->diffuse);
+	printf("s.ambient : %.3f\n", *s->ambient);
+	printf("s.diffuse : %.3f\n", *s->diffuse);
 	printf("s.specular : %.3f\n", s->specular);
 	printf("s.shininess : %.3f\n", s->shininess);
 	printf("s.x : %.3f\n", s->x);

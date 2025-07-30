@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 11:39:48 by aoshinth          #+#    #+#             */
-/*   Updated: 2025/07/30 12:21:14 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/30 15:02:23 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ typedef struct s_object
 	float			z;
 	float			radius;
 	float			height;
-	float			ambient;
-	float			diffuse;
+	float			*ambient;
+	float			*diffuse;
 	float			specular;
 	float			shininess;
 	t_tuple			color;

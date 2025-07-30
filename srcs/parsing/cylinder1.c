@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cylinder1.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoshinth <aoshinth@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 02:25:04 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/30 11:42:44 by aoshinth         ###   ########.fr       */
+/*   Updated: 2025/07/30 15:02:58 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ void	set_cylinder_values(t_state *state, t_object *s, float *v)
 	s->radius = v[6];
 	s->height = v[7];
 	color(&s->color, v[8] / 255.0f, v[9] / 255.0f, v[10] / 255.0f);
-	s->ambient = state->world.ambient;
-	s->diffuse = state->world.diffuse;
+	s->ambient = &state->world.ambient;
+	s->diffuse = &state->world.diffuse;
 	s->specular = 0.0f;
 	s->shininess = 200.0f;
 	s->transform = identity();

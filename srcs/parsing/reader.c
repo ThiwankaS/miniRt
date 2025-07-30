@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 04:38:04 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/21 02:21:38 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/30 15:30:48 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ bool	process_line(char *line, t_state *state)
 
 	i = 0;
 	res = 0;
+	if (!line)
+		return (false);
 	while (line && line[i] && line[i] != ' ')
 		i++;
 	if (i != 0 && ft_strncmp(line, "A", i) == 0)
@@ -67,18 +69,20 @@ bool	read_content(int fd, t_state *state)
 	char	*line;
 
 	line = NULL;
+	line = get_next_line(fd);
+	if (!line)
+		return (false);
 	while (true)
 	{
-		line = get_next_line(fd);
-		if (!line)
-			break ;
 		if (!process_line(line, state))
 		{
 			free(line);
 			return (false);
 		}
 		free(line);
-		line = NULL;
+		line = get_next_line(fd);
+		if (!line)
+			break ;
 	}
 	return (true);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sphere1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoshinth <aoshinth@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 06:35:49 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/30 11:42:17 by aoshinth         ###   ########.fr       */
+/*   Updated: 2025/07/30 15:03:30 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,8 @@ void	set_sphere_values(t_state *state, t_object *s, float *v)
 	s->height = 0.0f;
 	color(&s->color, v[4] / 255.0f, v[5] / 255.0f, v[6] / 255.0f);
 	vector(&s->norm_v, 0.0f, 0.0f, 0.0f);
-	s->ambient = state->world.ambient;
-	s->diffuse = state->world.diffuse;
+	s->ambient = &state->world.ambient;
+	s->diffuse = &state->world.diffuse;
 	s->specular = 0.9f;
 	s->shininess = 200.0f;
 	s->next = NULL;

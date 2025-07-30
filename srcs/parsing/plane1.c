@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   plane1.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoshinth <aoshinth@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 06:35:49 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/30 11:42:36 by aoshinth         ###   ########.fr       */
+/*   Updated: 2025/07/30 15:03:14 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,8 @@ void	set_plane_values(t_state *state, t_object *s, float *v)
 	color(&s->color, v[6] / 255.0f, v[7] / 255.0f, v[8] / 255.0f);
 	vector(&s->norm_v, v[3], v[4], v[5]);
 	s->norm_v = normalize(&s->norm_v);
-	s->ambient = state->world.ambient;
-	s->diffuse = state->world.diffuse;
+	s->ambient = &state->world.ambient;
+	s->diffuse = &state->world.diffuse;
 	s->specular = 0.0f;
 	s->shininess = 200.0f;
 	s->transform = identity();
