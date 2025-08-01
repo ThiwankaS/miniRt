@@ -6,26 +6,23 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 23:00:00 by aoshinth          #+#    #+#             */
-/*   Updated: 2025/07/30 13:44:17 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/31 21:44:47 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/miniRt.h"
 
-int	count_objects(t_state *state)
+char	*type_name(int type)
 {
-	t_object	*cur;
-	int			count;
+	char	*type_name;
 
-	count = 0;
-	cur = state->world.components;
-	while (cur)
-	{
-		count++;
-		cur = cur->next;
-	}
-	state->world.obj_count = count;
-	return (count);
+	if (type == SPHERE)
+		type_name = "sphere";
+	if (type == CYLINDER)
+		type_name = "cylinder";
+	if (type == PLANE)
+		type_name = "plane";
+	return (type_name);
 }
 
 void	select_next_object(t_state *state)
@@ -37,19 +34,19 @@ void	select_next_object(t_state *state)
 	i = 0;
 	if (!state->world.components)
 	{
-		printf("⚠️ No objects in scene.\n");
+		printf(" ⚠️  No objects in scene.\n");
 		return ;
 	}
-	if (state->world.obj_count == 0)
-		count_objects(state);
 	index = (index + 1) % state->world.obj_count;
 	cur = state->world.components;
 	while (cur && i++ < index)
 		cur = cur->next;
 	state->selected_object = cur;
 	if (cur)
-		printf("🔄 Selected [%d]: type=%d radius=%.2f height=%.2f\n",
-			index, cur->type, cur->radius, cur->height);
+	{
+		printf("🔄 Selected [%d]: object=%s radius=%.2f height=%.2f\n",
+			index, type_name(cur->type), cur->radius, cur->height);
+	}
 }
 
 void	handle_resize(t_state *state, int32_t cur_w, int32_t cur_h)
@@ -64,34 +61,18 @@ void	handle_resize(t_state *state, int32_t cur_w, int32_t cur_h)
 	render(state);
 }
 
-int	resize_object(mlx_key_data_t key, t_object *obj)
+int	change_value(mlx_key_data_t keydata, t_state *state)
 {
-	if (!obj)
-		return (FAILURE);
-	if (obj->type == SPHERE || obj->type == CYLINDER)
-	{
-		if (key.key == MLX_KEY_UP)
-		{
-			obj->radius += 0.1f;
-		}
-		else if (key.key == MLX_KEY_DOWN)
-			obj->radius = fmaxf(0.1f, obj->radius - 0.1f);
-	}
-	if (obj->type == CYLINDER)
-	{
-		if (key.key == MLX_KEY_RIGHT)
-			obj->height += 0.1f;
-		else if (key.key == MLX_KEY_LEFT)
-			obj->height = fmaxf(0.1f, obj->height - 0.1f);
-	}
-	return (SUCCESS);
-}
+	t_object *selected;
 
-int	change_value(mlx_key_data_t keydata, t_object *selected)
-{
+	selected = state->selected_object;
 	if (!selected)
 		return (FAILURE);
-	if (selected->type == SPHERE || selected->type == CYLINDER)
-		return (resize_object(keydata, selected));
+	if (selected->type == SPHERE)
+		return (resize_sphere(keydata, selected));
+	if (selected->type == CYLINDER)
+		return (resize_cylinder(keydata, selected));
+	if (state->interactive == true)
+		return (move_light(keydata, state));
 	return (FAILURE);
 }

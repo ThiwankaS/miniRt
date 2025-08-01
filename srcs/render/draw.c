@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 10:24:43 by aoshinth          #+#    #+#             */
-/*   Updated: 2025/07/30 15:13:03 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/08/01 04:28:38 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,9 +91,21 @@ void	keypress(mlx_key_data_t keydata, void *param)
 		select_next_object(state);
 		return ;
 	}
+	if (keydata.key == MLX_KEY_L)
+	{
+		state->interactive = true;
+		printf("✅ Interactive mood on.\n");
+		return ;
+	}
+	if (keydata.key == MLX_KEY_M)
+	{
+		state->interactive = false;
+		state->selected_object = NULL;
+		return ;
+	}
 	if (!state->selected_object)
 		return ;
-	if (change_value(keydata, state->selected_object) == SUCCESS)
+	if (change_value(keydata, state) == SUCCESS)
 	{
 		render(state);
 		printf("✅ Updated object.\n");

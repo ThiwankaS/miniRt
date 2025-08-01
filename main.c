@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 20:42:29 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/30 15:06:30 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/31 21:43:13 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ void	default_state(t_state *state)
 	color(&state->world.light.color, 1.0f, 1.0f, 1.0f);
 	camera_init(&state->camera, WIDTH, HEIGHT, M_PI / 3.0f);
 	state->camera.set_camera = false;
+	state->done = false;
+	state->interactive = false;
 }
 
 void	print_object(t_object *s)

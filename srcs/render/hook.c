@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hook.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoshinth <aoshinth@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 20:49:45 by aoshinth          #+#    #+#             */
-/*   Updated: 2025/07/30 11:35:23 by aoshinth         ###   ########.fr       */
+/*   Updated: 2025/07/31 05:24:33 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,10 @@ void	key_hook(mlx_key_data_t k_data, void *ptr)
 void	render_if_resized(void *param)
 {
 	t_state			*state;
-	static int32_t	prev_w = WIDTH;
-	static int32_t	prev_h = HEIGHT;
 	int32_t			cur_w;
 	int32_t			cur_h;
+	static int32_t	prev_w = WIDTH;
+	static int32_t	prev_h = HEIGHT;
 
 	state = (t_state *)param;
 	if (state->done)

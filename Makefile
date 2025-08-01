@@ -56,6 +56,8 @@ SRCS = \
 	srcs/render/draw.c\
 	srcs/render/hook.c\
 	srcs/render/resize.c\
+	srcs/render/resize2.c\
+	srcs/render/move1.c\
 	main.c
 
 OBJS = $(SRCS:.c=.o)

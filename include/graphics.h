@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 11:39:48 by aoshinth          #+#    #+#             */
-/*   Updated: 2025/07/30 15:02:23 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/07/31 21:47:07 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ typedef struct s_state
 	int			width;
 	int			height;
 	t_object	*selected_object;
+	bool		interactive;
 	bool		done;
 }	t_state;
 
@@ -121,8 +122,10 @@ void		update_fov(t_camera *camera, float fov);
 void		render_if_resized(void *param);
 void		render(t_state *state);
 void		keypress(mlx_key_data_t keydata, void *param);
-int			change_value(mlx_key_data_t keydata, t_object *selected);
+int			change_value(mlx_key_data_t keydata, t_state *state);
+int			resize_sphere(mlx_key_data_t key, t_object *obj);
+int			resize_cylinder(mlx_key_data_t key, t_object *obj);
 void		handle_resize(t_state *state, int32_t cur_w, int32_t cur_h);
 void		select_next_object(t_state *state);
-
+int			move_light(mlx_key_data_t key, t_state *state);
 #endif
