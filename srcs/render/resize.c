@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 23:00:00 by aoshinth          #+#    #+#             */
-/*   Updated: 2025/07/31 21:44:47 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/08/01 05:00:49 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,13 +66,13 @@ int	change_value(mlx_key_data_t keydata, t_state *state)
 	t_object *selected;
 
 	selected = state->selected_object;
-	if (!selected)
-		return (FAILURE);
-	if (selected->type == SPHERE)
-		return (resize_sphere(keydata, selected));
-	if (selected->type == CYLINDER)
-		return (resize_cylinder(keydata, selected));
 	if (state->interactive == true)
 		return (move_light(keydata, state));
+	else if (!selected)
+		return (FAILURE);
+	else if (selected->type == SPHERE)
+		return (resize_sphere(keydata, selected));
+	else if (selected->type == CYLINDER)
+		return (resize_cylinder(keydata, selected));
 	return (FAILURE);
 }

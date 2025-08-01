@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 20:42:29 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/31 21:43:13 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/08/01 05:10:27 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ void	default_state(t_state *state)
 	state->camera.set_camera = false;
 	state->done = false;
 	state->interactive = false;
+	state->selected_object = NULL;
 }
 
 void	print_object(t_object *s)

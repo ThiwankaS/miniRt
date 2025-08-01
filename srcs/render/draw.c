@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 10:24:43 by aoshinth          #+#    #+#             */
-/*   Updated: 2025/08/01 04:28:38 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/08/01 05:09:02 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,8 @@ void	keypress(mlx_key_data_t keydata, void *param)
 	state = (t_state *)param;
 	if (keydata.action != MLX_PRESS)
 		return ;
+	if (!state->selected_object && !state->world.set_light)
+		return ;
 	if (keydata.key == MLX_KEY_ESCAPE)
 	{
 		state->done = true;
@@ -94,7 +96,7 @@ void	keypress(mlx_key_data_t keydata, void *param)
 	if (keydata.key == MLX_KEY_L)
 	{
 		state->interactive = true;
-		printf("✅ Interactive mood on.\n");
+		printf("✅ Interactive mood for light ON.\n");
 		return ;
 	}
 	if (keydata.key == MLX_KEY_M)
@@ -103,8 +105,6 @@ void	keypress(mlx_key_data_t keydata, void *param)
 		state->selected_object = NULL;
 		return ;
 	}
-	if (!state->selected_object)
-		return ;
 	if (change_value(keydata, state) == SUCCESS)
 	{
 		render(state);
