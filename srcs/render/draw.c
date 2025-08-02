@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 10:24:43 by aoshinth          #+#    #+#             */
-/*   Updated: 2025/08/01 05:09:02 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/08/02 05:15:05 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,39 +77,31 @@ int	render_image(t_state *state)
 void	keypress(mlx_key_data_t keydata, void *param)
 {
 	t_state	*state;
+	bool	left;
+	bool	right;
 
 	state = (t_state *)param;
 	if (keydata.action != MLX_PRESS)
 		return ;
-	if (!state->selected_object && !state->world.set_light)
-		return ;
 	if (keydata.key == MLX_KEY_ESCAPE)
-	{
 		state->done = true;
-		return ;
-	}
-	if (keydata.key == MLX_KEY_N)
-	{
+	left = mlx_is_key_down(state->mlx, MLX_KEY_LEFT_CONTROL);
+	right = mlx_is_key_down(state->mlx, MLX_KEY_RIGHT_CONTROL);
+	if (keydata.key == MLX_KEY_N && (left || right))
 		select_next_object(state);
-		return ;
-	}
-	if (keydata.key == MLX_KEY_L)
+	else if (keydata.key == MLX_KEY_L)
 	{
 		state->interactive = true;
 		printf("✅ Interactive mood for light ON.\n");
-		return ;
 	}
-	if (keydata.key == MLX_KEY_M)
+	else if (keydata.key == MLX_KEY_M)
 	{
 		state->interactive = false;
 		state->selected_object = NULL;
-		return ;
 	}
-	if (change_value(keydata, state) == SUCCESS)
+	else if (change_value(keydata, state) == SUCCESS)
 	{
 		render(state);
 		printf("✅ Updated object.\n");
 	}
-	else
-		printf("⚠️ No change applied.\n");
 }
