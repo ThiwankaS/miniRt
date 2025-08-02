@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 04:38:04 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/30 15:30:48 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/08/02 15:06:18 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,7 @@ bool	process_line(char *line, t_state *state)
 		res = set_cylinder(line, state, &i);
 	else if (i != 0 && !line_break(line, &i))
 		return (false);
-	if (res)
-		return (false);
-	return (true);
+	return (!res);
 }
 
 bool	valid_filename(char *filename)

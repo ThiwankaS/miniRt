@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 20:42:29 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/08/01 05:10:27 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/08/02 09:09:04 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ void	default_state(t_state *state)
 	camera_init(&state->camera, WIDTH, HEIGHT, M_PI / 3.0f);
 	state->camera.set_camera = false;
 	state->done = false;
-	state->interactive = false;
+	state->interact = DEFAULT;
+	state->mode = MOVE;
 	state->selected_object = NULL;
 }
 
@@ -118,6 +119,7 @@ int	main(int argc, char *argv[])
 	{
 		if (init_file_reader(argv[1], state))
 		{
+			help_menu();
 			render_image(state);
 		}
 	}

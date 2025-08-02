@@ -1,0 +1,98 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   menu1.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/02 08:56:24 by tsomacha          #+#    #+#             */
+/*   Updated: 2025/08/02 13:20:38 by tsomacha         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../include/miniRt.h"
+
+void	help_menu(void)
+{
+	printf("\n");
+	printf("------------------------- miniRt -----------------------------\n");
+	printf("   miniRt is a simple raytracing program build with C and Joy!\n");
+	printf("   use below keys\\key comibinations to interact, enjoy...    \n");
+	printf("   Press -                                                    \n");
+	printf("   \tCtrl + L -> to select and toggle with light source       \n");
+	printf("   \tCtrl + C -> to select and toggle with camera             \n");
+	printf("   \tCtrl + N -> to select an object or select the next object\n");
+	printf("   \tCtrl + E -> to de-select and exit interactive mode       \n");
+	printf("   \tH        -> to display the help menu                     \n");
+	printf("   \tEsc      -> to exit the program                          \n");
+	printf("--------------------------------------------------------------\n");
+	printf("\n");
+}
+
+void	help_light(void)
+{
+	printf("\n");
+	printf("------------------------- miniRt -----------------------------\n");
+	printf("   key map help                                               \n");
+	printf("   Press -                                                    \n");
+	printf("   \tCtrl + L -> to select and toggle with light source       \n");
+	printf("   \tCtrl + C -> to select and toggle with camera             \n");
+	printf("   \tCtrl + N -> to select an object or select the next object\n");
+	printf("   \tCtrl + E -> to de-select and exit interactive mode       \n");
+	printf("   \tA        -> to move left along x-axis                    \n");
+	printf("   \tD        -> to move right along x-axis                   \n");
+	printf("   \tW        -> to move up along y-axis                      \n");
+	printf("   \tS        -> to move down along y-axis                    \n");
+	printf("   \tZ        -> to move forward along z-axis                 \n");
+	printf("   \tX        -> to move backward along z-axis                \n");
+	printf("   \tH        -> to display the help menu                     \n");
+	printf("   \tEsc      -> to exit the program                          \n");
+	printf("--------------------------------------------------------------\n");
+	printf("\n");
+}
+
+void	help_sphere(void)
+{
+	printf("\n");
+	printf("------------------------- miniRt -----------------------------\n");
+	printf("   miniRt is a simple raytracing program build with C and Joy!\n");
+	printf("   use below keys\\key comibinations to interact, enjoy...    \n");
+	printf("   Press -                                                    \n");
+	printf("   \tCtrl + L -> to select and toggle with light source       \n");
+	printf("   \tCtrl + C -> to select and toggle with camera             \n");
+	printf("   \tCtrl + N -> to select an object or select the next object\n");
+	printf("   \tCtrl + M -> to move the sphere along x,y,z axis          \n");
+	printf("   \tCtrl + R -> to re-size the spihre radius                 \n");
+	printf("   \tCtrl + E -> to de-select and exit interactive mode       \n");
+	printf("   \tA        -> to move left along x-axis                    \n");
+	printf("   \tD        -> to move right along x-axis                   \n");
+	printf("   \tW        -> to move up along y-axis                      \n");
+	printf("   \tS        -> to move down along y-axis                    \n");
+	printf("   \tZ        -> to move forward along z-axis                 \n");
+	printf("   \tX        -> to move backward along z-axis                \n");
+	printf("   \tKEY_DOWN -> to decreas the radius                        \n");
+	printf("   \tKEY_UP   -> to increase the raidius                      \n");
+	printf("   \tH        -> to display the help menu                     \n");
+	printf("   \tEsc      -> to exit the program                          \n");
+	printf("--------------------------------------------------------------\n");
+	printf("\n");
+}
+
+void	help_mode(void)
+{
+	printf("\n");
+	printf("------------------------- miniRt -----------------------------\n");
+	printf("   miniRt is a simple raytracing program build with C and Joy!\n");
+	printf("   use below keys\\key comibinations to interact, enjoy...    \n");
+	printf("   Press -                                                    \n");
+	printf("   \tCtrl + L -> to select and toggle with light source       \n");
+	printf("   \tCtrl + C -> to select and toggle with camera             \n");
+	printf("   \tCtrl + N -> to select an object or select the next object\n");
+	printf("   \tCtrl + M -> to move the sphere along x,y,z axis          \n");
+	printf("   \tCtrl + R -> to re-size the spihre radius                 \n");
+	printf("   \tCtrl + E -> to de-select and exit interactive mode       \n");
+	printf("   \tH        -> to display the help menu                     \n");
+	printf("   \tEsc      -> to exit the program                          \n");
+	printf("--------------------------------------------------------------\n");
+	printf("\n");
+}

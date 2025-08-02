@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 05:22:24 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/30 12:18:47 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/08/02 13:15:38 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,23 @@
 # define EPSILON 0.001f
 # define WIDTH 1024
 # define HEIGHT 768
-# define TILE_SIZE 64
+
 # define SPHERE   1
 # define PLANE    2
 # define CYLINDER 3
-# define SUCCESS 0
-# define FAILURE 1
+
+# define SUCCESS  0
+# define FAILURE  1
+
+# define DEFAULT  0
+# define OBJECT   1
+# define LIGHT    2
+# define CAMERA   3
+
+# define MOVE     1
+# define RESIZE   2
+# define ROTATE   3
+# define ZOOM     4
 
 # include <math.h>
 # include <stdlib.h>

@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 23:00:00 by aoshinth          #+#    #+#             */
-/*   Updated: 2025/08/01 05:00:49 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/08/02 15:55:03 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void	select_next_object(t_state *state)
 		printf("🔄 Selected [%d]: object=%s radius=%.2f height=%.2f\n",
 			index, type_name(cur->type), cur->radius, cur->height);
 	}
+	state->interact = OBJECT;
 }
 
 void	handle_resize(t_state *state, int32_t cur_w, int32_t cur_h)
@@ -63,11 +64,11 @@ void	handle_resize(t_state *state, int32_t cur_w, int32_t cur_h)
 
 int	change_value(mlx_key_data_t keydata, t_state *state)
 {
-	t_object *selected;
+	t_object	*selected;
 
 	selected = state->selected_object;
-	if (state->interactive == true)
-		return (move_light(keydata, state));
+	if (state->interact == LIGHT)
+		return (interact_light(keydata, state));
 	else if (!selected)
 		return (FAILURE);
 	else if (selected->type == SPHERE)
