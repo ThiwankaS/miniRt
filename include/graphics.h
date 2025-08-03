@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 11:39:48 by aoshinth          #+#    #+#             */
-/*   Updated: 2025/08/03 06:13:39 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/08/03 07:23:23 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,5 +140,6 @@ void	help_menu(void);
 void	help_mode(void);
 void	help_light(void);
 void	help_sphere(void);
+void	help_cylinder(void);
 void	cylinder_interact_mode(mlx_key_data_t keydata, t_state *state);
 #endif

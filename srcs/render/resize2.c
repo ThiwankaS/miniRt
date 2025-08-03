@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 05:53:40 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/08/02 15:48:32 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/08/03 06:44:22 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 int	resize_sphere(mlx_key_data_t key, t_object *obj)
 {
 	float	step;
-	t_mat	m1;
-	t_mat	m2;
 
 	step = 0.05f;
 	if (!obj)
@@ -27,19 +25,13 @@ int	resize_sphere(mlx_key_data_t key, t_object *obj)
 		obj->radius = fmaxf(1.0f, obj->radius - step);
 	else
 		return (FAILURE);
-	m1 = translation(obj->x, obj->y, obj->y);
-	m2 = scaling(obj->radius, obj->radius, obj->radius);
-	obj->transform = matrix_multiply(&m1, &m2);
-	matrix_inverse(&obj->invs, &obj->transform);
-	obj->invs_trans = matrix_transpose(&obj->invs);
+	creating_sphere_object(obj);
 	return (SUCCESS);
 }
 
 int	move_sphere(mlx_key_data_t key, t_object *obj)
 {
 	float	step;
-	t_mat	m1;
-	t_mat	m2;
 
 	step = 0.1f;
 	if (key.key == MLX_KEY_W)
@@ -56,10 +48,6 @@ int	move_sphere(mlx_key_data_t key, t_object *obj)
 		obj->z -= step;
 	else
 		return (FAILURE);
-	m1 = translation(obj->x, obj->y, obj->z);
-	m2 = scaling(obj->radius, obj->radius, obj->radius);
-	obj->transform = matrix_multiply(&m1, &m2);
-	matrix_inverse(&obj->invs, &obj->transform);
-	obj->invs_trans = matrix_transpose(&obj->invs);
+	creating_sphere_object(obj);
 	return (SUCCESS);
 }
