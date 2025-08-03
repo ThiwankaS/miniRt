@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 11:39:48 by aoshinth          #+#    #+#             */
-/*   Updated: 2025/08/02 15:41:44 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/08/03 06:13:39 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ void		position(t_tuple *pp, t_ray *r, float t);
 t_hit		find_hit(t_world *world, t_ray *ray);
 void		creating_plane_object(t_object *s);
 void		creating_sphere_object(t_object *s);
+void		creating_cylinder_object(t_object *s);
 void		find_hit_cylinder(t_object *object, t_ray *r, t_hit *h);
 void		hit_cap(t_object *object, t_ray *r, t_hit *h);
 void		find_hit_plane(t_object *object, t_ray *r, t_hit *h);
