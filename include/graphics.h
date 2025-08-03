@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 11:39:48 by aoshinth          #+#    #+#             */
-/*   Updated: 2025/07/31 21:47:07 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/08/02 15:41:44 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,8 @@ typedef struct s_state
 	int			width;
 	int			height;
 	t_object	*selected_object;
-	bool		interactive;
+	int			interact;
+	int			mode;
 	bool		done;
 }	t_state;
 
@@ -124,8 +125,19 @@ void		render(t_state *state);
 void		keypress(mlx_key_data_t keydata, void *param);
 int			change_value(mlx_key_data_t keydata, t_state *state);
 int			resize_sphere(mlx_key_data_t key, t_object *obj);
+int			move_sphere(mlx_key_data_t key, t_object *obj);
 int			resize_cylinder(mlx_key_data_t key, t_object *obj);
 void		handle_resize(t_state *state, int32_t cur_w, int32_t cur_h);
 void		select_next_object(t_state *state);
-int			move_light(mlx_key_data_t key, t_state *state);
+int			interact_light(mlx_key_data_t key, t_state *state);
+
+void	select_ligth_source(t_state *state);
+void	select_exit_interaction(t_state *state);
+void	select_camera(t_state *state);
+void	select_mode(mlx_key_data_t keydata, t_state *state);
+void	help_menu(void);
+void	help_mode(void);
+void	help_light(void);
+void	help_sphere(void);
+void	cylinder_interact_mode(mlx_key_data_t keydata, t_state *state);
 #endif
