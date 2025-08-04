@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 08:43:51 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/08/03 07:32:22 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/08/04 04:13:02 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ int	resize_cylinder(mlx_key_data_t key, t_object *obj)
 		obj->height = fmaxf(0.5f, obj->height - 0.1f);
 	else
 		return (FAILURE);
+	printf("height : %.5f | radius : %.5f \n", obj->height, obj->radius);
 	creating_cylinder_object(obj);
 	return (SUCCESS);
 }
@@ -53,7 +54,7 @@ int	move_cylinder(mlx_key_data_t key, t_object *obj)
 	return (SUCCESS);
 }
 
-int	otate_cylinder(mlx_key_data_t key, t_object *obj)
+int	rotate_cylinder(mlx_key_data_t key, t_object *obj)
 {
 	float	angle;
 	t_mat	rotate;

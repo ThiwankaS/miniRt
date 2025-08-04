@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 05:30:25 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/08/02 15:54:25 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/08/04 04:10:47 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,20 +39,6 @@ int	interact_light(mlx_key_data_t key, t_state *state)
 	else
 		return (FAILURE);
 	return (SUCCESS);
-}
-
-int	interact_object(mlx_key_data_t key, t_state *state)
-{
-	t_object	*selected;
-
-	selected = state->selected_object;
-	if (state->interact != OBJECT || !selected)
-		return (FAILURE);
-	else if (selected->type == SPHERE)
-		return (resize_sphere(key, selected));
-	else if (selected->type == CYLINDER)
-		return (resize_cylinder(key, selected));
-	return (FAILURE);
 }
 
 void	select_ligth_source(t_state *state)

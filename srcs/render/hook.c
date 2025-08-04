@@ -6,33 +6,13 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 20:49:45 by aoshinth          #+#    #+#             */
-/*   Updated: 2025/07/31 05:24:33 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/08/04 05:29:02 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/miniRt.h"
 
-void	uninit_mlx(t_state *state)
-{
-	if (state->img)
-		mlx_delete_image(state->mlx, state->img);
-	if (state->mlx)
-		mlx_terminate(state->mlx);
-	exit(0);
-}
-
-void	close_hook(void *ptr)
-{
-	uninit_mlx((t_state *)ptr);
-}
-
-void	key_hook(mlx_key_data_t k_data, void *ptr)
-{
-	if (k_data.key == MLX_KEY_ESCAPE && k_data.action == MLX_PRESS)
-		close_hook(ptr);
-}
-
-void	render_if_resized(void *param)
+void	window_resized(void *param)
 {
 	t_state			*state;
 	int32_t			cur_w;
@@ -55,12 +35,32 @@ void	render_if_resized(void *param)
 		return ;
 	prev_w = cur_w;
 	prev_h = cur_h;
-	handle_resize(state, cur_w, cur_h);
+	handle_window_resize(state, cur_w, cur_h);
 }
 
-void	setup_hooks(t_state *state)
+void	keypress(mlx_key_data_t keydata, void *param)
 {
-	mlx_close_hook(state->mlx, close_hook, state);
-	mlx_key_hook(state->mlx, keypress, state);
-	mlx_loop_hook(state->mlx, render_if_resized, state);
+	t_state	*state;
+	bool	left;
+	bool	right;
+
+	state = (t_state *)param;
+	if (keydata.action != MLX_PRESS)
+		return ;
+	if (keydata.key == MLX_KEY_ESCAPE)
+		state->done = true;
+	left = mlx_is_key_down(state->mlx, MLX_KEY_LEFT_CONTROL);
+	right = mlx_is_key_down(state->mlx, MLX_KEY_RIGHT_CONTROL);
+	if (keydata.key == MLX_KEY_L && (left || right))
+		select_ligth_source(state);
+	else if (keydata.key == MLX_KEY_N && (left || right))
+		select_next_object(state);
+	else if (keydata.key == MLX_KEY_E && (left || right))
+		select_exit_interaction(state);
+	else if (keydata.key == MLX_KEY_C && (left || right))
+		select_camera(state);
+	else if (keydata.key == MLX_KEY_H && state->interact == DEFAULT)
+		help_menu();
+	else if (state->interact != DEFAULT)
+		select_mode(keydata, state);
 }

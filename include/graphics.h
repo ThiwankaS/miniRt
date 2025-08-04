@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 11:39:48 by aoshinth          #+#    #+#             */
-/*   Updated: 2025/08/03 07:23:23 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/08/04 06:14:34 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,14 +121,13 @@ void		view_trans(t_camera *camera, t_tuple *from, t_tuple *to,
 				t_tuple *up);
 t_ray		ray_for_pixel(t_camera *camera, int px, int py);
 void		update_fov(t_camera *camera, float fov);
-void		render_if_resized(void *param);
-void		render(t_state *state);
+void		window_resized(void *param);
 void		keypress(mlx_key_data_t keydata, void *param);
-int			change_value(mlx_key_data_t keydata, t_state *state);
+void		render(t_state *state);
 int			resize_sphere(mlx_key_data_t key, t_object *obj);
 int			move_sphere(mlx_key_data_t key, t_object *obj);
 int			resize_cylinder(mlx_key_data_t key, t_object *obj);
-void		handle_resize(t_state *state, int32_t cur_w, int32_t cur_h);
+void		handle_window_resize(t_state *state, int32_t cur_w, int32_t cur_h);
 void		select_next_object(t_state *state);
 int			interact_light(mlx_key_data_t key, t_state *state);
 
@@ -141,5 +140,9 @@ void	help_mode(void);
 void	help_light(void);
 void	help_sphere(void);
 void	help_cylinder(void);
+void	help_plane(void);
+void	help_camera(void);
 void	cylinder_interact_mode(mlx_key_data_t keydata, t_state *state);
+void	camera_interaction_mode(mlx_key_data_t keydata, t_state *state);
+void	plane_interaction(mlx_key_data_t key, t_state *state);
 #endif

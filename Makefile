@@ -55,12 +55,16 @@ SRCS = \
 	srcs/parsing/cylinder2.c\
 	srcs/render/draw.c\
 	srcs/render/hook.c\
+	srcs/render/window.c\
 	srcs/render/resize.c\
 	srcs/render/resize2.c\
 	srcs/render/move1.c\
 	srcs/render/move2.c\
 	srcs/render/move3.c\
+	srcs/render/move4.c\
+	srcs/render/move5.c\
 	srcs/help/menu1.c\
+	srcs/help/menu2.c\
 	main.c
 
 OBJS = $(SRCS:.c=.o)

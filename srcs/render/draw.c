@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 10:24:43 by aoshinth          #+#    #+#             */
-/*   Updated: 2025/08/02 15:54:14 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/08/04 05:26:20 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,35 +68,8 @@ int	render_image(t_state *state)
 		return (1);
 	render(state);
 	mlx_key_hook(state->mlx, keypress, state);
-	mlx_loop_hook(state->mlx, render_if_resized, state);
+	mlx_loop_hook(state->mlx, window_resized, state);
 	mlx_loop(state->mlx);
 	mlx_terminate(state->mlx);
 	return (0);
-}
-
-void	keypress(mlx_key_data_t keydata, void *param)
-{
-	t_state	*state;
-	bool	left;
-	bool	right;
-
-	state = (t_state *)param;
-	if (keydata.action != MLX_PRESS)
-		return ;
-	if (keydata.key == MLX_KEY_ESCAPE)
-		state->done = true;
-	left = mlx_is_key_down(state->mlx, MLX_KEY_LEFT_CONTROL);
-	right = mlx_is_key_down(state->mlx, MLX_KEY_RIGHT_CONTROL);
-	if (keydata.key == MLX_KEY_L && (left || right))
-		select_ligth_source(state);
-	else if (keydata.key == MLX_KEY_N && (left || right))
-		select_next_object(state);
-	else if (keydata.key == MLX_KEY_E && (left || right))
-		select_exit_interaction(state);
-	else if (keydata.key == MLX_KEY_C && (left || right))
-		select_camera(state);
-	else if (keydata.key == MLX_KEY_H && state->interact == DEFAULT)
-		help_menu();
-	else if (state->interact != DEFAULT)
-		select_mode(keydata, state);
 }

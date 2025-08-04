@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 23:00:00 by aoshinth          #+#    #+#             */
-/*   Updated: 2025/08/02 15:55:03 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/08/04 06:08:42 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,32 +48,4 @@ void	select_next_object(t_state *state)
 			index, type_name(cur->type), cur->radius, cur->height);
 	}
 	state->interact = OBJECT;
-}
-
-void	handle_resize(t_state *state, int32_t cur_w, int32_t cur_h)
-{
-	state->camera.hsize = cur_w;
-	state->camera.vsize = cur_h;
-	update_fov(&state->camera, state->camera.fov);
-	if (state->img)
-		mlx_delete_image(state->mlx, state->img);
-	state->img = mlx_new_image(state->mlx, cur_w, cur_h);
-	mlx_image_to_window(state->mlx, state->img, 0, 0);
-	render(state);
-}
-
-int	change_value(mlx_key_data_t keydata, t_state *state)
-{
-	t_object	*selected;
-
-	selected = state->selected_object;
-	if (state->interact == LIGHT)
-		return (interact_light(keydata, state));
-	else if (!selected)
-		return (FAILURE);
-	else if (selected->type == SPHERE)
-		return (resize_sphere(keydata, selected));
-	else if (selected->type == CYLINDER)
-		return (resize_cylinder(keydata, selected));
-	return (FAILURE);
 }

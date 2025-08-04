@@ -6,7 +6,7 @@
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 20:42:29 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/08/02 09:09:04 by tsomacha         ###   ########.fr       */
+/*   Updated: 2025/08/04 06:17:51 by tsomacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	default_state(t_state *state)
 	state->camera.set_camera = false;
 	state->done = false;
 	state->interact = DEFAULT;
-	state->mode = MOVE;
+	state->mode = DEFAULT;
 	state->selected_object = NULL;
 }
 
