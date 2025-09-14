@@ -12,13 +12,15 @@
 
 #include "../../include/miniRt.h"
 
-bool	get_position_cy(float *v, char *line);
-bool	get_normal_cy(float *v, char *line);
 bool	get_radius_cy(float *v, char *line);
 bool	get_height_cy(float *v, char *line);
-bool	get_color_cy(float *v, char *line);
 t_mat	rotate_axis(t_tuple *axis, float angle);
 
+/**
+ * Creates a rotation matrix to align a cylinder's default up vector (v0) with
+ * its specified normal vector. If the axis length is zero, rotation is either
+ * identity or 180 degrees depending on direction.
+ */
 t_mat	set_rotate_matrix(t_object *s, t_tuple *axis, t_tuple *v0)
 {
 	float	angel;
@@ -40,7 +42,13 @@ t_mat	set_rotate_matrix(t_object *s, t_tuple *axis, t_tuple *v0)
 	return (rotate);
 }
 
-void	creating_cylinder_object(t_object *s)
+/**
+ * Builds the full transformation matrix for a cylinder object, including
+ * scaling by radius/height, rotation to match the normal vector,
+ * and translation to its position.
+ * Also computes its inverse and inverse-transpose matrices.
+ */
+void	creating_cylinder_object(t_object *s, float radius)
 {
 	t_tuple	v0;
 	t_tuple	axis;
@@ -50,7 +58,7 @@ void	creating_cylinder_object(t_object *s)
 
 	vector(&v0, 0, 1, 0);
 	axis = cross(&v0, &s->norm_v);
-	scale = scaling(s->radius, s->height / 2.0f, s->radius);
+	scale = scaling(radius, s->height / 2.0f, radius);
 	traslate = translation(s->x, s->y, s->z);
 	rotate = set_rotate_matrix(s, &axis, &v0);
 	scale = matrix_multiply(&rotate, &scale);
@@ -59,6 +67,11 @@ void	creating_cylinder_object(t_object *s)
 	s->invs_trans = matrix_transpose(&s->invs);
 }
 
+/**
+ * Initializes a cylinder object's properties from parsed values and adds it
+ * to the world's object list. Sets material properties
+ * and transformation defaults.
+ */
 void	set_cylinder_values(t_state *state, t_object *s, float *v)
 {
 	if (!state || !s)
@@ -85,6 +98,12 @@ void	set_cylinder_values(t_state *state, t_object *s, float *v)
 	state->world.obj_count++;
 }
 
+/**
+ * Parses cylinder parameters (position, normal, radius, height, color) from
+ * a line of text, initializes the object, sets its values,
+ * and applies transformations.
+ * Returns nonzero on error.
+ */
 int	set_cylinder(char *line, t_state *state, int *index)
 {
 	char		**items;
@@ -93,20 +112,20 @@ int	set_cylinder(char *line, t_state *state, int *index)
 
 	items = ft_split(&line[*index], ' ');
 	if (!items)
-		return (free_split(items), 1);
-	if (!get_position_cy(v, items[0]))
-		return (free_split(items), 1);
-	if (!get_normal_cy(v, items[1]))
-		return (free_split(items), 1);
+		return (free_split(items), 0);
+	if (!extract_position(items[0], &v[0], &v[1], &v[2]))
+		return (free_split(items), 0);
+	if (!extract_normal_v(items[1], &v[3], &v[4], &v[5]))
+		return (free_split(items), 0);
 	if (!get_radius_cy(v, items[2]))
-		return (free_split(items), 1);
+		return (free_split(items), 0);
 	if (!get_height_cy(v, items[3]))
-		return (free_split(items), 1);
-	if (!get_color_cy(v, items[4]))
-		return (free_split(items), 1);
+		return (free_split(items), 0);
+	if (!extract_color(items[4], &v[8], &v[9], &v[10]))
+		return (free_split(items), 0);
 	s = init_object();
 	set_cylinder_values(state, s, v);
-	creating_cylinder_object(s);
+	creating_cylinder_object(s, v[6]);
 	free_split(items);
-	return (0);
+	return (1);
 }

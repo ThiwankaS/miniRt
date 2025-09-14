@@ -12,6 +12,10 @@
 
 #include "../../include/miniRt.h"
 
+/**
+ * Returns the string name for an object type (sphere, cylinder, plane).
+ * Used in status prints; assumes input is one of the supported types.
+*/
 char	*type_name(int type)
 {
 	char	*type_name;
@@ -25,6 +29,11 @@ char	*type_name(int type)
 	return (type_name);
 }
 
+/**
+ * Cycles to the next object in the world using a static index.
+ * Updates selected_object and sets interaction mode to OBJECT.
+ * Prints a short status; does nothing if the world has no objects.
+*/
 void	select_next_object(t_state *state)
 {
 	static int	index = -1;

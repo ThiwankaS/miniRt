@@ -1,29 +1,25 @@
-PROG = miniRt
+NAME = miniRT
 
 # === LIBRARIES ===
-LIBFT_DIR = ft_libft
-LIBFT_REPO = https://github.com/ThiwankaS/ft_libft
-LIBFT_A = $(LIBFT_DIR)/libft.a
-
-MLX42_DIR = MLX42
-MLX42_REPO = https://github.com/codam-coding-college/MLX42
-MLX42_INCLUDE = -I$(MLX42_DIR)/include
-MLX42_LIB = $(MLX42_DIR)/build/libmlx42.a
+MLX42_DIR       = MLX42
+MLX42_REPO      = https://github.com/codam-coding-college/MLX42
+MLX42_INCLUDE   = -I$(MLX42_DIR)/include
+MLX42_LIB       = $(MLX42_DIR)/build/libmlx42.a
 MLX42_BUILD_CMD = cmake -B $(MLX42_DIR)/build -S $(MLX42_DIR) && cmake --build $(MLX42_DIR)/build
 
+# === LIBFT (mandatory) ===
+LIBFT_DIR       = ./ft_libft
+LIBFT_A         = $(LIBFT_DIR)/libft.a
+LIBFT_REPO      = https://github.com/ThiwankaS/ft_libft
+
 # === COMPILER & FLAGS ===
-CMD = cc
-
-# Debug and Release Flags
-DEBUG_FLAGS = -Wall -Wextra -Werror -g -O0 -fsanitize=address,undefined
-RELEASE_FLAGS = -Wall -Wextra -Werror -O3
-
-# Default to RELEASE
-CFLAGS = $(RELEASE_FLAGS) -I$(LIBFT_DIR) $(MLX42_INCLUDE) -std=c11
-LDFLAGS = -L$(MLX42_DIR)/build -lmlx42 -ldl -lglfw -pthread -lm $(LIBFT_A)
+CMD             = cc
+FLAGS           = -Wall -Wextra -Werror -O3
+CFLAGS          = $(FLAGS) -I$(LIBFT_DIR) $(MLX42_INCLUDE) -std=c11
+LDFLAGS         = -L$(MLX42_DIR)/build -lmlx42 -ldl -lglfw -pthread -lm $(LIBFT_A)
 
 # === SOURCES ===
-SRCS = \
+SRCS            = \
 	srcs/tuples/operations1.c\
 	srcs/tuples/operations2.c\
 	srcs/tuples/setting.c\
@@ -42,21 +38,20 @@ SRCS = \
 	srcs/graphics/world.c\
 	srcs/error/file.c\
 	srcs/parsing/atof.c\
-	srcs/parsing/reader.c\
+	srcs/parsing/reader1.c\
+	srcs/parsing/reader2.c\
 	srcs/parsing/world.c\
 	srcs/parsing/light.c\
 	srcs/parsing/camera.c\
 	srcs/parsing/common.c\
-	srcs/parsing/sphere1.c\
-	srcs/parsing/sphere2.c\
-	srcs/parsing/plane1.c\
-	srcs/parsing/plane2.c\
+	srcs/parsing/sphere.c\
+	srcs/parsing/plane.c\
 	srcs/parsing/cylinder1.c\
 	srcs/parsing/cylinder2.c\
 	srcs/render/draw.c\
 	srcs/render/hook.c\
 	srcs/render/window.c\
-	srcs/render/resize.c\
+	srcs/render/resize1.c\
 	srcs/render/resize2.c\
 	srcs/render/move1.c\
 	srcs/render/move2.c\
@@ -67,16 +62,13 @@ SRCS = \
 	srcs/help/menu2.c\
 	main.c
 
-OBJS = $(SRCS:.c=.o)
+OBJS            = $(SRCS:.c=.o)
 
 # === TARGETS ===
-all: $(LIBFT_A) $(MLX42_LIB) $(PROG)
+all: $(LIBFT_A) $(MLX42_LIB) $(NAME)
 
-$(PROG): $(OBJS)
+$(NAME): $(OBJS)
 	$(CMD) $(CFLAGS) -o $@ $^ $(LDFLAGS)
-
-debug: CFLAGS = $(DEBUG_FLAGS) -I$(LIBFT_DIR) $(MLX42_INCLUDE) -std=c11
-debug: re
 
 # === LIBFT ===
 $(LIBFT_A):
@@ -102,13 +94,13 @@ $(MLX42_LIB):
 
 clean:
 	rm -f $(OBJS)
-	@$(MAKE) -C $(LIBFT_DIR) clean
+	@make -C $(LIBFT_DIR) clean
 	@rm -rf $(MLX42_DIR)/build
 
 fclean: clean
-	rm -f $(PROG)
-	@$(MAKE) -C $(LIBFT_DIR) fclean
+	rm -rf $(NAME) $(LIBFT_DIR) $(MLX42_DIR)
+	@make -C $(LIBFT_DIR) fclean
 
 re: fclean all
 
-.PHONY: all clean fclean re debug
+.PHONY: all clean fclean re

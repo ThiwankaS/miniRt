@@ -12,6 +12,12 @@
 
 #include "../../include/miniRt.h"
 
+/**
+ * Chooses the nearest valid cylinder side hit from two quadratic roots and
+ * updates the hit record if it's closer than the current one. Validity checks
+ * require t > EPSILON and the y position to lie within the finite cylinder
+ * bounds [v[6], v[7]].
+ */
 void	set_closet_hit_cy(t_object *object, t_hit *h, float *v)
 {
 	float	min_t;
@@ -34,7 +40,12 @@ void	set_closet_hit_cy(t_object *object, t_hit *h, float *v)
 	}
 }
 
-void	cache_values(t_object *object, t_ray *r, float *v)
+/**
+ * Caches ray origin/direction components into a temporary array and sets
+ * constants used by the cylinder math: y-limits [-1, 1] and unit radius.
+ * This avoids repeated struct access and magic numbers in later steps.
+ */
+void	cache_values(t_ray *r, float *v)
 {
 	v[0] = r->direction.t[0];
 	v[1] = r->direction.t[1];
@@ -42,16 +53,22 @@ void	cache_values(t_object *object, t_ray *r, float *v)
 	v[3] = r->origin.t[0];
 	v[4] = r->origin.t[1];
 	v[5] = r->origin.t[2];
-	v[6] = -object->height / 2.0f;
-	v[7] = object->height / 2.0f;
-	v[8] = object->radius * object->radius;
+	v[6] = -1.0f;
+	v[7] = 1.0f;
+	v[8] = 1.0f;
 }
 
+/**
+ * Computes the intersection of a ray with a finite unit cylinder aligned to the
+ * y-axis, including caps. Solves the quadratic for the side surface, filters by
+ * y-limits, updates the hit if closer, and always also tests the top/bottom
+ * caps via hit_cap() when needed.
+ */
 void	find_hit_cylinder(t_object *object, t_ray *r, t_hit *h)
 {
 	float	v[18];
 
-	cache_values(object, r, v);
+	cache_values(r, v);
 	v[9] = v[0] * v[0] + v[2] * v[2];
 	if (fabsf(v[9]) < EPSILON)
 	{

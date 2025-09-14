@@ -12,6 +12,10 @@
 
 #include "../../include/miniRt.h"
 
+/**
+ * Prints the main miniRt help banner and global key bindings.
+ * Purely informational: writes a formatted overview to stdout.
+ */
 void	help_menu(void)
 {
 	printf("\n");
@@ -29,6 +33,10 @@ void	help_menu(void)
 	printf("\n");
 }
 
+/**
+ * Prints the key map for interacting with the light source.
+ * Lists selection/toggle shortcuts and movement along x, y, and z axes.
+ */
 void	help_light(void)
 {
 	printf("\n");
@@ -51,6 +59,11 @@ void	help_light(void)
 	printf("\n");
 }
 
+/**
+ * Prints the key map for interacting with a sphere.
+ * Includes selection/toggle, movement on all axes, and radius
+ * resizing via keys.
+ */
 void	help_sphere(void)
 {
 	printf("\n");
@@ -78,6 +91,10 @@ void	help_sphere(void)
 	printf("\n");
 }
 
+/**
+ * Prints a concise summary of interactive mode controls.
+ * Highlights how to enter/exit mode and manipulate the selected object.
+ */
 void	help_mode(void)
 {
 	printf("\n");
@@ -97,6 +114,11 @@ void	help_mode(void)
 	printf("\n");
 }
 
+/**
+ * Prints the key map for interacting with a cylinder.
+ * Covers selection/toggle, movement, rotation, and resizing radius/height
+ * (including arrow keys).
+ */
 void	help_cylinder(void)
 {
 	printf("\n");

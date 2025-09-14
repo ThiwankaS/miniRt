@@ -12,6 +12,12 @@
 
 #include "../../include/miniRt.h"
 
+/**
+ * Moves the scene's light source by one unit along the selected axis based
+ * on key input
+ * (W/S: y±, A/D: x∓, Z/X: z±).
+ * Requires a light to be set; returns SUCCESS on handled key,otherwise FAILURE
+ */
 int	interact_light(mlx_key_data_t key, t_state *state)
 {
 	t_light	*light;
@@ -41,12 +47,22 @@ int	interact_light(mlx_key_data_t key, t_state *state)
 	return (SUCCESS);
 }
 
+/**
+ * Enters light interaction mode so subsequent key presses affect
+ * the light source.
+ * Prints a small status message to stdout.
+ */
 void	select_ligth_source(t_state *state)
 {
 	state->interact = LIGHT;
 	printf("💡 Interactive mood for light ON.\n");
 }
 
+/**
+ * Exits any interaction mode, clears the currently selected object and
+ * mode flags, and returns control to the default state.
+ * Prints a status message.
+ */
 void	select_exit_interaction(t_state *state)
 {
 	state->interact = DEFAULT;
@@ -55,6 +71,10 @@ void	select_exit_interaction(t_state *state)
 	printf("👋 Interactive mood OFF.\n");
 }
 
+/**
+ * Enters camera interaction mode so subsequent key presses affect the camera.
+ * Prints a small status message to stdout.
+ */
 void	select_camera(t_state *state)
 {
 	state->interact = CAMERA;

@@ -12,15 +12,21 @@
 
 #include "../../include/miniRt.h"
 
-t_tuple	normal_at_cylinder(t_object *s, t_tuple *obj_p)
+/**
+ * Computes the surface normal vector for a cylinder at a given point in
+ * object space. Handles top and bottom caps separately and returns the
+ * appropriate normal depending on whether the hit point is on a cap or
+ * the curved side.
+ */
+t_tuple	normal_at_cylinder(t_tuple *obj_p)
 {
 	float	dist;
 	float	min;
 	float	max;
 	t_tuple	obj_normal;
 
-	min = -s->height / 2.0f;
-	max = s->height / 2.0f;
+	min = -1.0f;
+	max = 1.0f;
 	dist = obj_p->t[0] * obj_p->t[0] + obj_p->t[2] * obj_p->t[2];
 	if (dist < 1.0f && obj_p->t[1] >= max - EPSILON)
 		vector(&obj_normal, 0.0f, 1.0f, 0.0f);
@@ -31,6 +37,12 @@ t_tuple	normal_at_cylinder(t_object *s, t_tuple *obj_p)
 	return (obj_normal);
 }
 
+/**
+ * Calculates the surface normal of an object at a given point in world space.
+ * Transforms the point into object space, determines the object-space normal
+ * based on the shape type, then transforms it back to world space
+ * and normalizes it.
+ */
 t_tuple	normal_at(t_object *s, t_tuple *world_point)
 {
 	t_tuple	normal;
@@ -46,7 +58,7 @@ t_tuple	normal_at(t_object *s, t_tuple *world_point)
 	else if (s->type == SPHERE)
 		obj_normal = tuple_subtract(&obj_point, &absolute_point);
 	else if (s->type == CYLINDER)
-		obj_normal = normal_at_cylinder(s, &obj_point);
+		obj_normal = normal_at_cylinder(&obj_point);
 	else
 		vector(&obj_normal, 0.0f, 0.0f, 0.0f);
 	world_normal = matrix_multiply_by_tuple(&s->invs_trans, &obj_normal);

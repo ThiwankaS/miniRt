@@ -12,6 +12,10 @@
 
 #include "../../include/miniRt.h"
 
+/**
+ * Updates camera viewport on window resize and rebuilds the MLX image.
+ * Recomputes FOV, recreates the image, reattaches it, and re-renders.
+ */
 void	handle_window_resize(t_state *state, int32_t cur_w, int32_t cur_h)
 {
 	state->camera.hsize = cur_w;

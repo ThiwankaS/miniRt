@@ -12,6 +12,12 @@
 
 #include "../../include/miniRt.h"
 
+/**
+ * Calculates the intersection of a ray with an infinite horizontal plane
+ * at y = 0.
+ * If the ray is not parallel to the plane and the intersection is closer than
+ * the current hit, updates the hit record with the new intersection data.
+ */
 void	find_hit_plane(t_object *object, t_ray *r, t_hit *h)
 {
 	float	t;

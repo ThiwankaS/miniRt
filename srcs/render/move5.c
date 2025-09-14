@@ -15,6 +15,11 @@
 t_tuple	camera_position(t_camera *camera);
 t_tuple	camera_direction(t_camera *camera, t_tuple *pos);
 
+/**
+ * Rotates the camera view with W/A/S/D/Z/X by a small angle.
+ * Updates the view with the new direction. Returns SUCCESS on change,
+ * otherwise FAILURE.
+ */
 int	rotate_camera(mlx_key_data_t key, t_state *state)
 {
 	t_tuple	pos;
@@ -43,6 +48,11 @@ int	rotate_camera(mlx_key_data_t key, t_state *state)
 	return (SUCCESS);
 }
 
+/**
+ * Moves the camera position by small steps with W/A/S/D/Z/X.
+ * Keeps the current look direction. Returns SUCCESS on move,
+ * otherwise FAILURE.
+ */
 int	move_camera(mlx_key_data_t key, t_state *state)
 {
 	t_tuple	pos;
@@ -70,6 +80,11 @@ int	move_camera(mlx_key_data_t key, t_state *state)
 	return (SUCCESS);
 }
 
+/**
+ * Zooms the camera by adjusting FOV with A/D keys.
+ * Clamps FOV and updates derived values. Returns SUCCESS on change,
+ * otherwise FAILURE.
+ */
 int	zoom_camera(mlx_key_data_t key, t_state *state)
 {
 	float	step;
@@ -85,6 +100,10 @@ int	zoom_camera(mlx_key_data_t key, t_state *state)
 	return (SUCCESS);
 }
 
+/**
+ * Applies the current camera mode: rotate, move, or zoom.
+ * Re-renders after a successful update.
+ */
 void	camera_interaction(mlx_key_data_t keydata, t_state *state)
 {
 	if (state->mode == DEFAULT)
@@ -106,6 +125,10 @@ void	camera_interaction(mlx_key_data_t keydata, t_state *state)
 	}
 }
 
+/**
+ * Switches camera mode: Ctrl+M move, Ctrl+S rotate, Ctrl+F zoom.
+ * Shows help on H, then calls camera_interaction() to apply it.
+ */
 void	camera_interaction_mode(mlx_key_data_t keydata, t_state *state)
 {
 	bool	left;

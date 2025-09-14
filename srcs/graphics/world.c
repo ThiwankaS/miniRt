@@ -12,6 +12,10 @@
 
 #include "../../include/miniRt.h"
 
+/**
+ * Determines if a point in the world is in shadow by casting a ray toward the
+ * light source and checking if any object is between them.
+ */
 bool	is_shadow(t_world *world, t_tuple *p)
 {
 	float	distance;
@@ -39,6 +43,11 @@ bool	is_shadow(t_world *world, t_tuple *p)
 	return (false);
 }
 
+/**
+ * Prepares all necessary data for shading calculations at a given intersection.
+ * Computes point, normal, eye vector, inside/outside flag, offset point to avoid
+ * acne, and shadow status.
+ */
 t_compute	prepare_compute(float t, t_object *object, t_ray *r, t_world *world)
 {
 	t_compute	comp;
@@ -66,6 +75,10 @@ t_compute	prepare_compute(float t, t_object *object, t_ray *r, t_world *world)
 	return (comp);
 }
 
+/**
+ * Traces a ray into the world and returns the resulting color.
+ * If the ray hits an object, computes shading; otherwise returns a base color.
+ */
 t_tuple	color_at(t_world *world, t_ray *r)
 {
 	t_tuple		colour;
@@ -83,6 +96,10 @@ t_tuple	color_at(t_world *world, t_ray *r)
 	return (colour);
 }
 
+/**
+ * Builds a view transformation matrix for a camera given eye position, target
+ * point, and up vector. Updates the camera's transform and inverse transform.
+ */
 void	view_trans(t_camera *camera, t_tuple *from, t_tuple *to, t_tuple *up)
 {
 	t_tuple	vec[4];
@@ -111,6 +128,10 @@ void	view_trans(t_camera *camera, t_tuple *from, t_tuple *to, t_tuple *up)
 	matrix_inverse(&camera->invs, &camera->transform);
 }
 
+/**
+ * Generates a ray starting from the camera through the center of a specified
+ * pixel on the view plane. Accounts for camera transformation and pixel size.
+ */
 t_ray	ray_for_pixel(t_camera *camera, int px, int py)
 {
 	float	values[4];

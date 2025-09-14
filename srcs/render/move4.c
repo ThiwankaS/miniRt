@@ -12,6 +12,11 @@
 
 #include "../../include/miniRt.h"
 
+/**
+ * Rotates the plane using W/A/S/D/Z/X keys by a small angle.
+ * Updates the normal, rebuilds its transform, and returns SUCCESS on change.
+ * Returns FAILURE if the key is not a rotation command.
+ */
 int	rotate_plane(mlx_key_data_t key, t_object *obj)
 {
 	float	angle;
@@ -38,6 +43,10 @@ int	rotate_plane(mlx_key_data_t key, t_object *obj)
 	return (SUCCESS);
 }
 
+/**
+ * Applies rotation to the selected plane when in ROTATE mode.
+ * Re-renders the scene after a successful update.
+ */
 void	plane_interaction(mlx_key_data_t key, t_state *state)
 {
 	t_object	*selected;
@@ -52,6 +61,10 @@ void	plane_interaction(mlx_key_data_t key, t_state *state)
 	}
 }
 
+/**
+ * Computes the camera position in world space.
+ * Transforms the origin point by the inverse camera transform.
+ */
 t_tuple	camera_position(t_camera *camera)
 {
 	t_tuple	origin;
@@ -60,6 +73,11 @@ t_tuple	camera_position(t_camera *camera)
 	return (matrix_multiply_by_tuple(&camera->invs, &origin));
 }
 
+/**
+ * Computes the camera's forward view direction in world space.
+ * Transforms the canonical look-at point, subtracts the position,
+ * then normalizes.
+ */
 t_tuple	camera_direction(t_camera *camera, t_tuple *pos)
 {
 	t_tuple	look_at;

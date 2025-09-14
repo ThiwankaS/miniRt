@@ -12,25 +12,36 @@
 
 #include "../../include/miniRt.h"
 
+/**
+ * Adjusts cylinder radius/height using arrow keys.
+ * Rebuilds its transform and returns SUCCESS on change, else FAILURE.
+ */
 int	resize_cylinder(mlx_key_data_t key, t_object *obj)
 {
+	float	step;
+
+	step = 0.1f;
 	if (!obj)
 		return (FAILURE);
 	if (key.key == MLX_KEY_UP)
-		obj->radius += 0.1f;
+		obj->radius += step;
 	else if (key.key == MLX_KEY_DOWN)
-		obj->radius = fmaxf(0.5f, obj->radius - 0.1f);
+		obj->radius = fmaxf(0.5f, obj->radius - step);
 	else if (key.key == MLX_KEY_RIGHT)
-		obj->height += 0.1f;
+		obj->height += step;
 	else if (key.key == MLX_KEY_LEFT)
-		obj->height = fmaxf(0.5f, obj->height - 0.1f);
+		obj->height = fmaxf(0.5f, obj->height - step);
 	else
 		return (FAILURE);
 	printf("height : %.5f | radius : %.5f \n", obj->height, obj->radius);
-	creating_cylinder_object(obj);
+	creating_cylinder_object(obj, obj->radius);
 	return (SUCCESS);
 }
 
+/**
+ * Moves the cylinder by small steps with W/A/S/D/Z/X keys.
+ * Updates transform and returns SUCCESS on move, else FAILURE.
+ */
 int	move_cylinder(mlx_key_data_t key, t_object *obj)
 {
 	float	step;
@@ -50,10 +61,14 @@ int	move_cylinder(mlx_key_data_t key, t_object *obj)
 		obj->z -= step;
 	else
 		return (FAILURE);
-	creating_cylinder_object(obj);
+	creating_cylinder_object(obj, obj->radius);
 	return (SUCCESS);
 }
 
+/**
+ * Rotates cylinder orientation with W/A/S/D/Z/X keys.
+ * Updates normal, rebuilds transform, and returns SUCCESS or FAILURE.
+ */
 int	rotate_cylinder(mlx_key_data_t key, t_object *obj)
 {
 	float	angle;
@@ -76,10 +91,14 @@ int	rotate_cylinder(mlx_key_data_t key, t_object *obj)
 		return (FAILURE);
 	obj->norm_v = matrix_multiply_by_tuple(&rotate, &obj->norm_v);
 	obj->norm_v = normalize(&obj->norm_v);
-	creating_cylinder_object(obj);
+	creating_cylinder_object(obj, obj->radius);
 	return (SUCCESS);
 }
 
+/**
+ * Applies resize, move, or rotate based on current mode.
+ * Re-renders the scene after any successful update.
+ */
 void	cylinder_interaction(mlx_key_data_t key, t_state *state)
 {
 	t_object	*selected;
@@ -104,6 +123,11 @@ void	cylinder_interaction(mlx_key_data_t key, t_state *state)
 	}
 }
 
+/**
+ * Switches cylinder mode with Ctrl+M (move), Ctrl+R (resize),
+ * and Ctrl+S (rotate). Shows help on 'H', then delegates
+ * to cylinder_interaction().
+ */
 void	cylinder_interact_mode(mlx_key_data_t keydata, t_state *state)
 {
 	bool	left;

@@ -12,6 +12,11 @@
 
 #include "../../include/miniRt.h"
 
+/**
+ * Prints "Error\n" followed by the given message to stderr and returns the
+ * total number of bytes written (prefix + message).The prefix already includes
+ * a newline; the message is written as-is without an extra newline.
+ */
 int	ft_error(char *msg)
 {
 	int	len;

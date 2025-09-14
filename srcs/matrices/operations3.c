@@ -109,7 +109,6 @@ t_ray	transform(t_ray *r, t_mat *m)
 
 	rp.origin = matrix_multiply_by_tuple(m, &r->origin);
 	rp.direction = matrix_multiply_by_tuple(m, &r->direction);
-	rp.direction = normalize(&rp.direction);
 	rp.direction.t[3] = 0.0f;
 	return (rp);
 }

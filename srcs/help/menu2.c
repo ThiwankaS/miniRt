@@ -12,6 +12,11 @@
 
 #include "../../include/miniRt.h"
 
+/**
+ * Prints the key map for interacting with a plane.
+ * Focuses on selecting/toggling and rotating the plane around x, y, and
+ * z axes.
+ */
 void	help_plane(void)
 {
 	printf("\n");
@@ -35,6 +40,11 @@ void	help_plane(void)
 	printf("\n");
 }
 
+/**
+ * Prints the key map for interacting with the camera.
+ * Covers selection/toggle, movement, rotation, and zoom hints via x-axis
+ * controls.
+ */
 void	help_camera(void)
 {
 	printf("\n");

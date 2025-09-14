@@ -12,6 +12,10 @@
 
 #include "../../include/miniRt.h"
 
+/**
+ * Handles light interaction. Moves light, re-renders on success, and shows
+ * help when 'H' is pressed in LIGHT mode.
+ */
 void	light_interact_mode(mlx_key_data_t keydata, t_state *state)
 {
 	if (interact_light(keydata, state) == SUCCESS)
@@ -23,6 +27,10 @@ void	light_interact_mode(mlx_key_data_t keydata, t_state *state)
 		help_light();
 }
 
+/**
+ * Applies move or resize to the selected sphere based on current mode.
+ * Re-renders the scene after a successful change.
+ */
 void	sphere_interaction(mlx_key_data_t key, t_state *state)
 {
 	t_object	*selected;
@@ -42,6 +50,10 @@ void	sphere_interaction(mlx_key_data_t key, t_state *state)
 	}
 }
 
+/**
+ * Switches sphere mode with Ctrl+M (move) or Ctrl+R (resize). Shows help
+ * on 'H', then applies movement or resize to the selected sphere.
+ */
 void	spehere_interact_mode(mlx_key_data_t keydata, t_state *state)
 {
 	bool	left;
@@ -66,6 +78,10 @@ void	spehere_interact_mode(mlx_key_data_t keydata, t_state *state)
 	sphere_interaction(keydata, state);
 }
 
+/**
+ * Switches plane mode with Ctrl+M (move) or Ctrl+S (rotate). Shows help
+ * on 'H', then applies movement or rotation to the selected plane.
+ */
 void	plane_interact_mode(mlx_key_data_t keydata, t_state *state)
 {
 	bool	left;
@@ -90,6 +106,10 @@ void	plane_interact_mode(mlx_key_data_t keydata, t_state *state)
 	plane_interaction(keydata, state);
 }
 
+/**
+ * Routes the key to the active handler: light, camera, or selected object.
+ * Delegates to the specific object mode for sphere, cylinder, or plane.
+ */
 void	select_mode(mlx_key_data_t keydata, t_state *state)
 {
 	t_object	*selected;

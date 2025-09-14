@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   reader.c                                           :+:      :+:    :+:   */
+/*   reader1.c                                           :+:      :+:    :+:  */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,6 +12,10 @@
 
 #include "../../include/miniRt.h"
 
+/**
+ * Returns true if the line should be treated as a blank/line-break entry.
+ * Used to ignore lines that contain no meaningful tokens.
+ */
 bool	line_break(char *line, int *index)
 {
 	int	i;
@@ -22,15 +26,21 @@ bool	line_break(char *line, int *index)
 	return (false);
 }
 
-bool	process_line(char *line, t_state *state)
+/**
+ * Parses a single scene line and dispatches to the appropriate handler
+ * (A, L, C, sp, pl, cy). Returns true on success, false on bad/unknown input.
+ */
+int	process_line(char *line, t_state *state)
 {
 	int	i;
 	int	res;
 
+	if (!line)
+		return (0);
+	if (ft_strncmp(line, "\n", ft_strlen(line)) == 0)
+		return (1);
 	i = 0;
 	res = 0;
-	if (!line)
-		return (false);
 	while (line && line[i] && line[i] != ' ')
 		i++;
 	if (i != 0 && ft_strncmp(line, "A", i) == 0)
@@ -45,11 +55,13 @@ bool	process_line(char *line, t_state *state)
 		res = set_plane(line, state, &i);
 	else if (i != 0 && ft_strncmp(line, "cy", i) == 0)
 		res = set_cylinder(line, state, &i);
-	else if (i != 0 && !line_break(line, &i))
-		return (false);
-	return (!res);
+	return (res);
 }
 
+/**
+ * Verifies the scene filename ends with the ".rt" extension.
+ * Returns true if the extension is correct.
+ */
 bool	valid_filename(char *filename)
 {
 	int	len;
@@ -62,6 +74,11 @@ bool	valid_filename(char *filename)
 	return (true);
 }
 
+/**
+ * Reads the entire file line by line, processing each with process_line().
+ * Stops and returns false on the first parsing error;
+ * true if all lines succeed.
+ */
 bool	read_content(int fd, t_state *state)
 {
 	char	*line;
@@ -70,21 +87,29 @@ bool	read_content(int fd, t_state *state)
 	line = get_next_line(fd);
 	if (!line)
 		return (false);
-	while (true)
+	while (line)
 	{
-		if (!process_line(line, state))
+		if (!extract_data(line, state))
 		{
 			free(line);
+			line = get_next_line(fd);
+			while (line)
+			{
+				free(line);
+				line = get_next_line(fd);
+			}
 			return (false);
 		}
 		free(line);
 		line = get_next_line(fd);
-		if (!line)
-			break ;
 	}
 	return (true);
 }
 
+/**
+ * Validates the filename, opens the file, reads and parses its contents,
+ * and reports clear errors for bad extension, open failure, or bad data.
+ */
 bool	init_file_reader(char *filename, t_state *state)
 {
 	int	fd;

@@ -18,6 +18,8 @@
 # define WIDTH 1024
 # define HEIGHT 768
 
+# define CHAR_LIST "ACLspcyl0123456789. +-,\f\n\t\v\r"
+
 # define SPHERE   1
 # define PLANE    2
 # define CYLINDER 3
@@ -52,14 +54,19 @@
 int			render_image(t_state *state);
 void		print_object(t_object *s);
 int			ft_error(char *msg);
-int			values_validation(char *str);
+bool		is_valid(const char *str);
+int			process_line(char *line, t_state *state);
+bool		extract_data(char *line, t_state *state);
+bool		extract_color(char *line, float *r, float *g, float *b);
+bool		extract_position(char *line, float *x, float *y, float *z);
+bool		extract_normal_v(char *line, float *x, float *y, float *z);
 t_object	*init_object(void);
 void		free_split(char **array);
 void		clean_up(t_state *state);
 void		add_object(t_state *state, t_object **s);
 void		update_view(t_camera *camera, t_tuple *p, t_tuple *d);
 bool		ft_isspace(char c);
-float		ft_atof(const char *str);
+bool		ft_atof(const char *str, float *result);
 int			set_world(char *line, t_state *state, int *index);
 int			set_light(char *line, t_state *state, int *index);
 int			set_camera(char *line, t_state *state, int *index);
@@ -67,6 +74,5 @@ int			set_sphere(char *line, t_state *state, int *index);
 int			set_plane(char *line, t_state *state, int *index);
 int			set_cylinder(char *line, t_state *state, int *index);
 bool		init_file_reader(char *filename, t_state *state);
-void		print_things(t_state *state);
 
 #endif
