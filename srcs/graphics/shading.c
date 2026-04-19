@@ -1,22 +1,5 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   shading.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/10 05:42:55 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/08/20 11:30:38 by tsomacha         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../include/miniRt.h"
 
-/**
- * Computes the reflection vector of an incoming direction across
- * a surface normal.
- * Used in specular lighting calculations.
- */
 t_tuple	reflect(t_tuple *in, t_tuple *normal)
 {
 	t_tuple	reflect;
@@ -29,10 +12,6 @@ t_tuple	reflect(t_tuple *in, t_tuple *normal)
 	return (reflect);
 }
 
-/**
- * Combines ambient, diffuse, and specular color components into a final color,
- * clamping each channel to a maximum of 1.0 to avoid over-saturation.
- */
 t_tuple	final_color(t_tuple *ambient, t_tuple *diffuse, t_tuple *specular)
 {
 	t_tuple	colour;
@@ -47,11 +26,6 @@ t_tuple	final_color(t_tuple *ambient, t_tuple *diffuse, t_tuple *specular)
 	return (colour);
 }
 
-/**
- * Calculates the specular lighting contribution for a point on a surface.
- * Uses the Phong reflection model and the object's shininess to determine
- * the highlight intensity.
- */
 t_tuple	spec_color(t_object *obj, t_light *light, t_compute *comp, t_tuple *lv)
 {
 	t_tuple	reflectv;
@@ -73,11 +47,6 @@ t_tuple	spec_color(t_object *obj, t_light *light, t_compute *comp, t_tuple *lv)
 	return (specular);
 }
 
-/**
- * Computes the lighting at a point on a surface using ambient, diffuse,
- * and specular components. Considers shadow status to skip diffuse/specular
- * when the point is in shadow.
- */
 t_tuple	lighting(t_object *obj, t_light *light, t_compute *comp)
 {
 	t_tuple	ambient;

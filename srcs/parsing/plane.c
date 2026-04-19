@@ -1,79 +1,104 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   plane.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/20 06:35:49 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/07/30 15:03:14 by tsomacha         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../include/miniRt.h"
 
-/**
- * Builds a rotation matrix around an arbitrary unit axis using Rodrigues'
- * rotation formula for the given angle in radians.
- */
-t_mat	rotate_axis(t_tuple *axis, float angle)
+static bool	parse_position(float *v, char *line)
 {
-	float	c;
-	float	s;
-	float	t;
-	t_mat	rotate;
+	char	**values;
 
-	c = cosf(angle);
-	s = sinf(angle);
-	t = 1.0f - c;
-	rotate = identity();
-	rotate.m[0][0] = t * axis->t[0] * axis->t[0] + c;
-	rotate.m[0][1] = t * axis->t[0] * axis->t[1] - s * axis->t[2];
-	rotate.m[0][2] = t * axis->t[0] * axis->t[2] + s * axis->t[1];
-	rotate.m[1][0] = t * axis->t[0] * axis->t[1] + s * axis->t[2];
-	rotate.m[1][1] = t * axis->t[1] * axis->t[1] + c;
-	rotate.m[1][2] = t * axis->t[1] * axis->t[2] - s * axis->t[0];
-	rotate.m[2][0] = t * axis->t[0] * axis->t[2] - s * axis->t[1];
-	rotate.m[2][1] = t * axis->t[1] * axis->t[2] + s * axis->t[0];
-	rotate.m[2][2] = t * axis->t[2] * axis->t[2] + c;
-	return (rotate);
+	if (!line || !values_validation(line))
+		return (false);
+	values = ft_split(line, ',');
+	if (!values || !values[0] || !values[1] || !values[2])
+	{
+		free_split(values);
+		return (false);
+	}
+	v[0] = ft_atof(values[0]);
+	v[1] = ft_atof(values[1]);
+	v[2] = ft_atof(values[2]);
+	free_split(values);
+	return (true);
 }
 
-/**
- * Constructs a plane's transform by rotating the default up vector
- * to the plane's normal and translating to its position.
- * Also computes inverse and inverse-transpose.
- */
+static bool	parse_orientation(float *v, char *line)
+{
+	char	**values;
+
+	if (!line || !values_validation(line))
+		return (false);
+	values = ft_split(line, ',');
+	if (!values || !values[0] || !values[1] || !values[2])
+	{
+		free_split(values);
+		return (false);
+	}
+	v[3] = ft_atof(values[0]);
+	v[4] = ft_atof(values[1]);
+	v[5] = ft_atof(values[2]);
+	free_split(values);
+	if (v[3] < -1.0f || v[3] > 1.0f)
+		return (false);
+	if (v[4] < -1.0f || v[4] > 1.0f)
+		return (false);
+	if (v[5] < -1.0f || v[5] > 1.0f)
+		return (false);
+	return (true);
+}
+
+static bool	parse_color_rgb(float *v, char *line)
+{
+	char	**values;
+
+	if (!line || !values_validation(line))
+		return (false);
+	values = ft_split(line, ',');
+	if (!values || !values[0] || !values[1] || !values[2])
+	{
+		free_split(values);
+		return (false);
+	}
+	v[6] = ft_atof(values[0]);
+	v[7] = ft_atof(values[1]);
+	v[8] = ft_atof(values[2]);
+	free_split(values);
+	if (v[6] < 0.0f || v[6] > 255.0f)
+		return (false);
+	if (v[7] < 0.0f || v[7] > 255.0f)
+		return (false);
+	if (v[8] < 0.0f || v[8] > 255.0f)
+		return (false);
+	return (true);
+}
+
 void	creating_plane_object(t_object *s)
 {
-	t_tuple	v0;
+	t_tuple	default_up;
 	t_tuple	axis;
 	t_mat	rotate;
-	t_mat	traslate;
-	float	angel;
+	t_mat	translate;
+	float	angle;
 
-	vector(&v0, 0, 1, 0);
-	axis = cross(&v0, &s->norm_v);
-	if (tuple_magnitute(&axis) < EPSILON)
-		rotate = rotate_x(M_PI);
+	vector(&default_up, 0, 1, 0);
+	axis = cross(&default_up, &s->norm_v);
+	if (tuple_magnitude(&axis) == 0)
+	{
+		if (dot(&default_up, &s->norm_v) > 0)
+			rotate = identity();
+		else
+			rotate = rotate_x(M_PI);
+	}
 	else
 	{
 		axis = normalize(&axis);
-		angel = acosf(dot(&v0, &s->norm_v));
-		rotate = rotate_axis(&axis, angel);
+		angle = acosf(dot(&default_up, &s->norm_v));
+		rotate = rotate_axis(&axis, angle);
 	}
-	traslate = translation(s->x, s->y, s->z);
-	s->transform = matrix_multiply(&traslate, &rotate);
+	translate = translation(s->x, s->y, s->z);
+	s->transform = matrix_multiply(&translate, &rotate);
 	matrix_inverse(&s->invs, &s->transform);
 	s->invs_trans = matrix_transpose(&s->invs);
 }
 
-/**
- * Initializes a plane object's fields from parsed values,
- * normalizes its normal,
- * sets material pointers, builds its transform, and adds it to the world.
- */
-void	set_plane_values(t_state *state, t_object *s, float *v)
+static void	apply_plane_to_world(t_state *state, t_object *s, float *v)
 {
 	if (!state || !s)
 		return ;
@@ -100,11 +125,6 @@ void	set_plane_values(t_state *state, t_object *s, float *v)
 	state->world.obj_count++;
 }
 
-/**
- * Reads plane parameters (position, normal, color) from the input line,
- * creates and populates the plane object, and registers it with the world.
- * Returns nonzero on parsing or allocation error.
- */
 int	set_plane(char *line, t_state *state, int *index)
 {
 	char		**items;
@@ -113,15 +133,15 @@ int	set_plane(char *line, t_state *state, int *index)
 
 	items = ft_split(&line[*index], ' ');
 	if (!items)
-		return (free_split(items), 0);
-	if (!extract_position(items[0], &v[0], &v[1], &v[2]))
-		return (free_split(items), 0);
-	if (!extract_normal_v(items[1], &v[3], &v[4], &v[5]))
-		return (free_split(items), 0);
-	if (!extract_color(items[2], &v[6], &v[7], &v[8]))
-		return (free_split(items), 0);
+		return (free_split(items), 1);
+	if (!parse_position(v, items[0]))
+		return (free_split(items), 1);
+	if (!parse_orientation(v, items[1]))
+		return (free_split(items), 1);
+	if (!parse_color_rgb(v, items[2]))
+		return (free_split(items), 1);
 	s = init_object();
-	set_plane_values(state, s, v);
+	apply_plane_to_world(state, s, v);
 	free_split(items);
-	return (1);
+	return (0);
 }

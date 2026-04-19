@@ -1,22 +1,5 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   hook.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/29 20:49:45 by aoshinth          #+#    #+#             */
-/*   Updated: 2025/08/04 05:29:02 by tsomacha         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../include/miniRt.h"
 
-/**
- * Responds to window size changes. If the program is finishing, it destroys
- * the image and closes the window; otherwise it ignores unchanged sizes and,
- * on a real resize,updates cached dimensions and calls handle_window_resize()
- */
 void	window_resized(void *param)
 {
 	t_state			*state;
@@ -43,13 +26,6 @@ void	window_resized(void *param)
 	handle_window_resize(state, cur_w, cur_h);
 }
 
-/**
- * Handles key press events for interactive control. ESC flags shutdown;
- * Ctrl+L/C/N/E switch selection or interaction mode;
- * H shows help when not interacting; all other
- * active-mode keys are forwarded to select_mode().
- * Detects either Control key for combos.
- */
 void	keypress(mlx_key_data_t keydata, void *param)
 {
 	t_state	*state;
@@ -64,7 +40,7 @@ void	keypress(mlx_key_data_t keydata, void *param)
 	left = mlx_is_key_down(state->mlx, MLX_KEY_LEFT_CONTROL);
 	right = mlx_is_key_down(state->mlx, MLX_KEY_RIGHT_CONTROL);
 	if (keydata.key == MLX_KEY_L && (left || right))
-		select_ligth_source(state);
+		select_light_source(state);
 	else if (keydata.key == MLX_KEY_N && (left || right))
 		select_next_object(state);
 	else if (keydata.key == MLX_KEY_E && (left || right))

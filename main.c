@@ -1,21 +1,5 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/29 20:42:29 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/08/04 06:17:51 by tsomacha         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "include/miniRt.h"
 
-/**
- * Initializes camera with size and fov, and resets transforms.
- * Computes half sizes and pixel_size; fov is in radians.
-*/
 void	camera_init(t_camera *camera, int hsize, int vsize, float fov)
 {
 	float	half_view;
@@ -41,11 +25,6 @@ void	camera_init(t_camera *camera, int hsize, int vsize, float fov)
 	camera->pixel_size = (camera->half_width * 2.0f) / camera->hsize;
 }
 
-/**
- * Sets default world, camera, and interaction state.
- * Clears object list, zeroes lights, sets colors to white.
- * Resets flags and selection to defaults.
-*/
 void	default_state(t_state *state)
 {
 	state->world.ambient = 0.0f;
@@ -65,11 +44,57 @@ void	default_state(t_state *state)
 	state->selected_object = NULL;
 }
 
-/**
- * Allocates state, applies defaults, and parses args.
- * On a valid .rt file, shows help and renders the scene.
- * On bad args, prints an error; always cleans up.
-*/
+void	print_object(t_object *s)
+{
+	if (!s)
+		return ;
+	printf("id : %d\n", s->id);
+	printf("type : %d\n", s->type);
+	printf("s.ambient : %.3f\n", *s->ambient);
+	printf("s.diffuse : %.3f\n", *s->diffuse);
+	printf("s.specular : %.3f\n", s->specular);
+	printf("s.shininess : %.3f\n", s->shininess);
+	printf("s.x : %.3f\n", s->x);
+	printf("s.y : %.3f\n", s->y);
+	printf("s.z : %.3f\n", s->z);
+	printf("s.radius : %.3f\n", s->radius);
+	printf("s.color :\n");
+	tuple_print(&s->color);
+	printf("s.transform :\n");
+	matrix_print(&s->transform);
+}
+
+void	print_things(t_state *state)
+{
+	t_object	*s;
+
+	printf("state.world.ambient : %.3f\n", state->world.ambient);
+	printf("state.world.colour :\n");
+	tuple_print(&state->world.colour);
+	printf("state.world.diffuse : %.3f\n", state->world.diffuse);
+	printf("state.world.light.color :\n");
+	tuple_print(&state->world.light.color);
+	printf("state.world.light.position :\n");
+	tuple_print(&state->world.light.position);
+	printf("state.camera.hsize : %d\n", state->camera.hsize);
+	printf("state.camera.vsize : %d\n", state->camera.vsize);
+	printf("state.camera.half_height : %.3f\n", state->camera.half_height);
+	printf("state.camera.half_width : %.3f\n", state->camera.half_width);
+	printf("state.camera.pixel_size : %.3f\n", state->camera.pixel_size);
+	printf("state.camera.fov : %.3f\n", state->camera.fov);
+	printf("state.camera.transform :\n");
+	matrix_print(&state->camera.transform);
+	printf("state.camera.invs :\n");
+	matrix_print(&state->camera.invs);
+	printf("object list :\n");
+	s = state->world.components;
+	while (s)
+	{
+		print_object(s);
+		s = s->next;
+	}
+}
+
 int	main(int argc, char *argv[])
 {
 	t_state	*state;

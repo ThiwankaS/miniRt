@@ -1,5 +1,13 @@
-miniRt				# no program executale
-ft_libft\			# no libft
-MLX42\				# no MLX42
-*.a					# no dynamic libraries
-*.o					# no object flies
+# Built binary (Makefile produces at repo root)
+/miniRt
+
+# Object files and archives anywhere in the tree
+*.o
+*.a
+
+# Cloned / built by Makefile — not part of this repository
+/MLX42/
+/ft_libft/
+
+# Local editor settings
+/.vscode/

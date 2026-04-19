@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   graphics.h                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/30 11:39:48 by aoshinth          #+#    #+#             */
-/*   Updated: 2025/08/04 06:14:34 by tsomacha         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef GRAPHICS_H
 # define GRAPHICS_H
 
@@ -103,8 +91,8 @@ typedef struct s_state
 void		position(t_tuple *pp, t_ray *r, float t);
 t_hit		find_hit(t_world *world, t_ray *ray);
 void		creating_plane_object(t_object *s);
-void		creating_sphere_object(t_object *s, float radius);
-void		creating_cylinder_object(t_object *s, float radius);
+void		creating_sphere_object(t_object *s);
+void		creating_cylinder_object(t_object *s);
 void		find_hit_cylinder(t_object *object, t_ray *r, t_hit *h);
 void		hit_cap(t_object *object, t_ray *r, t_hit *h);
 void		find_hit_plane(t_object *object, t_ray *r, t_hit *h);
@@ -130,8 +118,7 @@ int			resize_cylinder(mlx_key_data_t key, t_object *obj);
 void		handle_window_resize(t_state *state, int32_t cur_w, int32_t cur_h);
 void		select_next_object(t_state *state);
 int			interact_light(mlx_key_data_t key, t_state *state);
-
-void		select_ligth_source(t_state *state);
+void		select_light_source(t_state *state);
 void		select_exit_interaction(t_state *state);
 void		select_camera(t_state *state);
 void		select_mode(mlx_key_data_t keydata, t_state *state);
@@ -145,4 +132,6 @@ void		help_camera(void);
 void		cylinder_interact_mode(mlx_key_data_t keydata, t_state *state);
 void		camera_interaction_mode(mlx_key_data_t keydata, t_state *state);
 void		plane_interaction(mlx_key_data_t key, t_state *state);
+void		sphere_interact_mode(mlx_key_data_t keydata, t_state *state);
+void		plane_interact_mode(mlx_key_data_t keydata, t_state *state);
 #endif

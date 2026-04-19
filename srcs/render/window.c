@@ -1,21 +1,5 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   window.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: tsomacha <tsomacha@student.hive.fi>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/04 05:16:41 by tsomacha          #+#    #+#             */
-/*   Updated: 2025/08/04 05:25:29 by tsomacha         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../include/miniRt.h"
 
-/**
- * Updates camera viewport on window resize and rebuilds the MLX image.
- * Recomputes FOV, recreates the image, reattaches it, and re-renders.
- */
 void	handle_window_resize(t_state *state, int32_t cur_w, int32_t cur_h)
 {
 	state->camera.hsize = cur_w;
